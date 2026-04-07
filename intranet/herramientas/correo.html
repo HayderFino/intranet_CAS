@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Directorio de Correos - Intranet CAS</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .dir-page {
+        padding: 0 0 3rem;
+      }
+
+      .dir-controls {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .dir-search-wrapper {
+        position: relative;
+        flex: 1;
+        min-width: 220px;
+      }
+
+      .dir-search-wrapper svg {
+        position: absolute;
+        left: 0.85rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        fill: #94a3b8;
+      }
+
+      .dir-search {
+        width: 100%;
+        padding: 0.65rem 1rem 0.65rem 2.4rem;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 0.6rem;
+        font-size: 0.9rem;
+        background: #fff;
+        color: #0f172a;
+        transition: border-color 0.2s;
+      }
+
+      .dir-search:focus {
+        outline: none;
+        border-color: #059669;
+      }
+
+      .dir-filter {
+        padding: 0.65rem 1rem;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 0.6rem;
+        font-size: 0.85rem;
+        background: #fff;
+        color: #475569;
+        cursor: pointer;
+      }
+
+      .dir-count {
+        font-size: 0.82rem;
+        color: #94a3b8;
+        margin-left: auto;
+      }
+
+      .dir-table-wrap {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      }
+
+      .dir-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .dir-table thead tr {
+        background: #059669;
+        color: #fff;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .dir-table th {
+        padding: 0.9rem 1.25rem;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .dir-table tbody tr {
+        border-bottom: 1px solid #f1f5f9;
+        transition: background 0.15s;
+      }
+
+      .dir-table tbody tr:last-child {
+        border-bottom: none;
+      }
+
+      .dir-table tbody tr:hover {
+        background: #f8fafc;
+      }
+
+      .dir-table td {
+        padding: 0.85rem 1.25rem;
+        font-size: 0.88rem;
+        color: #334155;
+        vertical-align: middle;
+      }
+
+      .dir-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.65rem;
+        flex-shrink: 0;
+      }
+
+      .dir-name-cell {
+        display: flex;
+        align-items: center;
+      }
+
+      .dir-name-text strong {
+        display: block;
+        font-weight: 600;
+        color: #0f172a;
+        font-size: 0.9rem;
+      }
+
+      .dir-name-text span {
+        font-size: 0.78rem;
+        color: #64748b;
+      }
+
+      .dir-dep-badge {
+        display: inline-block;
+        padding: 0.2rem 0.65rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: #f0fdf4;
+        color: #059669;
+      }
+
+      .dir-mail-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: #0ea5e9;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: color 0.15s;
+      }
+
+      .dir-mail-link:hover {
+        color: #0369a1;
+        text-decoration: underline;
+      }
+
+      .dir-mail-link svg {
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+        flex-shrink: 0;
+      }
+
+      .dir-empty {
+        text-align: center;
+        padding: 3rem;
+        color: #94a3b8;
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 768px) {
+        .dir-table thead {
+          display: none;
+        }
+
+        .dir-table tbody tr {
+          display: block;
+          padding: 1rem;
+          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dir-table td {
+          display: block;
+          padding: 0.3rem 0;
+          border: none;
+        }
+
+        .dir-table td::before {
+          content: attr(data-label);
+          font-weight: 600;
+          font-size: 0.75rem;
+          color: #94a3b8;
+          display: block;
+          text-transform: uppercase;
+          margin-bottom: 0.15rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img
+          class="placeholder-img"
+          src="../data/imagenes/logo.png"
+          alt="LOGO CAS"
+        />
+        <h2>Intranet CAS</h2>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../header_menu/cas/noticas-cas.html">NotiCAS</a></li>
+          <li><a href="../herramientas/respel.html">RESPEL</a></li>
+          <li><a href="../herramientas/rua.html">RUA</a></li>
+          <li><a href="../herramientas/pcb.html">PCB</a></li>
+          <li>
+            <a href="../herramientas/cartografia.html"
+              >Cartograf&iacute;a en L&iacute;nea</a
+            >
+          </li>
+          <li><a href="../herramientas/soporte.html">Soporte</a></li>
+          <li><a href="../herramientas/galeria.html">Galeria</a></li>
+          <li>
+            <a
+              href="../herramientas/correo.html"
+              style="color: var(--primary, #059669); font-weight: 600"
+              >Correo</a
+            >
+          </li>
+          <li><a href="../herramientas/calendario.html">Calendario</a></li>
+          <li><a href="../herramientas/busqueda.html">Busqueda Avanzada</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="top-nav">
+        <div class="header-menu">
+          <a href="../index.html">Inicio</a>
+          <div class="dropdown">
+            <a href="../header_menu/cas/resena.html">La CAS &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../header_menu/cas/mision-vision.html"
+                >Misi&oacute;n y Visi&oacute;n</a
+              >
+              <a href="../header_menu/cas/objetivos.html"
+                >Objetivos de la CAS</a
+              >
+              <a href="../header_menu/cas/funciones.html"
+                >Funciones de la CAS</a
+              >
+              <a href="../header_menu/cas/estructura.html"
+                >Estructura Organizacional</a
+              >
+              <a href="../header_menu/cas/politica-ambiental.html"
+                >Pol&iacute;tica Ambiental</a
+              >
+              <a href="../header_menu/cas/normativa-cas.html">Normativa CAS</a>
+              <a href="../header_menu/cas/informe-gestion.html"
+                >Informe de Gesti&oacute;n</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../header_menu/cas/talento-humano.html"
+                  >Talento Humano <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../header_menu/cas/manual-funciones.html"
+                    >Manual de Funciones</a
+                  >
+                  <a href="https://www.cas.gov.co/not-found" target="_blank"
+                    >Directorio de Funcionarios</a
+                  >
+                  <a href="../header_menu/cas/plan-monitoreo-sigep.html"
+                    >Plan de monitoreo del SIGEP</a
+                  >
+                  <a href="../header_menu/cas/planes.html">Planes</a>
+                  <a href="../header_menu/cas/convocatorias.html"
+                    >Convocatorias</a
+                  >
+                  <a href="../header_menu/cas/estudios-tecnicos.html"
+                    >Estudios T&eacute;cnicos</a
+                  >
+                  <a href="../header_menu/cas/provision-empleos.html"
+                    >Provisi&oacute;n de empleos</a
+                  >
+                  <a
+                    href="https://cas.delfineco.com/gdpagos_cas/"
+                    target="_blank"
+                    >Desprendibles de Nomina</a
+                  >
+                </div>
+              </div>
+              <a href="../header_menu/cas/postalcas.html">PostalCAS</a>
+              <a href="../header_menu/cas/noticas-cas.html">NotiCAS</a>
+              <a href="../header_menu/cas/agenda.html">Agenda CAS</a>
+              <a href="../header_menu/cas/ciberseguridad.html"
+                >GIT - Ciberseguridad</a
+              >
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="../header_menu/sgi/sgi.html">SGI &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../header_menu/sgi/procesos-estrategicos.html"
+                >Procesos Estrat&eacute;gicos</a
+              >
+              <a href="../header_menu/sgi/procesos-misionales.html"
+                >Procesos Misionales</a
+              >
+              <a href="../header_menu/sgi/procesos-apoyo.html"
+                >Procesos de Apoyo</a
+              >
+              <a href="../header_menu/sgi/evaluacion.html"
+                >Proceso de Evaluaci&oacute;n y Seguimiento</a
+              >
+              <a href="../header_menu/sgi/politicas.html">Pol&iacute;ticas</a>
+              <a href="../header_menu/sgi/objetivos-calidad.html"
+                >Objetivos de Calidad</a
+              >
+              <a href="../header_menu/sgi/alcance.html">Alcance de SGI</a>
+              <a href="../header_menu/sgi/documentos.html"
+                >Documentos Institucionales</a
+              >
+              <a href="../header_menu/sgi/manuales.html">Manuales SGI</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#">GIT &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../header_menu/git/normatividad.html"
+                >Normatividad GIT</a
+              >
+              <a href="../header_menu/git/gobierno-digital.html"
+                >Gobierno Digital</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../header_menu/git/manuales-usuario.html"
+                  >Manuales de Usuario
+                  <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../header_menu/git/manuales_usuario/cita.html"
+                    >CITA</a
+                  >
+                  <a href="../header_menu/git/manuales_usuario/sirh.html"
+                    >SIRH</a
+                  >
+                  <a href="../header_menu/git/manuales_usuario/snif.html"
+                    >SNIF</a
+                  >
+                  <a
+                    href="../header_menu/git/manuales_usuario/revision-red.html"
+                    >Revisi&oacute;n de red primer nivel</a
+                  >
+                </div>
+              </div>
+              <a href="../header_menu/git/boletines.html"
+                >Boletines de Seguridad</a
+              >
+              <a href="../header_menu/git/responsables.html"
+                >Responsables de la informaci&oacute;n en pagina WEB</a
+              >
+              <a href="../header_menu/git/proteccion-datos.html"
+                >Proteccion de datos personales</a
+              >
+            </div>
+          </div>
+          <a href="../meci.html">MECI</a>
+          <a href="/administracion/login.html" class="btn-login">Ingresar</a>
+          <div class="search-bar">
+            <input type="text" placeholder="Buscar..." />
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-area">
+        <nav class="breadcrumbs">
+          <a href="../index.html">Inicio</a> <span>/</span> Herramientas
+          <span>/</span> Directorio de Correos
+        </nav>
+        <section class="welcome-header">
+          <h1>Directorio de Correos Institucionales</h1>
+          <p>
+            Contactos oficiales de los funcionarios de la CAS &ndash;
+            @cas.gov.co
+          </p>
+        </section>
+
+        <div class="dir-page">
+          <div class="dir-controls">
+            <div class="dir-search-wrapper">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                />
+              </svg>
+              <input
+                type="text"
+                id="dirSearch"
+                class="dir-search"
+                placeholder="Buscar por nombre, cargo o dependencia..."
+              />
+            </div>
+            <select id="dirFilter" class="dir-filter">
+              <option value="">Todas las dependencias</option>
+            </select>
+            <span class="dir-count" id="dirCount"></span>
+          </div>
+
+          <div class="dir-table-wrap">
+            <table class="dir-table">
+              <thead>
+                <tr>
+                  <th>Funcionario</th>
+                  <th>Dependencia</th>
+                  <th>Correo Institucional</th>
+                </tr>
+              </thead>
+              <tbody id="dirTbody">
+                <tr>
+                  <td colspan="3" class="dir-empty">Cargando...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="../script.js"></script>
+    <script>
+      let TODO_DIRECTORIO = [];
+      const COLORS = [
+        "#059669",
+        "#0ea5e9",
+        "#8b5cf6",
+        "#f59e0b",
+        "#f43f5e",
+        "#10b981",
+        "#3b82f6",
+      ];
+
+      function initiales(nombre) {
+        const p = nombre.trim().split(" ");
+        return (p[0][0] + (p[1] ? p[1][0] : "")).toUpperCase();
+      }
+      function colorAvatar(nombre) {
+        return COLORS[nombre.charCodeAt(0) % COLORS.length];
+      }
+
+      function buildDepFilter(lista) {
+        const sel = document.getElementById("dirFilter");
+        const deps = [
+          ...new Set(lista.map((p) => p.dependencia).filter(Boolean)),
+        ].sort();
+        sel.innerHTML =
+          '<option value="">Todas las dependencias</option>' +
+          deps.map((d) => `<option value="${d}">${d}</option>`).join("");
+      }
+
+      function renderDir(lista) {
+        const tbody = document.getElementById("dirTbody");
+        document.getElementById("dirCount").textContent =
+          `${lista.length} de ${TODO_DIRECTORIO.length} contactos`;
+        if (lista.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="3" class="dir-empty">No se encontraron resultados.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = lista
+          .map(
+            (p) => `
+        <tr>
+            <td data-label="Funcionario">
+                <div class="dir-name-cell">
+                    <div class="dir-avatar" style="background:${colorAvatar(p.nombre)}">${initiales(p.nombre)}</div>
+                    <div class="dir-name-text">
+                        <strong>${p.nombre}</strong>
+                        <span>${p.cargo}</span>
+                    </div>
+                </div>
+            </td>
+            <td data-label="Dependencia"><span class="dir-dep-badge">${p.dependencia || ""}</span></td>
+            <td data-label="Correo">
+                <a href="mailto:${p.correo}" class="dir-mail-link">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    ${p.correo}
+                </a>
+            </td>
+        </tr>`,
+          )
+          .join("");
+      }
+
+      function filtrar() {
+        const q = document.getElementById("dirSearch").value.toLowerCase();
+        const dep = document.getElementById("dirFilter").value;
+        const res = TODO_DIRECTORIO.filter(
+          (p) =>
+            (!dep || p.dependencia === dep) &&
+            (!q ||
+              p.nombre.toLowerCase().includes(q) ||
+              p.cargo.toLowerCase().includes(q) ||
+              (p.dependencia || "").toLowerCase().includes(q)),
+        );
+        renderDir(res);
+      }
+
+      async function iniciarDirectorio() {
+        const tbody = document.getElementById("dirTbody");
+        try {
+          const res = await fetch("/api/directorio");
+          if (!res.ok) throw new Error();
+          TODO_DIRECTORIO = await res.json();
+          buildDepFilter(TODO_DIRECTORIO);
+          renderDir(TODO_DIRECTORIO);
+        } catch (e) {
+          tbody.innerHTML =
+            '<tr><td colspan="3" class="dir-empty">No se pudo cargar el directorio. Verifica que el servidor esté activo.</td></tr>';
+        }
+      }
+
+      iniciarDirectorio();
+      document.getElementById("dirSearch").addEventListener("input", filtrar);
+      document.getElementById("dirFilter").addEventListener("change", filtrar);
+    </script>
+  </body>
+</html>

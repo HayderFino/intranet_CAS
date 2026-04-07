@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Convocatorias - Talento Humano - Intranet CAS</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .doc-item {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.25rem;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .doc-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid #3b82f6;
+      }
+
+      .doc-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .doc-type {
+        font-weight: 700;
+        color: #1e40af;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+      }
+
+      .doc-date {
+        font-size: 0.85rem;
+        color: #64748b;
+        background: #f8fafc;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+      }
+
+      .doc-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+        line-height: 1.4;
+      }
+
+      .doc-description {
+        font-size: 0.9rem;
+        color: #475569;
+        line-height: 1.5;
+      }
+
+      .btn-download {
+        align-self: flex-start;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #3b82f6;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        background: #eff6ff;
+        transition: all 0.2s ease;
+      }
+
+      .btn-download:hover {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .meta-info-bar {
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: 15px;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+        font-size: 0.85rem;
+      }
+
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .meta-label {
+        color: #64748b;
+        font-weight: 500;
+      }
+
+      .meta-value {
+        color: #1e293b;
+        font-weight: 600;
+      }
+
+      .year-separator {
+        margin: 3rem 0 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: #64748b;
+        font-weight: 700;
+        font-size: 1.25rem;
+      }
+
+      .year-separator::after {
+        content: "";
+        flex: 1;
+        height: 2px;
+        background: #e2e8f0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img
+          class="placeholder-img"
+          src="../../data/imagenes/logo.png"
+          alt="LOGO CAS"
+        />
+        <h2>Intranet CAS</h2>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a></li>
+          <li><a href="../../herramientas/respel.html">RESPEL</a></li>
+          <li><a href="../../herramientas/rua.html">RUA</a></li>
+          <li><a href="../../herramientas/pcb.html">PCB</a></li>
+          <li>
+            <a href="../../herramientas/cartografia.html"
+              >Cartograf&iacute;a en L&iacute;nea</a
+            >
+          </li>
+          <li><a href="../../herramientas/soporte.html">Soporte</a></li>
+          <li><a href="../../herramientas/galeria.html">Galeria</a></li>
+          <li><a href="../../herramientas/correo.html">Correo</a></li>
+          <li><a href="../../herramientas/calendario.html">Calendario</a></li>
+          <li>
+            <a href="../../herramientas/busqueda.html">Busqueda Avanzada</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="top-nav">
+        <div class="header-menu">
+          <a href="../../index.html">Inicio</a>
+
+          <div class="dropdown">
+            <a href="../../header_menu/cas/resena.html">La CAS &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/cas/mision-vision.html"
+                >Misi&oacute;n y Visi&oacute;n</a
+              >
+              <a href="../../header_menu/cas/objetivos.html"
+                >Objetivos de la CAS</a
+              >
+              <a href="../../header_menu/cas/funciones.html"
+                >Funciones de la CAS</a
+              >
+              <a href="../../header_menu/cas/estructura.html"
+                >Estructura Organizacional</a
+              >
+              <a href="../../header_menu/cas/politica-ambiental.html"
+                >Pol&iacute;tica Ambiental</a
+              >
+              <a href="../../header_menu/cas/normativa-cas.html"
+                >Normativa CAS</a
+              >
+              <a href="../../header_menu/cas/informe-gestion.html"
+                >Informe de Gesti&oacute;n</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/cas/talento-humano.html"
+                  >Talento Humano <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="manual-funciones.html">Manual de Funciones</a>
+                  <a href="https://www.cas.gov.co/not-found" target="_blank"
+                    >Directorio de Funcionarios</a
+                  >
+                  <a href="plan-monitoreo-sigep.html"
+                    >Plan de monitoreo del SIGEP</a
+                  >
+                  <a href="planes.html">Planes</a>
+                  <a href="convocatorias.html">Convocatorias</a>
+                  <a href="estudios-tecnicos.html">Estudios T&eacute;cnicos</a>
+                  <a href="provision-empleos.html"
+                    >Provisi&oacute;n de empleos</a
+                  >
+                  <a
+                    href="https://cas.delfineco.com/gdpagos_cas/"
+                    target="_blank"
+                    >Desprendibles de Nomina</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/cas/postalcas.html">PostalCAS</a>
+              <a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a>
+              <a href="../../header_menu/cas/agenda.html">Agenda CAS</a>
+              <a href="../../header_menu/cas/ciberseguridad.html"
+                >GIT - Ciberseguridad</a
+              >
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="../../header_menu/sgi/sgi.html">SGI &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/sgi/procesos-estrategicos.html"
+                >Procesos Estrat&eacute;gicos</a
+              >
+              <a href="../../header_menu/sgi/procesos-misionales.html"
+                >Procesos Misionales</a
+              >
+
+              <a href="../../header_menu/sgi/procesos-apoyo.html"
+                >Procesos de Apoyo</a
+              >
+              <a href="../../header_menu/sgi/evaluacion.html"
+                >Proceso de Evaluaci&oacute;n y Seguimiento</a
+              >
+              <a href="../../header_menu/sgi/politicas.html"
+                >Pol&iacute;ticas</a
+              >
+              <a href="../../header_menu/sgi/objetivos-calidad.html"
+                >Objetivos de Calidad</a
+              >
+              <a href="../../header_menu/sgi/alcance.html">Alcance de SGI</a>
+              <a href="../../header_menu/sgi/documentos.html"
+                >Documentos Institucionales</a
+              >
+              <a href="../../header_menu/sgi/manuales.html">Manuales SGI</a>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="#">GIT &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/git/normatividad.html"
+                >Normatividad GIT</a
+              >
+              <a href="../../header_menu/git/gobierno-digital.html"
+                >Gobierno Digital</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/git/manuales-usuario.html"
+                  >Manuales de Usuario
+                  <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../../header_menu/git/manuales_usuario/cita.html"
+                    >CITA</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/sirh.html"
+                    >SIRH</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/snif.html"
+                    >SNIF</a
+                  >
+                  <a
+                    href="../../header_menu/git/manuales_usuario/revision-red.html"
+                    >Revisi&oacute;n de red primer nivel</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/git/boletines.html"
+                >Boletines de Seguridad</a
+              >
+              <a href="../../header_menu/git/responsables.html"
+                >Responsables de la informaci&oacute;n en pagina WEB</a
+              >
+              <a href="../../header_menu/git/proteccion-datos.html"
+                >Proteccion de datos personales</a
+              >
+            </div>
+          </div>
+
+          <a href="../../meci.html">MECI</a>
+          <a href="/administracion/login.html" class="btn-login">Ingresar</a>
+          <div class="search-bar">
+            <input type="text" placeholder="Buscar..." />
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-area">
+        <nav class="breadcrumbs">
+          <a href="../../index.html">Inicio</a> <span>/</span>
+          <a href="#">La CAS</a> <span>/</span>
+          <a href="talento-humano.html">Talento Humano</a> <span>/</span>
+          Convocatorias
+        </nav>
+
+        <section class="welcome-header">
+          <h1>Convocatorias</h1>
+          <p>
+            Procesos de selecci&oacute;n, elecci&oacute;n de representantes y
+            actos administrativos de la oficina de Talento Humano.
+          </p>
+        </section>
+
+        <div class="meta-info-bar">
+          <div class="meta-item">
+            <span class="meta-label">Publicado:</span>
+            <span class="meta-value">27 Septiembre 2021</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">&Uacute;ltima actualizaci&oacute;n:</span>
+            <span class="meta-value">02 Diciembre 2025</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Responsable:</span>
+            <span class="meta-value">Gesti&oacute;n de Talento Humano</span>
+          </div>
+        </div>
+
+        <div class="document-list" id="convocatorias-grid">
+          <div class="year-separator">2025</div>
+
+          <div
+            class="doc-item"
+            data-id="def_conv_25_1"
+            style="border-left: 5px solid #10b981"
+          >
+            <div class="doc-header">
+              <span class="doc-type">RESOLUCI&Oacute;N DGL No. 000880</span>
+              <span class="doc-date">Noviembre 28, 2025</span>
+            </div>
+            <div class="doc-title">
+              Conformaci&oacute;n Comisi&oacute;n de Personal 2025 - 2027
+            </div>
+            <div class="doc-description">
+              "Por la cual se conforma la Comisi&oacute;n de Personal de la
+              Corporaci&oacute;n Aut&oacute;noma Regional de Santander — CAS
+              para el periodo 2025 - 2027"
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/res-880-2025.pdf"
+              class="btn-download"
+              >Descargue aqu&iacute; Documento</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_25_2">
+            <div class="doc-header">
+              <span class="doc-type">INFORME RESULTADOS</span>
+              <span class="doc-date">Noviembre 2025</span>
+            </div>
+            <div class="doc-title">
+              Elecci&oacute;n de Representantes de los Empleados
+            </div>
+            <div class="doc-description">
+              Resultados de la elecci&oacute;n ante la Comisi&oacute;n de
+              Personal, Periodo 2025 - 2027.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/informe-2025.pdf"
+              class="btn-download"
+              >Descargue aqu&iacute; Documento</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_25_3">
+            <div class="doc-header">
+              <span class="doc-type">LISTADO DE VOTANTES</span>
+              <span class="doc-date">Noviembre 2025</span>
+            </div>
+            <div class="doc-title">
+              Elecci&oacute;n Representantes ante la Comisi&oacute;n de Personal
+            </div>
+            <div class="doc-description">
+              Lista oficial de votantes habilitados para el proceso de
+              elecci&oacute;n.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/votantes-2025.pdf"
+              class="btn-download"
+              >Descargar Lista de Votantes (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_25_4">
+            <div class="doc-header">
+              <span class="doc-type">ACTA DE DESIGNACI&Oacute;N</span>
+              <span class="doc-date">Noviembre 2025</span>
+            </div>
+            <div class="doc-title">
+              Jurados de Votaci&oacute;n - Comisi&oacute;n de Personal
+            </div>
+            <div class="doc-description">
+              Acta de designaci&oacute;n de jurados para el periodo 2025-2027.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/jurados-2025.pdf"
+              class="btn-download"
+              >Descargar Acta de Jurados (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_25_5">
+            <div class="doc-header">
+              <span class="doc-type">AVISO DE INICIO</span>
+              <span class="doc-date">Noviembre 05, 2025</span>
+            </div>
+            <div class="doc-title">
+              Proceso de Encargos: Profesional Especializado, C&oacute;digo
+              2028, Grado 12
+            </div>
+            <div class="doc-description">
+              &Aacute;rea Funcional: Administraci&oacute;n de la Oferta de los
+              Recursos Naturales Renovables Disponibles. Vacante temporal por
+              vacaciones.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/aviso-inicio-2025.pdf"
+              class="btn-download"
+              >Ver Aviso (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_25_6">
+            <div class="doc-header">
+              <span class="doc-type">LISTA CANDIDATOS</span>
+              <span class="doc-date">Noviembre 05, 2025</span>
+            </div>
+            <div class="doc-title">
+              Candidatos Habilitados - Comisi&oacute;n de Personal
+            </div>
+            <div class="doc-description">
+              Lista de candidatos inscritos y habilitados para la
+              elecci&oacute;n 2025-2027.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/candidatos-2025.pdf"
+              class="btn-download"
+              >Descargar Lista (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_25_7">
+            <div class="doc-header">
+              <span class="doc-type">AVISO PR&Oacute;RROGA</span>
+              <span class="doc-date">Octubre 2025</span>
+            </div>
+            <div class="doc-title">
+              Pr&oacute;rroga para Inscripci&oacute;n de Candidatos
+            </div>
+            <div class="doc-description">
+              Extensi&oacute;n del t&eacute;rmino para la elecci&oacute;n de
+              representantes ante la Comisi&oacute;n de Personal 2025-2027.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/prorroga-2025.pdf"
+              class="btn-download"
+              >Ver Aviso (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_25_8">
+            <div class="doc-header">
+              <span class="doc-type">RESOLUCI&Oacute;N DGL No. 000698</span>
+              <span class="doc-date">Octubre 14, 2025</span>
+            </div>
+            <div class="doc-title">
+              Elecci&oacute;n de Representantes 2025 - 2027
+            </div>
+            <div class="doc-description">
+              Reglamentaci&oacute;n de la elecci&oacute;n de representantes de
+              los empleados ante la Comisi&oacute;n de Personal.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/res-698-2025.pdf"
+              class="btn-download"
+              >Descargar Resoluci&oacute;n (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_25_9">
+            <div class="doc-header">
+              <span class="doc-type">RESOLUCI&Oacute;N DGL No. 000302</span>
+              <span class="doc-date">Mayo 13, 2025</span>
+            </div>
+            <div class="doc-title">Apoyo a la Educaci&oacute;n Formal</div>
+            <div class="doc-description">
+              Reglamentaci&oacute;n del procedimiento para otorgar apoyo a
+              servidores de carrera y libre nombramiento (Programa de Bienestar
+              Social).
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/res-302-2025.pdf"
+              class="btn-download"
+              >Descargar Resoluci&oacute;n (PDF)</a
+            >
+          </div>
+
+          <div class="year-separator">2023</div>
+
+          <div class="doc-item" data-id="def_conv_23_1">
+            <div class="doc-header">
+              <span class="doc-type">RESOLUCI&Oacute;N DGL No. 000940</span>
+              <span class="doc-date">Diciembre 14, 2023</span>
+            </div>
+            <div class="doc-title">
+              Conformaci&oacute;n Comisi&oacute;n de Personal
+            </div>
+            <div class="doc-description">
+              Acto administrativo para la conformaci&oacute;n oficial de la
+              comisi&oacute;n.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/res-940-2023.pdf"
+              class="btn-download"
+              >Descargar Resoluci&oacute;n (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_23_2">
+            <div class="doc-header">
+              <span class="doc-type">ACTA DE CIERRE</span>
+              <span class="doc-date">2023</span>
+            </div>
+            <div class="doc-title">
+              Cierre de Elecci&oacute;n de Representantes
+            </div>
+            <div class="doc-description">
+              Finalizaci&oacute;n del proceso de votaci&oacute;n de empleados.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/acta-cierre-2023.pdf"
+              class="btn-download"
+              >Descargar Acta (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_23_3">
+            <div class="doc-header">
+              <span class="doc-type">ACTA DE APERTURA</span>
+              <span class="doc-date">2023</span>
+            </div>
+            <div class="doc-title">
+              Apertura de Elecci&oacute;n de Representantes
+            </div>
+            <div class="doc-description">
+              Inicio formal de la jornada electoral.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/acta-apertura-2023.pdf"
+              class="btn-download"
+              >Descargar Acta (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_23_4">
+            <div class="doc-header">
+              <span class="doc-type">LISTADO DE VOTANTES</span>
+              <span class="doc-date">2023</span>
+            </div>
+            <div class="doc-description">
+              Registro de empleados habilitados para votar en la elecci&oacute;n
+              de representantes.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/votantes-2023.pdf"
+              class="btn-download"
+              >Ver Listado (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_23_5">
+            <div class="doc-header">
+              <span class="doc-type">COMUNICADO</span>
+              <span class="doc-date">2023</span>
+            </div>
+            <div class="doc-title">Jurados de Votaci&oacute;n</div>
+            <div class="doc-description">
+              Listado oficial de jurados designados para la jornada.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/jurados-2023.pdf"
+              class="btn-download"
+              >Ver Listado (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_23_6">
+            <div class="doc-header">
+              <span class="doc-type">ACTA DE VERIFICACI&Oacute;N</span>
+              <span class="doc-date">2023</span>
+            </div>
+            <div class="doc-title">Candidatos Inscritos</div>
+            <div class="doc-description">
+              Verificaci&oacute;n de requisitos de candidatos para la
+              Comisi&oacute;n de Personal.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/verificacion-2023.pdf"
+              class="btn-download"
+              >Descargar Acta (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_23_7">
+            <div class="doc-header">
+              <span class="doc-type">CONVOCATORIA</span>
+              <span class="doc-date">2023</span>
+            </div>
+            <div class="doc-title">
+              Elecci&oacute;n de Representantes ante la Comisi&oacute;n de
+              Personal
+            </div>
+            <div class="doc-description">
+              Documento de convocatoria principal para el proceso electoral.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/convocatoria-2023.pdf"
+              class="btn-download"
+              >Descargar Convocatoria (PDF)</a
+            >
+          </div>
+
+          <div class="year-separator">2021 - 2022</div>
+
+          <div class="doc-item" data-id="def_conv_22_1">
+            <div class="doc-header">
+              <span class="doc-type">RESOLUCI&Oacute;N DGL 000009</span>
+              <span class="doc-date">Enero 12, 2022</span>
+            </div>
+            <div class="doc-title">
+              Conformaci&oacute;n Comisi&oacute;n de Personal - CAS
+            </div>
+            <div class="doc-description">
+              Acto administrativo que formaliza la comisi&oacute;n para el
+              periodo correspondiente.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/res-009-2022.pdf"
+              class="btn-download"
+              >Ver Resoluci&oacute;n (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_21_1">
+            <div class="doc-header">
+              <span class="doc-type">ACTA DE CIERRE</span>
+              <span class="doc-date">2021</span>
+            </div>
+            <div class="doc-title">
+              Votaci&oacute;n Representante de los Empleados
+            </div>
+            <div class="doc-description">
+              Cierre de votaci&oacute;n de la convocatoria para representantes
+              ante la comisi&oacute;n.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/acta-cierre-2021.pdf"
+              class="btn-download"
+              >Ver Acta (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_21_2">
+            <div class="doc-header">
+              <span class="doc-type">MEMORANDO OP NO. 641</span>
+              <span class="doc-date">2021</span>
+            </div>
+            <div class="doc-title">
+              Elecci&oacute;n de Jurados de Votaci&oacute;n
+            </div>
+            <div class="doc-description">
+              Designaci&oacute;n formal de jurados para el proceso de 2021.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/memorando-641-2021.pdf"
+              class="btn-download"
+              >Ver Memorando (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_21_3">
+            <div class="doc-header">
+              <span class="doc-type">TERCERA CONVOCATORIA</span>
+              <span class="doc-date">2021</span>
+            </div>
+            <div class="doc-title">
+              Elecci&oacute;n de Representantes ante la Comisi&oacute;n de
+              Personal
+            </div>
+            <div class="doc-description">
+              Tercer llamado oficial para la inscripci&oacute;n y
+              selecci&oacute;n de representantes.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/convocatoria-3-2021.pdf"
+              class="btn-download"
+              >Ver Convocatoria (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_21_4">
+            <div class="doc-header">
+              <span class="doc-type">INSCRIPCI&Oacute;N</span>
+              <span class="doc-date">2021</span>
+            </div>
+            <div class="doc-title">
+              Soporte Inscripci&oacute;n Comisi&oacute;n de Personal
+            </div>
+            <div class="doc-description">
+              Evidencia de inscripci&oacute;n para representantes de los
+              empleados 2021.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/inscripcion-2021.pdf"
+              class="btn-download"
+              >Ver Soporte (PDF)</a
+            >
+          </div>
+
+          <div class="doc-item" data-id="def_conv_21_5">
+            <div class="doc-header">
+              <span class="doc-type">CONVOCATORIA INICIAL</span>
+              <span class="doc-date">2021</span>
+            </div>
+            <div class="doc-title">
+              Elecci&oacute;n de Representantes de los Empleados
+            </div>
+            <div class="doc-description">
+              Primera convocatoria para la elecci&oacute;n ante la
+              comisi&oacute;n de personal.
+            </div>
+            <a
+              href="../../data/menu header/la cas/talento humano/Convocatorias/convocatoria-inicial-2021.pdf"
+              class="btn-download"
+              >Ver Convocatoria (PDF)</a
+            >
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="../../script.js"></script>
+  </body>
+</html>

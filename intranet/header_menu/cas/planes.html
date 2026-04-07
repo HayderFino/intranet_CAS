@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planes - Talento Humano - Intranet CAS</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+      }
+
+      .category-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        border-color: #3b82f6;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f1f5f9;
+      }
+
+      .card-icon {
+        width: 40px;
+        height: 40px;
+        background: #eff6ff;
+        color: #3b82f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+      }
+
+      .card-title {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 1.1rem;
+      }
+
+      .plan-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .plan-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #475569;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+
+      .plan-item:hover {
+        background: #eff6ff;
+        color: #1e40af;
+      }
+
+      .plan-item svg {
+        color: #ef4444;
+        flex-shrink: 0;
+      }
+
+      .meta-info-bar {
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: 15px;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+        font-size: 0.85rem;
+      }
+
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .meta-label {
+        color: #64748b;
+        font-weight: 500;
+      }
+
+      .meta-value {
+        color: #1e293b;
+        font-weight: 600;
+      }
+
+      .res-section {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .res-title {
+        color: #166534;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img
+          class="placeholder-img"
+          src="../../data/imagenes/logo.png"
+          alt="LOGO CAS"
+        />
+        <h2>Intranet CAS</h2>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a></li>
+          <li><a href="../../herramientas/respel.html">RESPEL</a></li>
+          <li><a href="../../herramientas/rua.html">RUA</a></li>
+          <li><a href="../../herramientas/pcb.html">PCB</a></li>
+          <li>
+            <a href="../../herramientas/cartografia.html"
+              >Cartograf&iacute;a en L&iacute;nea</a
+            >
+          </li>
+          <li><a href="../../herramientas/soporte.html">Soporte</a></li>
+          <li><a href="../../herramientas/galeria.html">Galeria</a></li>
+          <li><a href="../../herramientas/correo.html">Correo</a></li>
+          <li><a href="../../herramientas/calendario.html">Calendario</a></li>
+          <li>
+            <a href="../../herramientas/busqueda.html">Busqueda Avanzada</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="top-nav">
+        <div class="header-menu">
+          <a href="../../index.html">Inicio</a>
+
+          <div class="dropdown">
+            <a href="../../header_menu/cas/resena.html">La CAS &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/cas/mision-vision.html"
+                >Misi&oacute;n y Visi&oacute;n</a
+              >
+              <a href="../../header_menu/cas/objetivos.html"
+                >Objetivos de la CAS</a
+              >
+              <a href="../../header_menu/cas/funciones.html"
+                >Funciones de la CAS</a
+              >
+              <a href="../../header_menu/cas/estructura.html"
+                >Estructura Organizacional</a
+              >
+              <a href="../../header_menu/cas/politica-ambiental.html"
+                >Pol&iacute;tica Ambiental</a
+              >
+              <a href="../../header_menu/cas/normativa-cas.html"
+                >Normativa CAS</a
+              >
+              <a href="../../header_menu/cas/informe-gestion.html"
+                >Informe de Gesti&oacute;n</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/cas/talento-humano.html"
+                  >Talento Humano <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="manual-funciones.html">Manual de Funciones</a>
+                  <a href="https://www.cas.gov.co/not-found" target="_blank"
+                    >Directorio de Funcionarios</a
+                  >
+                  <a href="plan-monitoreo-sigep.html"
+                    >Plan de monitoreo del SIGEP</a
+                  >
+                  <a href="planes.html">Planes</a>
+                  <a href="convocatorias.html">Convocatorias</a>
+                  <a href="estudios-tecnicos.html">Estudios T&eacute;cnicos</a>
+                  <a href="provision-empleos.html"
+                    >Provisi&oacute;n de empleos</a
+                  >
+                  <a
+                    href="https://cas.delfineco.com/gdpagos_cas/"
+                    target="_blank"
+                    >Desprendibles de Nomina</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/cas/postalcas.html">PostalCAS</a>
+              <a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a>
+              <a href="../../header_menu/cas/agenda.html">Agenda CAS</a>
+              <a href="../../header_menu/cas/ciberseguridad.html"
+                >GIT - Ciberseguridad</a
+              >
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="../../header_menu/sgi/sgi.html">SGI &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/sgi/procesos-estrategicos.html"
+                >Procesos Estrat&eacute;gicos</a
+              >
+              <a href="../../header_menu/sgi/procesos-misionales.html"
+                >Procesos Misionales</a
+              >
+
+              <a href="../../header_menu/sgi/procesos-apoyo.html"
+                >Procesos de Apoyo</a
+              >
+              <a href="../../header_menu/sgi/evaluacion.html"
+                >Proceso de Evaluaci&oacute;n y Seguimiento</a
+              >
+              <a href="../../header_menu/sgi/politicas.html"
+                >Pol&iacute;ticas</a
+              >
+              <a href="../../header_menu/sgi/objetivos-calidad.html"
+                >Objetivos de Calidad</a
+              >
+              <a href="../../header_menu/sgi/alcance.html">Alcance de SGI</a>
+              <a href="../../header_menu/sgi/documentos.html"
+                >Documentos Institucionales</a
+              >
+              <a href="../../header_menu/sgi/manuales.html">Manuales SGI</a>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="#">GIT &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/git/normatividad.html"
+                >Normatividad GIT</a
+              >
+              <a href="../../header_menu/git/gobierno-digital.html"
+                >Gobierno Digital</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/git/manuales-usuario.html"
+                  >Manuales de Usuario
+                  <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../../header_menu/git/manuales_usuario/cita.html"
+                    >CITA</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/sirh.html"
+                    >SIRH</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/snif.html"
+                    >SNIF</a
+                  >
+                  <a
+                    href="../../header_menu/git/manuales_usuario/revision-red.html"
+                    >Revisi&oacute;n de red primer nivel</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/git/boletines.html"
+                >Boletines de Seguridad</a
+              >
+              <a href="../../header_menu/git/responsables.html"
+                >Responsables de la informaci&oacute;n en pagina WEB</a
+              >
+              <a href="../../header_menu/git/proteccion-datos.html"
+                >Proteccion de datos personales</a
+              >
+            </div>
+          </div>
+
+          <a href="../../meci.html">MECI</a>
+          <a href="/administracion/login.html" class="btn-login">Ingresar</a>
+          <div class="search-bar">
+            <input type="text" placeholder="Buscar..." />
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-area">
+        <nav class="breadcrumbs">
+          <a href="../../index.html">Inicio</a> <span>/</span>
+          <a href="#">La CAS</a> <span>/</span>
+          <a href="talento-humano.html">Talento Humano</a> <span>/</span>
+          Planes
+        </nav>
+
+        <section class="welcome-header">
+          <h1>Planes de Talento Humano</h1>
+          <p>
+            Instrumentos de planeaci&oacute;n y gesti&oacute;n para el
+            desarrollo integral del personal de la instituci&oacute;n.
+          </p>
+        </section>
+
+        <div class="meta-info-bar">
+          <div class="meta-item">
+            <span class="meta-label">Publicado:</span>
+            <span class="meta-value">29 Septiembre 2022</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">&Uacute;ltima actualizaci&oacute;n:</span>
+            <span class="meta-value">22 Enero 2026</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Responsable:</span>
+            <span class="meta-value"
+              >Subdirecci&oacute;n Administrativa y Financiera - Talento
+              Humano</span
+            >
+          </div>
+        </div>
+
+        <div class="category-grid">
+          <!-- Plan Anual de Vacantes -->
+          <div class="category-card">
+            <div class="card-header">
+              <div class="card-icon">
+                <svg
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+              </div>
+              <div class="card-title">Plan Anual de Vacantes</div>
+            </div>
+            <div class="plan-list" id="vacantes-list">
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Plan Anual de Vacantes/pav-2026.pdf"
+                class="plan-item"
+                data-id="def_vac_26"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan Anual de Vacantes 2026
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Plan Anual de Vacantes/pav-2025.pdf"
+                class="plan-item"
+                data-id="def_vac_25"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan Anual de Vacantes 2025
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Plan Anual de Vacantes/pav-2021.pdf"
+                class="plan-item"
+                data-id="def_vac_21"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan Anual de Vacantes 2021
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan de Bienestar Social -->
+          <div class="category-card">
+            <div class="card-header">
+              <div class="card-icon">
+                <svg
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </div>
+              <div class="card-title">Bienestar e Incentivos</div>
+            </div>
+            <div class="plan-list" id="bienestar-list">
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Bienestar e Incentivos/plan-estrategico-2026.pdf"
+                class="plan-item"
+                data-id="def_bie_26e"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan Estrat&eacute;gico 2026
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Bienestar e Incentivos/estimulos-2026.pdf"
+                class="plan-item"
+                data-id="def_bie_26i"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Estimulos e Incentivos 2026
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Bienestar e Incentivos/estimulos-2025.pdf"
+                class="plan-item"
+                data-id="def_bie_25i"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Estimulos e Incentivos 2025
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Bienestar e Incentivos/bienestar-2022.pdf"
+                class="plan-item"
+                data-id="def_bie_22"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan de Bienestar Social 2022
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan de Previsión de RRHH -->
+          <div class="category-card">
+            <div class="card-header">
+              <div class="card-icon">
+                <svg
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
+                </svg>
+              </div>
+              <div class="card-title">Previsi&oacute;n de Recurso Humano</div>
+            </div>
+            <div class="plan-list" id="prevision-list">
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Previsión de Recurso Humano/prevision-2026.pdf"
+                class="plan-item"
+                data-id="def_pre_26"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan de Previsi&oacute;n 2026
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Previsión de Recurso Humano/prevision-2025.pdf"
+                class="plan-item"
+                data-id="def_pre_25"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan de Previsi&oacute;n 2025
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Previsión de Recurso Humano/prevision-2022.pdf"
+                class="plan-item"
+                data-id="def_pre_22"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan de Previsi&oacute;n 2022
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan Estratégico de Talento Humano -->
+          <div class="category-card">
+            <div class="card-header">
+              <div class="card-icon">
+                <svg
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  />
+                </svg>
+              </div>
+              <div class="card-title">Plan Estrat&eacute;gico TH</div>
+            </div>
+            <div class="plan-list" id="estrategico-list">
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Plan Estratégico TH/estrategico-2026.pdf"
+                class="plan-item"
+                data-id="def_est_26"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Estrat&eacute;gico TH 2026
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Plan Estratégico TH/estrategico-2025.pdf"
+                class="plan-item"
+                data-id="def_est_25"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Estrat&eacute;gico TH 2025
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Plan Estratégico TH/estrategico-2022.pdf"
+                class="plan-item"
+                data-id="def_est_22"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Estrat&eacute;gico TH 2022
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Plan Estratégico TH/estrategico-2021.pdf"
+                class="plan-item"
+                data-id="def_est_21"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Estrat&eacute;gico TH 2021
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan Institucional de Capacitación -->
+          <div class="category-card">
+            <div class="card-header">
+              <div class="card-icon">
+                <svg
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                  <path
+                    d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+                  />
+                  <path
+                    d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="card-title">Plan de Capacitaci&oacute;n (PIC)</div>
+            </div>
+            <div class="plan-list" id="pic-list">
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Plan de Capacitación (PIC)/pic-2026.pdf"
+                class="plan-item"
+                data-id="def_pic_26"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan Institucional PIC 2026
+              </a>
+              <a
+                href="../../data/menu header/la cas/talento humano/Planes/Plan de Capacitación (PIC)/pic-2025.pdf"
+                class="plan-item"
+                data-id="def_pic_25"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+                Plan Institucional PIC 2025
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="res-section">
+          <div class="res-title">
+            <svg
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Resolucciones - 2026
+          </div>
+          <div class="plan-list" id="resoluciones-list">
+            <a
+              href="../../data/menu header/la cas/talento humano/Planes/Resoluciones - 2026/res-028-2026.pdf"
+              class="plan-item"
+              data-id="def_res_28"
+              style="background: white; border: 1px solid #bbf7d0"
+            >
+              <svg
+                width="18"
+                height="18"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                />
+              </svg>
+              Resoluci&oacute;n DGL No. 000028 DE 2026
+            </a>
+            <a
+              href="../../data/menu header/la cas/talento humano/Planes/Resoluciones - 2026/res-029-2026.pdf"
+              class="plan-item"
+              data-id="def_res_29"
+              style="background: white; border: 1px solid #bbf7d0"
+            >
+              <svg
+                width="18"
+                height="18"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                />
+              </svg>
+              Resoluci&oacute;n DGL No. 000029 DE 2026
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="../../script.js"></script>
+  </body>
+</html>

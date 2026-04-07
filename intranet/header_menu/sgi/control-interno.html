@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Control Interno - SGI - Intranet CAS</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .category-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--primary-light);
+      }
+
+      .category-icon {
+        width: 42px;
+        height: 42px;
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .category-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .category-header h3 {
+        margin: 0;
+        font-size: 1.35rem;
+        color: var(--primary-dark);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img
+          class="placeholder-img"
+          src="../../data/imagenes/logo.png"
+          alt="LOGO CAS"
+        />
+        <h2>Intranet CAS</h2>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a></li>
+          <li><a href="../../herramientas/respel.html">RESPEL</a></li>
+          <li><a href="../../herramientas/rua.html">RUA</a></li>
+          <li><a href="../../herramientas/pcb.html">PCB</a></li>
+          <li>
+            <a href="../../herramientas/cartografia.html"
+              >Cartograf&iacute;a en L&iacute;nea</a
+            >
+          </li>
+          <li><a href="../../herramientas/soporte.html">Soporte</a></li>
+          <li><a href="../../herramientas/galeria.html">Galeria</a></li>
+          <li><a href="../../herramientas/correo.html">Correo</a></li>
+          <li><a href="../../herramientas/calendario.html">Calendario</a></li>
+          <li>
+            <a href="../../herramientas/busqueda.html">Busqueda Avanzada</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="top-nav">
+        <div class="header-menu">
+          <a href="../../index.html">Inicio</a>
+          <div class="dropdown">
+            <a href="../../header_menu/cas/resena.html">La CAS &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/cas/mision-vision.html"
+                >Misi&oacute;n y Visi&oacute;n</a
+              >
+              <a href="../../header_menu/cas/objetivos.html"
+                >Objetivos de la CAS</a
+              >
+              <a href="../../header_menu/cas/funciones.html"
+                >Funciones de la CAS</a
+              >
+              <a href="../../header_menu/cas/estructura.html"
+                >Estructura Organizacional</a
+              >
+              <a href="../../header_menu/cas/politica-ambiental.html"
+                >Pol&iacute;tica Ambiental</a
+              >
+              <a href="../../header_menu/cas/normativa-cas.html"
+                >Normativa CAS</a
+              >
+              <a href="../../header_menu/cas/informe-gestion.html"
+                >Informe de Gesti&oacute;n</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/cas/talento-humano.html"
+                  >Talento Humano <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../cas/manual-funciones.html">Manual de Funciones</a>
+                  <a href="https://www.cas.gov.co/not-found" target="_blank"
+                    >Directorio de Funcionarios</a
+                  >
+                  <a href="../cas/plan-monitoreo-sigep.html"
+                    >Plan de monitoreo del SIGEP</a
+                  >
+                  <a href="../cas/planes.html">Planes</a>
+                  <a href="../cas/convocatorias.html">Convocatorias</a>
+                  <a href="../cas/estudios-tecnicos.html"
+                    >Estudios T&eacute;cnicos</a
+                  >
+                  <a href="../cas/provision-empleos.html"
+                    >Provisi&oacute;n de empleos</a
+                  >
+                  <a
+                    href="https://cas.delfineco.com/gdpagos_cas/"
+                    target="_blank"
+                    >Desprendibles de Nomina</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/cas/postalcas.html">PostalCAS</a>
+              <a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a>
+              <a href="../../header_menu/cas/agenda.html">Agenda CAS</a>
+              <a href="../../header_menu/cas/ciberseguridad.html"
+                >GIT - Ciberseguridad</a
+              >
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="../../header_menu/sgi/sgi.html">SGI &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/sgi/procesos-estrategicos.html"
+                >Procesos Estrat&eacute;gicos</a
+              >
+              <a href="../../header_menu/sgi/procesos-misionales.html"
+                >Procesos Misionales</a
+              >
+              <a href="../../header_menu/sgi/procesos-apoyo.html"
+                >Procesos de Apoyo</a
+              >
+              <a href="../../header_menu/sgi/evaluacion.html"
+                >Proceso de Evaluaci&oacute;n y Seguimiento</a
+              >
+              <a href="../../header_menu/sgi/politicas.html"
+                >Pol&iacute;ticas</a
+              >
+              <a href="../../header_menu/sgi/objetivos-calidad.html"
+                >Objetivos de Calidad</a
+              >
+              <a href="../../header_menu/sgi/alcance.html">Alcance de SGI</a>
+              <a href="../../header_menu/sgi/documentos.html"
+                >Documentos Institucionales</a
+              >
+              <a href="../../header_menu/sgi/manuales.html">Manuales SGI</a>
+            </div>
+          </div>
+          <div class="dropdown">
+            <a href="#">GIT &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/git/normatividad.html"
+                >Normatividad GIT</a
+              >
+              <a href="../../header_menu/git/gobierno-digital.html"
+                >Gobierno Digital</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/git/manuales-usuario.html"
+                  >Manuales de Usuario
+                  <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../../header_menu/git/manuales_usuario/cita.html"
+                    >CITA</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/sirh.html"
+                    >SIRH</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/snif.html"
+                    >SNIF</a
+                  >
+                  <a
+                    href="../../header_menu/git/manuales_usuario/revision-red.html"
+                    >Revisi&oacute;n de red primer nivel</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/git/boletines.html"
+                >Boletines de Seguridad</a
+              >
+              <a href="../../header_menu/git/responsables.html"
+                >Responsables de la informaci&oacute;n en pagina WEB</a
+              >
+              <a href="../../header_menu/git/proteccion-datos.html"
+                >Proteccion de datos personales</a
+              >
+            </div>
+          </div>
+          <a href="../../meci.html">MECI</a>
+          <a href="/administracion/login.html" class="btn-login">Ingresar</a>
+          <div class="search-bar">
+            <input type="text" placeholder="Buscar..." />
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-area">
+        <nav class="breadcrumbs">
+          <a href="../../index.html">Inicio</a> <span>/</span>
+          <a href="sgi.html">SGI</a> <span>/</span>
+          <a href="evaluacion.html">Evaluaci&oacute;n y Seguimiento</a>
+          <span>/</span>
+          Control Interno
+        </nav>
+
+        <section class="welcome-header">
+          <h1>Control Interno — PCI</h1>
+          <p>
+            Evaluaci&oacute;n independiente del Sistema de Control Interno y
+            auditor&iacute;as de cumplimiento.
+          </p>
+        </section>
+
+        <!-- CATEGORÍA: Caracterización -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </div>
+            <h3>Caracterizaci&oacute;n</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item" data-id="1772320002001">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">Caracterizaci&oacute;n proceso</div>
+                <div class="file-meta">PDF - Documento Principal</div>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- CATEGORÍA: Formatos Institucionales -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 17v-2m3 2v-4m3 2v-6m-8-5.125c.487-.167.994-.275 1.517-.323m0 0A12.03 12.03 0 0112 3a12.03 12.03 0 014.483.852m-4.483-.852v3.175m5.517 7.95c.167.487.275.994.323 1.517m0 0A12.03 12.03 0 0112 21a12.03 12.03 0 01-4.483-.852m4.483.852v-3.175"
+                />
+              </svg>
+            </div>
+            <h3>Formatos Institucionales (F-PCI)</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item" data-id="1772320002021">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  F-PCI-001 Encuesta de Autoevaluaci&oacute;n
+                </div>
+                <div class="file-meta">PDF - Formato</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002022">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  F-PCI-002 Mapa de Riesgos Institucional
+                </div>
+                <div class="file-meta">PDF - Formato</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002023">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  F-PCI-003 Encuesta Satisfacci&oacute;n Cliente Interno
+                </div>
+                <div class="file-meta">PDF - Formato</div>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- CATEGORÍA: Procedimientos -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                />
+              </svg>
+            </div>
+            <h3>Procedimientos (PCI)</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item" data-id="1772320002002">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">PCI-001 Evaluaci&oacute;n del SCI</div>
+                <div class="file-meta">PDF - Procedimiento</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002003">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  PCI-002 Autoevaluaci&oacute;n de Procesos
+                </div>
+                <div class="file-meta">PDF - Procedimiento</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002004">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  PCI-003 Atenci&oacute;n al Usuario y Partes
+                </div>
+                <div class="file-meta">PDF - Procedimiento</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002005">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  PCI-004 Procedimiento para los Comit&eacute;s
+                </div>
+                <div class="file-meta">PDF - Procedimiento</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002006">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">PCI-005 Plan de Mejoramiento CGR</div>
+                <div class="file-meta">PDF - Procedimiento</div>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- CATEGORÍA: Instructivos de Auditoría -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <h3>Instructivos de Auditor&iacute;a (I-PCI)</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item" data-id="1772320002007">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  I-PCI-001 Auditor&iacute;a a la Contrataci&oacute;n
+                </div>
+                <div class="file-meta">PDF - Instructivo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002008">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  I-PCI-002 Auditor&iacute;a Interna al Inventario
+                </div>
+                <div class="file-meta">PDF - Instructivo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002009">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  I-PCI-003 Auditor&iacute;a Propiedad, Planta y Equipo
+                </div>
+                <div class="file-meta">PDF - Instructivo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002010">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  I-PCI-004 Auditor&iacute;a Interna al Presupuesto
+                </div>
+                <div class="file-meta">PDF - Instructivo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002011">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  I-PCI-005 Auditor&iacute;a Interna a Tesorer&iacute;a
+                </div>
+                <div class="file-meta">PDF - Instructivo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002012">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  I-PCI-006 Instructivo de Mapa de Riesgos
+                </div>
+                <div class="file-meta">PDF - Instructivo</div>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- CATEGORÍA: Gestión de Riesgos -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                />
+              </svg>
+            </div>
+            <h3>Gesti&oacute;n de Riesgos y Matriz</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item" data-id="1772320002013">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">MR-SGI-002 Control Interno</div>
+                <div class="file-meta">PDF - Matriz de Riesgos</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002014">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  Matriz de Rendici&oacute;n de Informes CAS
+                </div>
+                <div class="file-meta">PDF - Matriz</div>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- CATEGORÍA: Anexos y Guías Técnicas -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+            </div>
+            <h3>Anexos y Gu&iacute;as T&eacute;cnicas</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item" data-id="1772320002015">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  Pol&iacute;tica de Administraci&oacute;n del Riesgo
+                </div>
+                <div class="file-meta">PDF - Anexo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002016">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  Gu&iacute;a Auditor&iacute;a Interna (Versi&oacute;n 4)
+                </div>
+                <div class="file-meta">PDF - Anexo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002017">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  Gu&iacute;a Administraci&oacute;n Riesgo (Versi&oacute;n 5)
+                </div>
+                <div class="file-meta">PDF - Anexo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002018">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  Gu&iacute;a Identificaci&oacute;n Conflicto de Intereses
+                </div>
+                <div class="file-meta">PDF - Anexo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002019">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  Gu&iacute;a Rol de Unidades de Control Interno
+                </div>
+                <div class="file-meta">PDF - Anexo</div>
+              </div>
+            </a>
+            <a href="#" class="file-item" data-id="1772320002020">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="file-name">
+                  Evaluaci&oacute;n Gesti&oacute;n por Dependencias 2018
+                </div>
+                <div class="file-meta">PDF - Anexo</div>
+              </div>
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script src="../../script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Procesos de Apoyo - SGI - Intranet CAS</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .process-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem 0;
+      }
+
+      .process-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 180px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .process-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--primary);
+        opacity: 0.8;
+      }
+
+      .process-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        border-color: var(--primary);
+      }
+
+      .process-card h3 {
+        color: var(--primary-dark);
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      .process-card p {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        line-height: 1.4;
+      }
+
+      .icon-box {
+        width: 50px;
+        height: 50px;
+        background: var(--primary-light);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+        color: var(--primary-dark);
+      }
+
+      .icon-box svg {
+        width: 28px;
+        height: 28px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img
+          class="placeholder-img"
+          src="../../data/imagenes/logo.png"
+          alt="LOGO CAS"
+        />
+        <h2>Intranet CAS</h2>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a></li>
+          <li><a href="../../herramientas/respel.html">RESPEL</a></li>
+          <li><a href="../../herramientas/rua.html">RUA</a></li>
+          <li><a href="../../herramientas/pcb.html">PCB</a></li>
+          <li>
+            <a href="../../herramientas/cartografia.html"
+              >Cartograf&iacute;a en L&iacute;nea</a
+            >
+          </li>
+          <li><a href="../../herramientas/soporte.html">Soporte</a></li>
+          <li><a href="../../herramientas/galeria.html">Galeria</a></li>
+          <li><a href="../../herramientas/correo.html">Correo</a></li>
+          <li><a href="../../herramientas/calendario.html">Calendario</a></li>
+          <li>
+            <a href="../../herramientas/busqueda.html">Busqueda Avanzada</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="top-nav">
+        <div class="header-menu">
+          <a href="../../index.html">Inicio</a>
+
+          <div class="dropdown">
+            <a href="../../header_menu/cas/resena.html">La CAS &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/cas/mision-vision.html"
+                >Misi&oacute;n y Visi&oacute;n</a
+              >
+              <a href="../../header_menu/cas/objetivos.html"
+                >Objetivos de la CAS</a
+              >
+              <a href="../../header_menu/cas/funciones.html"
+                >Funciones de la CAS</a
+              >
+              <a href="../../header_menu/cas/estructura.html"
+                >Estructura Organizacional</a
+              >
+              <a href="../../header_menu/cas/politica-ambiental.html"
+                >Pol&iacute;tica Ambiental</a
+              >
+              <a href="../../header_menu/cas/normativa-cas.html"
+                >Normativa CAS</a
+              >
+              <a href="../../header_menu/cas/informe-gestion.html"
+                >Informe de Gesti&oacute;n</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/cas/talento-humano.html"
+                  >Talento Humano <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../cas/manual-funciones.html">Manual de Funciones</a>
+                  <a href="https://www.cas.gov.co/not-found" target="_blank"
+                    >Directorio de Funcionarios</a
+                  >
+                  <a href="../cas/plan-monitoreo-sigep.html"
+                    >Plan de monitoreo del SIGEP</a
+                  >
+                  <a href="../cas/planes.html">Planes</a>
+                  <a href="../cas/convocatorias.html">Convocatorias</a>
+                  <a href="../cas/estudios-tecnicos.html"
+                    >Estudios T&eacute;cnicos</a
+                  >
+                  <a href="../cas/provision-empleos.html"
+                    >Provisi&oacute;n de empleos</a
+                  >
+                  <a
+                    href="https://cas.delfineco.com/gdpagos_cas/"
+                    target="_blank"
+                    >Desprendibles de Nomina</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/cas/postalcas.html">PostalCAS</a>
+              <a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a>
+              <a href="../../header_menu/cas/agenda.html">Agenda CAS</a>
+              <a href="../../header_menu/cas/ciberseguridad.html"
+                >GIT - Ciberseguridad</a
+              >
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="../../header_menu/sgi/sgi.html">SGI &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/sgi/procesos-estrategicos.html"
+                >Procesos Estrat&eacute;gicos</a
+              >
+              <a href="../../header_menu/sgi/procesos-misionales.html"
+                >Procesos Misionales</a
+              >
+              <a href="../../header_menu/sgi/procesos-apoyo.html"
+                >Procesos de Apoyo</a
+              >
+              <a href="../../header_menu/sgi/evaluacion.html"
+                >Proceso de Evaluaci&oacute;n y Seguimiento</a
+              >
+              <a href="../../header_menu/sgi/politicas.html"
+                >Pol&iacute;ticas</a
+              >
+              <a href="../../header_menu/sgi/objetivos-calidad.html"
+                >Objetivos de Calidad</a
+              >
+              <a href="../../header_menu/sgi/alcance.html">Alcance de SGI</a>
+              <a href="../../header_menu/sgi/documentos.html"
+                >Documentos Institucionales</a
+              >
+              <a href="../../header_menu/sgi/manuales.html">Manuales SGI</a>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="#">GIT &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/git/normatividad.html"
+                >Normatividad GIT</a
+              >
+              <a href="../../header_menu/git/gobierno-digital.html"
+                >Gobierno Digital</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/git/manuales-usuario.html"
+                  >Manuales de Usuario
+                  <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../../header_menu/git/manuales_usuario/cita.html"
+                    >CITA</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/sirh.html"
+                    >SIRH</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/snif.html"
+                    >SNIF</a
+                  >
+                  <a
+                    href="../../header_menu/git/manuales_usuario/revision-red.html"
+                    >Revisi&oacute;n de red primer nivel</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/git/boletines.html"
+                >Boletines de Seguridad</a
+              >
+              <a href="../../header_menu/git/responsables.html"
+                >Responsables de la informaci&oacute;n en pagina WEB</a
+              >
+              <a href="../../header_menu/git/proteccion-datos.html"
+                >Proteccion de datos personales</a
+              >
+            </div>
+          </div>
+
+          <a href="../../meci.html">MECI</a>
+          <a href="/administracion/login.html" class="btn-login">Ingresar</a>
+          <div class="search-bar">
+            <input type="text" placeholder="Buscar..." />
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-area">
+        <nav class="breadcrumbs">
+          <a href="../../index.html">Inicio</a> <span>/</span>
+          <a href="sgi.html">SGI</a> <span>/</span>
+          Procesos de Apoyo
+        </nav>
+
+        <section class="welcome-header">
+          <h1>Procesos de Apoyo</h1>
+          <p>
+            Soporte t&eacute;cnico, log&iacute;stico y financiero para la
+            operaci&oacute;n institucional.
+          </p>
+        </section>
+
+        <div class="process-grid">
+          <!-- Gestión Documental -->
+          <a href="gestion-documental.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Gestión Documental</h3>
+            <p>
+              Admisi&oacute;n, organizaci&oacute;n y preservaci&oacute;n de
+              documentos.
+            </p>
+          </a>
+
+          <!-- Contratación -->
+          <a href="contratacion.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Contratación</h3>
+            <p>Gesti&oacute;n contractual y procesos de adquisici&oacute;n.</p>
+          </a>
+
+          <!-- Jurídico -->
+          <a href="juridico.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Jurídico</h3>
+            <p>Asesor&iacute;a legal y representaci&oacute;n judicial.</p>
+          </a>
+
+          <!-- Bienes y Servicios -->
+          <a href="bienes-servicios.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Bienes y Servicios</h3>
+            <p>
+              Administraci&oacute;n de recursos f&iacute;sicos y suministros.
+            </p>
+          </a>
+
+          <!-- Gestión de la Información y Tecnologías -->
+          <a href="gestion-tecnologias.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Gestión de la Información y Tecnologías</h3>
+            <p>Infraestructura TIC, sistemas y ciberseguridad.</p>
+          </a>
+
+          <!-- Talento Humano -->
+          <a href="talento-humano.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Talento Humano</h3>
+            <p>Desarrollo, bienestar y gesti&oacute;n del personal.</p>
+          </a>
+
+          <!-- Control Interno Disciplinario -->
+          <a href="control-disciplinario.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Control Interno Disciplinario</h3>
+            <p>Vigilancia de la conducta oficial y transparencia.</p>
+          </a>
+
+          <!-- Cobro Coactivo -->
+          <a href="cobro-coactivo.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Cobro Coactivo</h3>
+            <p>Recuperaci&oacute;n de cartera y obligaciones financieras.</p>
+          </a>
+
+          <!-- Gestión Financiera -->
+          <a href="gestion-financiera.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Gestión Financiera</h3>
+            <p>Presupuesto, contabilidad y tesorer&iacute;a.</p>
+          </a>
+
+          <!-- Gestión Integral -->
+          <a href="gestion-integral.html" class="process-card">
+            <div class="icon-box">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Gestión Integral</h3>
+            <p>Sistema Integrado de Gesti&oacute;n y mejora continua.</p>
+          </a>
+        </div>
+      </div>
+    </main>
+    <script src="../../script.js"></script>
+  </body>
+</html>

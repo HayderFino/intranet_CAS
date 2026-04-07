@@ -1,0 +1,154 @@
+[
+  {
+    "id": "legacy-0",
+    "title": "Día internacional del Tremarctos ornatus",
+    "description": "En el marco del Día Internacional de la Protección del Oso, sensibilizamos sobre la importancia de proteger nuestra fauna silvestre, destacando al oso de anteojos, único en Sudamérica.",
+    "imageUrl": "/data/imagenes/dia_internacionaltremarctos.jpeg",
+    "category": "Ambiental",
+    "createdAt": "2026-02-28T15:20:00.000Z"
+  },
+  {
+    "id": "legacy-1",
+    "title": "Pausa activa",
+    "description": "Iniciamos jornadas de pausas activas para fortalecer el bienestar físico y mental, previniendo lesiones y promoviendo hábitos saludables en nuestra rutina laboral.",
+    "imageUrl": "/data/imagenes/pausas-activas.jpg",
+    "category": "Bienestar",
+    "createdAt": "2026-02-28T15:20:01.000Z"
+  },
+  {
+    "id": "legacy-2",
+    "title": "Capacitación a coordinadores regionales",
+    "description": "Jornada para fortalecer conocimientos, unificar criterios y optimizar procesos internos, reafirmando el compromiso con una gestión eficiente y transparente.",
+    "imageUrl": "/data/imagenes/laceholder.jpeg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:02.000Z"
+  },
+  {
+    "id": "legacy-3",
+    "title": "Jornada Especial",
+    "description": "Actividad especial programada para el fortalecimiento institucional.",
+    "imageUrl": "/data/imagenes/especial.jpeg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:03.000Z"
+  },
+  {
+    "id": "legacy-4",
+    "title": "Síguenos en la red",
+    "description": "Mantente conectado con nosotros a través de nuestras redes sociales oficiales.",
+    "imageUrl": "/data/imagenes/facebookseguibores.jpeg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:04.000Z"
+  },
+  {
+    "id": "legacy-5",
+    "title": "Bienestar Emocional",
+    "description": "Espacios dedicados al cuidado de la salud mental y emocional de todos nuestros colaboradores.",
+    "imageUrl": "/data/imagenes/bienestar.jpeg",
+    "category": "Bienestar",
+    "createdAt": "2026-02-28T15:20:05.000Z"
+  },
+  {
+    "id": "legacy-6",
+    "title": "Reconocimiento 'Roble de Oro'",
+    "description": "La Dirección General de la CAS realizó la ceremonia de entrega del reconocimiento al mérito ambiental “Roble de Oro” a tres funcionarios que culminan su etapa laboral al recibir su pensión, en agradecimiento por su compromiso y vocación de servicio con la Corporación.",
+    "imageUrl": "/data/imagenes/pensionados.jpeg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:06.000Z"
+  },
+  {
+    "id": "legacy-7",
+    "title": "Nombramiento Subdirector de Autoridad Ambiental",
+    "description": "La Corporación Autónoma Regional de Santander (CAS) se complace en anunciar el nombramiento de Juan Manuel Saavedra como nuevo Subdirector de Autoridad Ambiental.",
+    "imageUrl": "/data/imagenes/FOTO2.jpeg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:07.000Z"
+  },
+  {
+    "id": "legacy-8",
+    "title": "Gracias",
+    "description": "Agradecimiento especial a todo el equipo por su dedicación y compromiso constante.",
+    "imageUrl": "/data/imagenes/GRACIAS.jpg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:08.000Z"
+  },
+  {
+    "id": "legacy-9",
+    "title": "Conozca nuestro Programa de Transparencia y Ética Pública - PTEP",
+    "description": "Consúltalo en el siguiente link: CLIC AQUÍ (https://www.cas.gov.co/)",
+    "imageUrl": "/data/imagenes/1PROGRAMATRANSPA.jpg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:09.000Z"
+  },
+  {
+    "id": "legacy-10",
+    "title": "Donatón Solidaria CAS",
+    "description": "Invitamos a todos nuestros funcionarios and contratistas a unirse a esta noble campaña solidaria.",
+    "imageUrl": "/data/imagenes/DONATONSOLIDARIA.jpeg",
+    "category": "Bienestar",
+    "createdAt": "2026-02-28T15:20:10.000Z"
+  },
+  {
+    "id": "legacy-11",
+    "title": "Invitación Semana Mundial del Agua",
+    "description": "Participa en las actividades conmemorativas por la Semana Mundial del Agua, cuidando nuestro recurso más valioso.",
+    "imageUrl": "/data/imagenes/CADAGOTACUENTADOS.jpeg",
+    "category": "Ambiental",
+    "createdAt": "2026-02-28T15:20:11.000Z"
+  },
+  {
+    "id": "legacy-12",
+    "title": "Invitación especial para funcionarios y contratistas",
+    "description": "Te invitamos a ser parte de los eventos de celebración por los 30 años de la Corporación.",
+    "imageUrl": "/data/imagenes/INVITACION30.jpeg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:12.000Z"
+  },
+  {
+    "id": "legacy-13",
+    "title": "Campaña de racionalización de trámites",
+    "description": "Estamos simplificando nuestros procesos para brindarte un mejor servicio y mayor agilidad.",
+    "imageUrl": "/data/imagenes/CR2.jpg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:13.000Z"
+  },
+  {
+    "id": "legacy-14",
+    "title": "Gran Caminata Ecolográfica por los 30 años de la CAS",
+    "description": "Invitamos a participar de esta iniciativa ambiental conmemorativa.",
+    "imageUrl": "/data/imagenes/CAMINATA1.jpeg",
+    "category": "Ambiental",
+    "createdAt": "2026-02-28T15:20:14.000Z"
+  },
+  {
+    "id": "legacy-15",
+    "title": "Certificación HSEQ Norsok SWA 2020",
+    "description": "¡Buenas noticias! Sistema calificado con 92.25/100, reafirmando nuestro compromiso con la calidad.",
+    "imageUrl": "/data/imagenes/ICONTEC.jpeg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:15.000Z"
+  },
+  {
+    "id": "legacy-16",
+    "title": "¿Y tú estas somatizando tus emociones?",
+    "description": "Tips para identificar cómo la salud digestiva afecta nuestras emociones y cómo prevenirlos.",
+    "imageUrl": "/data/imagenes/EMOCIONES.jpeg",
+    "category": "Bienestar",
+    "createdAt": "2026-02-28T15:20:16.000Z"
+  },
+  {
+    "id": "legacy-17",
+    "title": "Conformación de Brigadistas de Emergencia",
+    "description": "Estamos fortaleciendo nuestro equipo de respuesta ante emergencias para tu seguridad.",
+    "imageUrl": "/data/imagenes/BRIGADISTAS.jpeg",
+    "category": "Bienestar",
+    "createdAt": "2026-02-28T15:20:17.000Z"
+  },
+  {
+    "id": "legacy-18",
+    "title": "Información de Interés",
+    "description": "Consulta las últimas circulares y boletines informativos de la Corporación.",
+    "imageUrl": "/data/imagenes/REALFAMDAY.jpg",
+    "category": "Institucional",
+    "createdAt": "2026-02-28T15:20:18.000Z"
+  }
+]

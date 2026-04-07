@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Funciones de la CAS - Intranet CAS</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img
+          class="placeholder-img"
+          src="../../imagenes/logo.png"
+          alt="LOGO CAS"
+        />
+        <h2>Intranet CAS</h2>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a></li>
+          <li><a href="../../herramientas/respel.html">RESPEL</a></li>
+          <li><a href="../../herramientas/rua.html">RUA</a></li>
+          <li><a href="../../herramientas/pcb.html">PCB</a></li>
+          <li>
+            <a href="../../herramientas/cartografia.html"
+              >Cartograf&iacute;a en L&iacute;nea</a
+            >
+          </li>
+          <li><a href="../../herramientas/soporte.html">Soporte</a></li>
+          <li><a href="../../herramientas/galeria.html">Galeria</a></li>
+          <li><a href="../../herramientas/correo.html">Correo</a></li>
+          <li><a href="../../herramientas/calendario.html">Calendario</a></li>
+          <li>
+            <a href="../../herramientas/busqueda.html">Busqueda Avanzada</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="top-nav">
+        <div class="header-menu">
+          <a href="../../index.html">Inicio</a>
+
+          <div class="dropdown">
+            <a href="../../header_menu/cas/resena.html">La CAS &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/cas/mision-vision.html"
+                >Misi&oacute;n y Visi&oacute;n</a
+              >
+              <a href="../../header_menu/cas/objetivos.html"
+                >Objetivos de la CAS</a
+              >
+              <a href="../../header_menu/cas/funciones.html"
+                >Funciones de la CAS</a
+              >
+              <a href="../../header_menu/cas/estructura.html"
+                >Estructura Organizacional</a
+              >
+              <a href="../../header_menu/cas/politica-ambiental.html"
+                >Pol&iacute;tica Ambiental</a
+              >
+              <a href="../../header_menu/cas/normativa-cas.html"
+                >Normativa CAS</a
+              >
+              <a href="../../header_menu/cas/informe-gestion.html"
+                >Informe de Gesti&oacute;n</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/cas/talento-humano.html"
+                  >Talento Humano <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="manual-funciones.html">Manual de Funciones</a>
+                  <a href="https://www.cas.gov.co/not-found" target="_blank"
+                    >Directorio de Funcionarios</a
+                  >
+                  <a href="plan-monitoreo-sigep.html"
+                    >Plan de monitoreo del SIGEP</a
+                  >
+                  <a href="planes.html">Planes</a>
+                  <a href="convocatorias.html">Convocatorias</a>
+                  <a href="estudios-tecnicos.html">Estudios T&eacute;cnicos</a>
+                  <a href="provision-empleos.html"
+                    >Provisi&oacute;n de empleos</a
+                  >
+                  <a
+                    href="https://cas.delfineco.com/gdpagos_cas/"
+                    target="_blank"
+                    >Desprendibles de Nomina</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/cas/postalcas.html">PostalCAS</a>
+              <a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a>
+              <a href="../../header_menu/cas/agenda.html">Agenda CAS</a>
+              <a href="../../header_menu/cas/ciberseguridad.html"
+                >GIT - Ciberseguridad</a
+              >
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="../../header_menu/sgi/sgi.html">SGI &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/sgi/procesos-estrategicos.html"
+                >Procesos Estrat&eacute;gicos</a
+              >
+              <a href="../../header_menu/sgi/procesos-misionales.html"
+                >Procesos Misionales</a
+              >
+              <a href="../../header_menu/sgi/procesos-apoyo.html"
+                >Procesos de Apoyo</a
+              >
+              <a href="../../header_menu/sgi/evaluacion.html"
+                >Proceso de Evaluaci&oacute;n y Seguimiento</a
+              >
+              <a href="../../header_menu/sgi/politicas.html"
+                >Pol&iacute;ticas</a
+              >
+              <a href="../../header_menu/sgi/objetivos-calidad.html"
+                >Objetivos de Calidad</a
+              >
+              <a href="../../header_menu/sgi/alcance.html">Alcance de SGI</a>
+              <a href="../../header_menu/sgi/documentos.html"
+                >Documentos Institucionales</a
+              >
+              <a href="../../header_menu/sgi/manuales.html">Manuales SGI</a>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="#">GIT &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/git/normatividad.html"
+                >Normatividad GIT</a
+              >
+              <a href="../../header_menu/git/gobierno-digital.html"
+                >Gobierno Digital</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/git/manuales-usuario.html"
+                  >Manuales de Usuario
+                  <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../../header_menu/git/manuales_usuario/cita.html"
+                    >CITA</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/sirh.html"
+                    >SIRH</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/snif.html"
+                    >SNIF</a
+                  >
+                  <a
+                    href="../../header_menu/git/manuales_usuario/revision-red.html"
+                    >Revisi&oacute;n de red primer nivel</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/git/boletines.html"
+                >Boletines de Seguridad</a
+              >
+              <a href="../../header_menu/git/responsables.html"
+                >Responsables de la informaci&oacute;n en pagina WEB</a
+              >
+              <a href="../../header_menu/git/proteccion-datos.html"
+                >Proteccion de datos personales</a
+              >
+            </div>
+          </div>
+
+          <a href="../../meci.html">MECI</a>
+          <a href="#" class="btn-login">Ingresar</a>
+          <div class="search-bar">
+            <input type="text" placeholder="Buscar..." />
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-area">
+        <nav class="breadcrumbs">
+          <a href="../../index.html">Inicio</a> <span>/</span>
+          <a href="#">La CAS</a> <span>/</span> Funciones de la CAS
+        </nav>
+        <section class="welcome-header">
+          <h1>Funciones de la CAS</h1>
+          <p>
+            Marco legal y competencias institucionales seg&uacute;n la Ley 99 de
+            1993.
+          </p>
+        </section>
+
+        <div class="card info-card">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 1.5rem;
+              flex-wrap: wrap;
+              gap: 1rem;
+            "
+          >
+            <h3 style="color: var(--primary-dark); margin: 0">
+              Funciones de la CAS
+            </h3>
+            <div
+              style="
+                font-size: 0.82rem;
+                color: #666;
+                background: #fff;
+                padding: 0.6rem 1rem;
+                border-radius: 8px;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+              "
+            >
+              <span>Publicado: 26 Noviembre 2015</span> |
+              <span>Actualizado: 04 Abril 2022</span>
+            </div>
+          </div>
+
+          <p
+            style="margin-bottom: 1.5rem; text-align: justify; font-weight: 500"
+          >
+            Las Corporaciones Aut&oacute;nomas Regionales ejercerán las
+            siguientes funciones:
+          </p>
+
+          <div
+            class="functions-list"
+            style="display: flex; flex-direction: column; gap: 1rem"
+          >
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >1)</span
+              >
+              <p>
+                Ejecutar las pol&iacute;ticas, planes y programas nacionales en
+                materia ambiental definidos por la ley aprobatoria del Plan
+                Nacional de Desarrollo y del Plan Nacional de Inversiones o por
+                el Ministerio del Medio Ambiente, as&iacute; como los del orden
+                regional que le hayan sido confiados conforme a la ley, dentro
+                del &aacute;mbito de su jurisdicci&oacute;n;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >2)</span
+              >
+              <p>
+                Ejercer la funci&oacute;n de m&aacute;xima autoridad ambiental
+                en el &aacute;rea de su jurisdicci&oacute;n, de acuerdo con las
+                normas de car&aacute;cter superior y conforme a los criterios y
+                directrices trazadas por el Ministerio del Medio Ambiente;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >3)</span
+              >
+              <p>
+                Promover y desarrollar la participaci&oacute;n comunitaria en
+                actividades y programas de protecci&oacute;n ambiental, de
+                desarrollo sostenible y de manejo adecuado de los recursos
+                naturales renovables;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >4)</span
+              >
+              <p>
+                Coordinar el proceso de preparaci&oacute;n de los planes,
+                programas y proyectos de desarrollo medioambiental que deban
+                formular los diferentes organismos y entidades integrantes del
+                Sistema Nacional Ambiental (SINA) en el &aacute;rea de su
+                jurisdicci&oacute;n y en especial, asesorar a los Departamentos,
+                Distritos y Municipios de su comprensi&oacute;n territorial en
+                la definici&oacute;n de los planes de desarrollo ambiental y en
+                sus programas y proyectos en materia de protecci&oacute;n del
+                medio ambiente y los recursos naturales renovables, de manera
+                que se asegure la armon&iacute;a y coherencia de las
+                pol&iacute;ticas y acciones adoptadas por las distintas
+                entidades territoriales;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >5)</span
+              >
+              <p>
+                Participar con los dem&aacute;s organismos y entes competentes
+                en el &aacute;mbito de su jurisdicci&oacute;n, en los procesos
+                de planificaci&oacute;n y ordenamiento territorial a fin de que
+                el factor ambiental sea tenido en cuenta en las decisiones que
+                se adopten;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >6)</span
+              >
+              <p>
+                Celebrar contratos y convenios con las entidades territoriales,
+                otras entidades p&uacute;blicas y privadas y con las entidades
+                sin &aacute;nimo de lucro cuyo objeto sea la defensa y
+                protecci&oacute;n del medio ambiente y los recursos naturales
+                renovables, con el fin de ejecutar de mejor manera alguna o
+                algunas de sus funciones, cuando no correspondan al ejercicio de
+                funciones administrativas;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >7)</span
+              >
+              <p>
+                Promover y realizar conjuntamente con los organismos nacionales
+                adscritos y vinculados al Ministerio del Medio Ambiente, y con
+                las entidades de apoyo t&eacute;cnico y cient&iacute;fico del
+                Sistema Nacional Ambiental (SINA), estudios e investigaciones en
+                materia de medio ambiente y recursos naturales renovables;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >8)</span
+              >
+              <p>
+                Asesorar a las entidades territoriales en la formulaci&oacute;n
+                de planes de educaci&oacute;n ambiental formal y ejecutar
+                programas de educaci&oacute;n ambiental no formal, conforme a
+                las directrices de la pol&iacute;tica nacional;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >9)</span
+              >
+              <p>
+                Otorgar concesiones, permisos, autorizaciones y licencias
+                ambientales requeridas por la Ley para el uso, aprovechamiento o
+                movilizaci&oacute;n de los recursos naturales renovables o para
+                el desarrollo de actividades que afecten o puedan afectar el
+                medio ambiente. Otorgar permisos y concesiones para
+                aprovechamientos forestales, concesiones para el uso de aguas
+                superficiales y subterr&aacute;neas y establecer vedas para la
+                caza y pesca deportiva;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >10)</span
+              >
+              <p>
+                Fijar en el &aacute;rea de su jurisdicci&oacute;n, los
+                l&iacute;mites permisibles de emisi&oacute;n, descarga,
+                transporte o dep&oacute;sito de sustancias, productos,
+                compuestos o cualquier otra materia que puedan afectar el medio
+                ambiente o los recursos naturales renovables y prohibir,
+                restringir o regular la fabricaci&oacute;n, distribuci&oacute;n,
+                uso, disposici&oacute;n o vertimiento de sustancias causantes de
+                degradaci&oacute;n ambiental. Estos l&iacute;mites restricciones
+                y regulaciones en ning&uacute;n caso podr&aacute;n ser menos
+                estrictos que los definidos por el Ministerio del Medio
+                Ambiente.
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >11)</span
+              >
+              <p>
+                Ejercer las funciones de evaluaci&oacute;n, control y
+                seguimiento ambiental de las actividades de exploraci&oacute;n,
+                explotaci&oacute;n, beneficio, transporte, uso y dep&oacute;sito
+                de los recursos naturales no renovables, incluida la actividad
+                portuaria con exclusi&oacute;n de las competencias atribuidas al
+                Ministerio del Medio Ambiente, as&iacute; como de otras
+                actividades, proyectos o factores que generen o puedan generar
+                deterioro ambiental. Esta funci&oacute;n comprende la
+                expedici&oacute;n de la respectiva licencia ambiental. Las
+                funciones a que se refiere este numeral ser&aacute;n ejercidas
+                de acuerdo con el art&iacute;culo 58 de esta Ley.
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >12)</span
+              >
+              <p>
+                Ejercer las funciones de evaluaci&oacute;n, control y
+                seguimiento ambiental de los usos del agua, el suelo, el aire y
+                los dem&aacute;s recursos naturales renovables, lo cual
+                comprender&aacute; el vertimiento, emisi&oacute;n o
+                incorporaci&oacute;n de sustancias o residuos l&iacute;quidos,
+                s&oacute;lidos y gaseosos, a las aguas en cualquiera de sus
+                formas, al aire o a los suelos, as&iacute; como los vertimientos
+                o emisiones que puedan causar da&ntilde;o o poner en peligro el
+                normal desarrollo sostenible de los recursos naturales
+                renovables o impedir u obstaculizar su empleo para otros usos.
+                Estas funciones comprenden la expedici&oacute;n de las
+                respectivas licencias ambientales, permisos, concesiones,
+                autorizaciones y salvoconductos;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >13)</span
+              >
+              <p>
+                Recaudar, conforme a la ley, las contribuciones, tasas,
+                derechos, tarifas y multas por concepto del uso y
+                aprovechamiento de los recursos naturales renovables, fijar su
+                monto en el territorio de su jurisdicci&oacute;n con base en las
+                tarifas m&iacute;nimas establecidas por el Ministerio del Medio
+                Ambiente;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >14)</span
+              >
+              <p>
+                Ejercer el control de la movilizaci&oacute;n, procesamiento y
+                comercializaci&oacute;n de los recursos naturales renovables en
+                coordinaci&oacute;n con las dem&aacute;s Corporaciones
+                Aut&oacute;nomas Regionales, las entidades territoriales y otras
+                autoridades de polic&iacute;a, de conformidad con la ley y los
+                reglamentos; y expedir los permisos, licencias y salvoconductos
+                para la movilizaci&oacute;n de recursos naturales renovables;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >15)</span
+              >
+              <p>
+                Administrar, bajo la tutela del Ministerio del Medio Ambiente
+                las &aacute;reas del Sistema de Parques Nacionales que ese
+                Ministerio les delegue. Esta administraci&oacute;n podr&aacute;
+                hacerse con la participaci&oacute;n de las entidades
+                territoriales y de la sociedad civil.
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >16)</span
+              >
+              <p>
+                Reservar, alinderar, administrar o sustraer, en los
+                t&eacute;rminos y condiciones que fijen la Ley y los
+                reglamentos, los distritos de manejo integrado, los distritos de
+                conservaci&oacute;n de suelos, las reservas forestales y parques
+                naturales de car&aacute;cter regional, y reglamentar su uso y
+                funcionamiento. Administrar las Reservas Forestales Nacionales
+                en el &aacute;rea de su jurisdicci&oacute;n.
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >17)</span
+              >
+              <p>
+                Imponer y ejecutar a prevenci&oacute;n y sin perjuicio de las
+                competencias atribuidas por la ley a otras autoridades, las
+                medidas de polic&iacute;a y las sanciones previstas en la ley,
+                en caso de violaci&oacute;n a las normas de protecci&oacute;n
+                ambiental y de manejo de recursos naturales renovables y exigir,
+                con sujeci&oacute;n a las regulaciones pertinentes, la
+                reparaci&oacute;n de los da&ntilde{causados;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >18)</span
+              >
+              <p>
+                Ordenar y establecer las normas y directrices para el manejo de
+                las cuencas hidrogr&aacute;ficas ubicadas dentro del &aacute;rea
+                de su jurisdicci&oacute;n, conforme a las disposiciones
+                superiores y a las pol&iacute;ticas nacionales;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >19)</span
+              >
+              <p>
+                Promover y ejecutar obras de irrigaci&oacute;n, avenamiento,
+                defensa contra las inundaciones, regulaci&oacute;n de cauces y
+                corrientes de agua, y de recuperaci&oacute;n de tierras que sean
+                necesarias para la defensa, protecci&oacute;n y adecuado manejo
+                de las cuencas hidrogr&aacute;ficas del territorio de su
+                jurisdicci&oacute;n, en coordinaci&oacute;n con los organismos
+                directores y ejecutores del Sistema Nacional de
+                Adecuaci&oacute;n de Tierras, conforme a las disposiciones
+                legales y a las previsiones t&eacute;cnicas correspondientes;
+                Cuando se trate de obras de riego y avenamiento que de acuerdo
+                con las normas y los reglamentos requieran de Licencia
+                Ambiental, esta deber&aacute; ser expedida por el Ministerio del
+                Medio Ambiente.
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >20)</span
+              >
+              <p>
+                Ejecutar, administrar, operar y mantener en coordinaci&oacute;n
+                con las entidades territoriales, proyectos, programas de
+                desarrollo sostenible y obras de infraestructura cuya
+                realizaci&oacute;n sea necesaria para la defensa y
+                protecci&oacute;n o para la descontaminaci&oacute;n o
+                recuperaci&oacute;n del medio ambiente y los recursos naturales
+                renovables;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >21)</span
+              >
+              <p>
+                Adelantar en coordinaci&oacute;n con las autoridades de las
+                comunidades ind&iacute;genas y con las autoridades de las
+                tierras habitadas tradicionalmente por comunidades negras, a que
+                se refiere la Ley 70 de 1993, programas y proyectos de
+                desarrollo sostenible y de manejo, aprovechamiento, uso y
+                conservaci&oacute;n de los recursos naturales renovables y del
+                medio ambiente;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >22)</span
+              >
+              <p>
+                Implantar y operar el Sistema de Informaci&oacute;n Ambiental en
+                el &aacute;rea de su jurisdicci&oacute;n, de acuerdo con las
+                directrices trazadas por el Ministerio del Medio Ambiente;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >23)</span
+              >
+              <p>
+                Realizar actividades de an&aacute;lisis, seguimiento,
+                prevenci&oacute;n y control de desastres, en coordinaci&oacute;n
+                con las dem&aacute;s autoridades competentes, y asistirlas en
+                los aspectos medioambientales en la prevenci&oacute;n y
+                atenci&oacute;n de emergencias y desastres; adelantar con las
+                administraciones municipales o distritales programas de
+                adecuaci&oacute;n de &aacute;reas urbanas en zonas de alto
+                riesgo, tales como control de erosi&oacute;n, manejo de cauces y
+                reforestaci&oacute;n;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >24)</span
+              >
+              <p>
+                Transferir la tecnolog&iacute;a resultante de las
+                investigaciones que adelanten las entidades de
+                investigaci&oacute;n cient&iacute;fica y de apoyo t&eacute;cnico
+                del nivel nacional que forman parte del Sistema Nacional
+                Ambiental, SINA, y prestar asistencia t&eacute;cnica a entidades
+                p&uacute;blicas y privadas y a los particulares, acerca del
+                adecuado manejo de los recursos naturales renovables y la
+                preservaci&oacute;n del medio ambiente, en la forma que lo
+                establezcan los reglamentos y de acuerdo con los lineamientos
+                fijados por el Ministerio del Medio Ambiente;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >25)</span
+              >
+              <p>
+                Imponer, distribuir y recaudar las contribuciones de
+                valorizaci&oacute;n con que haya de gravarse la propiedad
+                inmueble, por raz&oacute;n de la ejecuci&oacute;n de obras
+                p&uacute;blicas por parte de la Corporaci&oacute;n; fijar los
+                dem&aacute;s derechos cuyo cobro pueda hacer conforme a la ley;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >26)</span
+              >
+              <p>
+                Asesorar a las entidades territoriales en la elaboraci&oacute;n
+                de proyectos en materia ambiental que deban desarrollarse con
+                recursos provenientes del Fondo Nacional de Regal&iacute;as o
+                con otros de destinaci&oacute;n semejante;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >27)</span
+              >
+              <p>
+                Adquirir bienes de propiedad privada y los patrimoniales de las
+                entidades de derecho p&uacute;blico y adelantar ante el juez
+                competente la expropiaci&oacute;n de bienes, una vez surtida la
+                etapa de negociaci&oacute;n directa, cuando ello sea necesario
+                para el cumplimiento de sus funciones o para la ejecuci&oacute;n
+                de obras o proyectos requeridos para el cumplimiento de las
+                mismas, e imponer las servidumbres a que haya lugar, conforme a
+                la ley;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >28)</span
+              >
+              <p>
+                Promover y ejecutar programas de abastecimiento de agua a las
+                comunidades ind&iacute;genas y negras tradicionalmente asentadas
+                en el &aacute;rea de su jurisdicci&oacute;n, en
+                coordinaci&oacute;n con las autoridades competentes;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >29)</span
+              >
+              <p>
+                Apoyar a los concejos municipales, a las asambleas
+                departamentales y a los consejos de las entidades territoriales
+                ind&iacute;genas en las funciones de planificaci&oacute;n que
+                les otorga la Constituci&oacute;n Nacional;
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >30)</span
+              >
+              <p>
+                Las dem&aacute;s que anteriormente estaban atribuidas a otras
+                autoridades, en materia de medio ambiente y recursos naturales
+                renovables, dentro de sus respectivos &aacute;mbitos de
+                competencia, en cuanto no pugnen con las atribuidas por la
+                Constituci&oacute;n Nacional a las entidades territoriales, o
+                sean contrarias a la presente Ley o a las facultades de que ella
+                inviste al Ministerio del Medio Ambiente.
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: flex-start">
+              <span
+                style="font-weight: 700; color: var(--primary); min-width: 25px"
+                >31)</span
+              >
+              <p>
+                Sin perjuicio de las atribuciones de los municipios y distritos
+                en relaci&oacute;n con la zonificaci&oacute;n y el uso del
+                suelo, de conformidad por lo establecido en el art&iacute;culo
+                313 numeral s&eacute;ptimo de la Constituci&oacute;n Nacional,
+                las Corporaciones Aut&oacute;nomas Regionales
+                establecer&aacute;n las normas generales y las densidades
+                m&aacute;ximas a las que se sujetar&aacute;n los propietarios de
+                vivienda en &aacute;reas sub-urbanas y en cerros y
+                monta&ntilde;as, de manera que se protejan el medio ambiente y
+                los recursos naturales. No menos del 70% del &aacute;rea a
+                desarrollar en dichos proyectos se destinar&aacute; a la
+                conservaci&oacute;n de la vegetaci&oacute;n nativa existente.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="../../script.js"></script>
+  </body>
+</html>

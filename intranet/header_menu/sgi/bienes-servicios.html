@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bienes y Servicios - SGI - Intranet CAS</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .category-section {
+        margin-bottom: 3rem;
+      }
+
+      .category-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--primary-light);
+      }
+
+      .category-header h3 {
+        color: var(--primary-dark);
+        font-size: 1.25rem;
+      }
+
+      .category-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+      }
+
+      .category-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .file-list-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1rem;
+      }
+
+      .file-item {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .file-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border-color: var(--primary);
+      }
+
+      .file-item .icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        background: #f8fafc;
+        color: #ef4444;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+      }
+
+      .file-name {
+        font-size: 0.85rem;
+        font-weight: 500;
+        line-height: 1.4;
+        color: var(--text-main);
+      }
+
+      .meta-info-bar {
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: 15px;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+        font-size: 0.85rem;
+      }
+
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .meta-label {
+        color: var(--text-light);
+        font-weight: 500;
+      }
+
+      .meta-value {
+        color: var(--text-main);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img
+          class="placeholder-img"
+          src="../../data/imagenes/logo.png"
+          alt="LOGO CAS"
+        />
+        <h2>Intranet CAS</h2>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a></li>
+          <li><a href="../../herramientas/respel.html">RESPEL</a></li>
+          <li><a href="../../herramientas/rua.html">RUA</a></li>
+          <li><a href="../../herramientas/pcb.html">PCB</a></li>
+          <li>
+            <a href="../../herramientas/cartografia.html"
+              >Cartograf&iacute;a en L&iacute;nea</a
+            >
+          </li>
+          <li><a href="../../herramientas/soporte.html">Soporte</a></li>
+          <li><a href="../../herramientas/galeria.html">Galeria</a></li>
+          <li><a href="../../herramientas/correo.html">Correo</a></li>
+          <li><a href="../../herramientas/calendario.html">Calendario</a></li>
+          <li>
+            <a href="../../herramientas/busqueda.html">Busqueda Avanzada</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="top-nav">
+        <div class="header-menu">
+          <a href="../../index.html">Inicio</a>
+
+          <div class="dropdown">
+            <a href="../../header_menu/cas/resena.html">La CAS &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/cas/mision-vision.html"
+                >Misi&oacute;n y Visi&oacute;n</a
+              >
+              <a href="../../header_menu/cas/objetivos.html"
+                >Objetivos de la CAS</a
+              >
+              <a href="../../header_menu/cas/funciones.html"
+                >Funciones de la CAS</a
+              >
+              <a href="../../header_menu/cas/estructura.html"
+                >Estructura Organizacional</a
+              >
+              <a href="../../header_menu/cas/politica-ambiental.html"
+                >Pol&iacute;tica Ambiental</a
+              >
+              <a href="../../header_menu/cas/normativa-cas.html"
+                >Normativa CAS</a
+              >
+              <a href="../../header_menu/cas/informe-gestion.html"
+                >Informe de Gesti&oacute;n</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/cas/talento-humano.html"
+                  >Talento Humano <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../cas/manual-funciones.html">Manual de Funciones</a>
+                  <a href="https://www.cas.gov.co/not-found" target="_blank"
+                    >Directorio de Funcionarios</a
+                  >
+                  <a href="../cas/plan-monitoreo-sigep.html"
+                    >Plan de monitoreo del SIGEP</a
+                  >
+                  <a href="../cas/planes.html">Planes</a>
+                  <a href="../cas/convocatorias.html">Convocatorias</a>
+                  <a href="../cas/estudios-tecnicos.html"
+                    >Estudios T&eacute;cnicos</a
+                  >
+                  <a href="../cas/provision-empleos.html"
+                    >Provisi&oacute;n de empleos</a
+                  >
+                  <a
+                    href="https://cas.delfineco.com/gdpagos_cas/"
+                    target="_blank"
+                    >Desprendibles de Nomina</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/cas/postalcas.html">PostalCAS</a>
+              <a href="../../header_menu/cas/noticas-cas.html">NotiCAS</a>
+              <a href="../../header_menu/cas/agenda.html">Agenda CAS</a>
+              <a href="../../header_menu/cas/ciberseguridad.html"
+                >GIT - Ciberseguridad</a
+              >
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="../../header_menu/sgi/sgi.html">SGI &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/sgi/procesos-estrategicos.html"
+                >Procesos Estrat&eacute;gicos</a
+              >
+              <a href="../../header_menu/sgi/procesos-misionales.html"
+                >Procesos Misionales</a
+              >
+              <a href="../../header_menu/sgi/procesos-apoyo.html"
+                >Procesos de Apoyo</a
+              >
+              <a href="../../header_menu/sgi/evaluacion.html"
+                >Proceso de Evaluaci&oacute;n y Seguimiento</a
+              >
+              <a href="../../header_menu/sgi/politicas.html"
+                >Pol&iacute;ticas</a
+              >
+              <a href="../../header_menu/sgi/objetivos-calidad.html"
+                >Objetivos de Calidad</a
+              >
+              <a href="../../header_menu/sgi/alcance.html">Alcance de SGI</a>
+              <a href="../../header_menu/sgi/documentos.html"
+                >Documentos Institucionales</a
+              >
+              <a href="../../header_menu/sgi/manuales.html">Manuales SGI</a>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="#">GIT &#9662;</a>
+            <div class="dropdown-content">
+              <a href="../../header_menu/git/normatividad.html"
+                >Normatividad GIT</a
+              >
+              <a href="../../header_menu/git/gobierno-digital.html"
+                >Gobierno Digital</a
+              >
+              <div class="dropdown-submenu">
+                <a href="../../header_menu/git/manuales-usuario.html"
+                  >Manuales de Usuario
+                  <span class="submenu-arrow">&#9656;</span></a
+                >
+                <div class="dropdown-content">
+                  <a href="../../header_menu/git/manuales_usuario/cita.html"
+                    >CITA</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/sirh.html"
+                    >SIRH</a
+                  >
+                  <a href="../../header_menu/git/manuales_usuario/snif.html"
+                    >SNIF</a
+                  >
+                  <a
+                    href="../../header_menu/git/manuales_usuario/revision-red.html"
+                    >Revisi&oacute;n de red primer nivel</a
+                  >
+                </div>
+              </div>
+              <a href="../../header_menu/git/boletines.html"
+                >Boletines de Seguridad</a
+              >
+              <a href="../../header_menu/git/responsables.html"
+                >Responsables de la informaci&oacute;n en pagina WEB</a
+              >
+              <a href="../../header_menu/git/proteccion-datos.html"
+                >Proteccion de datos personales</a
+              >
+            </div>
+          </div>
+
+          <a href="../../meci.html">MECI</a>
+          <a href="/administracion/login.html" class="btn-login">Ingresar</a>
+          <div class="search-bar">
+            <input type="text" placeholder="Buscar..." />
+          </div>
+        </div>
+      </header>
+
+      <div class="main-scroll-area">
+        <nav class="breadcrumbs">
+          <a href="../../index.html">Inicio</a> <span>/</span>
+          <a href="sgi.html">SGI</a> <span>/</span>
+          <a href="procesos-apoyo.html">Procesos de Apoyo</a> <span>/</span>
+          Bienes y Servicios
+        </nav>
+
+        <section class="welcome-header">
+          <h1>Recursos Bienes y Servicios</h1>
+        </section>
+
+        <div class="meta-info-bar">
+          <div class="meta-item">
+            <span class="meta-label">Publicado:</span>
+            <span class="meta-value">10 Diciembre 2015</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Última actualización:</span>
+            <span class="meta-value">09 Febrero 2026</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Responsable:</span>
+            <span class="meta-value"
+              >Subdirecci&oacute;n Administrativa - Bienes y Servicios</span
+            >
+          </div>
+        </div>
+
+        <!-- Caracterización -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Caracterización</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">Caracterizaci&oacute;n proceso</div>
+            </a>
+          </div>
+        </section>
+
+        <!-- Formatos -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Formatos (Bienes y Seguridad Vial)</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                F-PBS-001 Cronograma Mantenimiento Equipos
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                F-PBS-006 Solicitud Elementos de Consumo
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                F-PBS-008 Inventario Botiqu&iacute;n Prim. Auxilios
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                F-PBS-013 Control Extintores y Emergencia
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                F-PBS-014 Entrega de Respel Gestor Externo
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">F-PBS-015 Entrega Bien Comodato</div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                F-PBS-PESV-016 Inspecci&oacute;n Preoperacional Veh&iacute;culo
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                F-PBS-PESV-017 Inspecci&oacute;n Preoperacional Moto
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                F-PBS-PESV-027 Control Entrada y Salida Parque Aut.
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                F-PBS-PESV-030 Inspecci&oacute;n Retroexcavadora
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- Procedimientos -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Procedimientos</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">PBS-001 Procedimiento de Compras</div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                PBS-002 Mantenimiento Propiedad y Planta
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                PBS-004 Inventario F&iacute;sico de Bienes
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                PBS-005 Manejo y Uso de Veh&iacute;culos
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                PBS-006 Procedimiento Bienes en Comodato
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- Seguridad Vial (PESV) -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+                <path
+                  d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 11-2 0 1 1 0 012 0zm0 0h5.586a1 1 0 00.707-.293l2.414-2.414a1 1 0 00.293-.707V13a1 1 0 00-1-1h-3V7a1 1 0 00-1-1H9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Seguridad Vial (PESV)</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                PL-PBS-PESV-001 Plan Estrat&eacute;gico Seg. Vial
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                ANEXO 2 Pol&iacute;tica de Seguridad Vial
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">ANEXO 6 Rutagrama Vial</div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                ANEXO 13 Est&aacute;ndares B&aacute;sicos Seg. Vial
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                ANEXO 19 Protocolos Emergencias Tr&aacute;nsito
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- Instructivos y Guías -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Instructivos y Gu&iacute;as</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">I-PBS-001 Manejo de Almac&eacute;n</div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                I-PBS-002 Manejo Sustancias Qu&iacute;micas
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                G-PBS-001 Gesti&oacute;n Integral RESPEL
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                G-PBS-002 Criterios Ambientales Compra Insumos
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- Registros y Riesgos -->
+        <section class="category-section">
+          <div class="category-header">
+            <div class="category-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Registros y Gesti&oacute;n de Riesgos</h3>
+          </div>
+          <div class="file-list-grid">
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">
+                Comit&eacute; Seguridad Vial - Res. 0301 de 2018
+              </div>
+            </a>
+            <a href="#" class="file-item">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </div>
+              <div class="file-name">MR-SGI-002 Bienes y Servicios</div>
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script src="../../script.js"></script>
+  </body>
+</html>
