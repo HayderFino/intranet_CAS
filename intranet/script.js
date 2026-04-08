@@ -2,6 +2,10 @@
 // Script.js - Intranet CAS
 // ===================================
 
+// Capturar la URL base del proyecto a partir de la ruta de este script
+const scriptSrc = document.currentScript ? document.currentScript.src : window.location.href;
+const BASE_PATH = scriptSrc.substring(0, scriptSrc.lastIndexOf('/') + 1);
+
 // --- Carrusel Dinámico ---
 let currentSlide = 0;
 
@@ -51,7 +55,7 @@ async function loadDynamicBanner() {
   if (!bannerContainer) return;
 
   try {
-    const response = await fetch("/api/banner");
+    const response = await fetch(BASE_PATH + "api/banner");
     if (!response.ok) throw new Error("Error al obtener banners");
     const banners = await response.json();
 
@@ -101,9 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginBtns = document.querySelectorAll(".btn-login");
   loginBtns.forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      // Forzamos la redirección a la ruta raíz del servidor para que funcione desde subcarpetas
+      // Usamos BASE_PATH calculado al inicio para ir al login desde cualquier subcarpeta
       e.preventDefault();
-      window.location.href = "/administracion/login.html";
+      window.location.href = BASE_PATH + "administracion/login.html";
     });
   });
 
@@ -114,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.key === "Enter") {
         const query = headerSearchInput.value.trim();
         if (query) {
-          window.location.href = `/herramientas/busqueda.html?q=${encodeURIComponent(query)}`;
+          window.location.href = BASE_PATH + `herramientas/busqueda.html?q=${encodeURIComponent(query)}`;
         }
       }
     });
@@ -134,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Limpiar si hay placeholder o items previos
       newsGrid.innerHTML = "";
 
-      fetch("/api/news")
+      fetch(BASE_PATH + "api/news")
         .then((res) => res.json())
         .then((news) => {
           if (news && news.length > 0) {
@@ -242,31 +246,31 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       // Fetch múltiples fuentes en paralelo
       const endpoints = [
-        { url: "/api/eventos", type: "evento" },
-        { url: "/api/news", type: "noticia" },
-        { url: "/api/informe-gestion", type: "informe" },
+        { url: BASE_PATH + "api/eventos", type: "evento" },
+        { url: BASE_PATH + "api/news", type: "noticia" },
+        { url: BASE_PATH + "api/informe-gestion", type: "informe" },
         {
-          url: "/api/estudios-tecnicos",
+          url: BASE_PATH + "api/estudios-tecnicos",
           type: "manual",
           cat: "Estudio Técnico",
         },
         {
-          url: "/api/provision-empleos",
+          url: BASE_PATH + "api/provision-empleos",
           type: "manual",
           cat: "Provisión Empleo",
         },
-        { url: "/api/convocatorias", type: "manual", cat: "Convocatoria" },
-        { url: "/api/plan-monitoreo", type: "manual", cat: "Plan Monitoreo" },
-        { url: "/api/planes-talento", type: "manual", cat: "Plan Talento" },
+        { url: BASE_PATH + "api/convocatorias", type: "manual", cat: "Convocatoria" },
+        { url: BASE_PATH + "api/plan-monitoreo", type: "manual", cat: "Plan Monitoreo" },
+        { url: BASE_PATH + "api/planes-talento", type: "manual", cat: "Plan Talento" },
         {
-          url: "/api/manual-funciones",
+          url: BASE_PATH + "api/manual-funciones",
           type: "manual",
           cat: "Manual Funciones",
         },
-        { url: "/api/cita", type: "manual", cat: "CITA" },
-        { url: "/api/sirh", type: "manual", cat: "SIRH" },
-        { url: "/api/snif", type: "manual", cat: "SNIF" },
-        { url: "/api/revision-red", type: "manual", cat: "REVISIÓN RED" },
+        { url: BASE_PATH + "api/cita", type: "manual", cat: "CITA" },
+        { url: BASE_PATH + "api/sirh", type: "manual", cat: "SIRH" },
+        { url: BASE_PATH + "api/snif", type: "manual", cat: "SNIF" },
+        { url: BASE_PATH + "api/revision-red", type: "manual", cat: "REVISIÓN RED" },
       ];
 
       const responses = await Promise.all(
