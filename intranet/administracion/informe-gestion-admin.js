@@ -1,5 +1,5 @@
 const InformeGestionAdmin = {
-  API_URL: "../api/informe-gestion",
+  API_URL: "/CAS/intranet_CAS/intranet/api/informe-gestion",
 
   load: async function () {
     const list = document.getElementById("informeGestionList");

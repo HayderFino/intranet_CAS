@@ -197,53 +197,42 @@
           <p>Resultados y transparencia administrativa.</p>
         </section>
 
-        <div class="card info-card" data-id="inf_2022">
-          <h3>Informe de Gesti&oacute;n 2022</h3>
-          <p style="margin-bottom: 1.5rem">
-            A continuaci&oacute;n se presenta la vista previa del informe
-            institucional correspondiente al a&ntilde;o 2022.
-          </p>
-
-          <!-- PDF Preview Container -->
-          <div
-            style="
-              width: 100%;
-              height: 800px;
-              border-radius: 12px;
-              overflow: hidden;
-              box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-              border: 1px solid #e0e0e0;
-              background: #f9f9f9;
-            "
-          >
-            <iframe
-              src="../../data/menu header/la cas/Informe de Gestión/informe-de-gestion-2022.pdf#toolbar=0"
-              width="100%"
-              height="100%"
-              style="border: none"
-            >
-              <p>
-                Su navegador no soporta la visualizaci&oacute;n de PDFs.
-                <a
-                  href="../../data/menu header/la cas/Informe de Gestión/informe-de-gestion-2022.pdf"
-                  >Haga clic aqu&iacute; para descargar el archivo.</a
-                >
-              </p>
-            </iframe>
-          </div>
-
-          <div style="margin-top: 1.5rem; text-align: right">
-            <a
-              href="../../data/menu header/la cas/Informe de Gestión/informe-de-gestion-2022.pdf"
-              target="_blank"
-              class="btn-pdf-download"
-              style="display: inline-flex"
-              >Abrir en pantalla completa</a
-            >
-          </div>
+        <div id="informe-list">
+             <div style="text-align:center;padding:2rem;color:#64748b;">Cargando informes...</div>
         </div>
       </div>
     </main>
-    <script src="../../script.js?v=2"></script>
+    <script src="../../script.js?v=3"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+          try {
+              const res = await fetch("/CAS/intranet_CAS/intranet/api/informe-gestion");
+              if (!res.ok) throw new Error("Error fetching documents");
+              const items = await res.json();
+              const list = document.getElementById("informe-list");
+              if (items.length === 0) {
+                  list.innerHTML = "<p style='text-align:center;color:#64748b;padding:2rem;'>No hay informes disponibles por el momento.</p>";
+                  return;
+              }
+              list.innerHTML = items.map(inf => `
+                <div class="card info-card" data-id="${inf.id}">
+                  <h3>${inf.title}</h3>
+                  <p style="margin-bottom: 1.5rem">${inf.description}</p>
+                  <div style="width: 100%; height: 800px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border: 1px solid #e0e0e0; background: #f9f9f9;">
+                    <iframe src="${inf.pdfUrl}#toolbar=0" width="100%" height="100%" style="border: none">
+                      <p>Su navegador no soporta PDFs. <a href="${inf.pdfUrl}">Descargar archivo.</a></p>
+                    </iframe>
+                  </div>
+                  <div style="margin-top: 1.5rem; text-align: right">
+                    <a href="${inf.pdfUrl}" target="_blank" class="btn-pdf-download" style="display: inline-flex">Abrir en pantalla completa</a>
+                  </div>
+                </div>
+              `).join("");
+          } catch (e) {
+              console.error(e);
+              document.getElementById("informe-list").innerHTML = "<p style='text-align:center;color:red;padding:2rem;'>Error al cargar los documentos.</p>";
+          }
+      });
+    </script>
   </body>
 </html>

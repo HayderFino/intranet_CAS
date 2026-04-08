@@ -5,7 +5,7 @@
 
 const CitaAdmin = (() => {
   // --- Config & State ---
-  const API = "../api/cita";
+  const API = "/CAS/intranet_CAS/intranet/api/cita";
   const elements = {
     form: document.getElementById("citaForm"),
     editId: null, // We'll create this if it doesn't exist

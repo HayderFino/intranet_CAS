@@ -3,7 +3,7 @@
  */
 
 window.EstudiosTecnicosAdmin = (() => {
-  const API = "../api/estudios-tecnicos";
+  const API = "/CAS/intranet_CAS/intranet/api/estudios-tecnicos";
   let items = [];
 
   function getElements() {

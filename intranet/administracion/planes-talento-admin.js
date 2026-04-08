@@ -3,7 +3,7 @@
  */
 
 const PlanesTalentoAdmin = (() => {
-  const API = "../api/planes-talento";
+  const API = "/CAS/intranet_CAS/intranet/api/planes-talento";
   const MAX_SIZE_MB = 10;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
   const FORBIDDEN_EXTS = [

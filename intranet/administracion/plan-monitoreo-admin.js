@@ -3,7 +3,7 @@
  */
 
 const PlanMonitoreoAdmin = (() => {
-  const API = "../api/plan-monitoreo";
+  const API = "/CAS/intranet_CAS/intranet/api/plan-monitoreo";
   const MAX_SIZE_MB = 20;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
   const FORBIDDEN_EXTS = [

@@ -119,7 +119,7 @@ if ($route === 'auth/login' && $method === 'POST') {
     $users = read_json(__DIR__ . '/default_user.json');
     foreach ($users as $u) {
         if ($u['username'] === ($in['username'] ?? '') && password_verify($in['password'] ?? '', $u['password'])) {
-            $_SESSION['userId']      = $u['_id']['$oid'] ?? uniqid();
+            $_SESSION['userId']      = $u['_id'] ?? uniqid();
             $_SESSION['displayName'] = $u['displayName'];
             $_SESSION['role']        = $u['role'];
             $_SESSION['permissions'] = $u['permissions'];
@@ -570,68 +570,74 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
 //  6. INFORME DE GESTIÓN (tarjetas info-card)
 // ══════════════════════════════════════════════════════════════
 
-if ($route === 'informe-gestion') {
-    $htmlPath = __DIR__ . '/header_menu/cas/informe-gestion.html';
-    $uploadDir = 'data/menu header/la cas/Informe de Gestión';
 
-    if ($method === 'GET') {
-        if (!file_exists($htmlPath)) out([]);
-        $content = file_get_contents($htmlPath);
-        preg_match_all('/<div class="card info-card"[^>]*data-id="([^"]*)"[^>]*>([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>/i', $content, $all, PREG_SET_ORDER);
+if (strpos($route, 'informe-gestion') === 0) {
+    $uploadDir = 'data/menu header/la cas/Informe de Gestión';
+    $dirPath   = __DIR__ . '/' . $uploadDir;
+    $metaPath  = $dirPath . '/metadata.json';
+    if (!is_dir($dirPath)) @mkdir($dirPath, 0777, true);
+
+    if ($route === 'informe-gestion/upload' && $method === 'POST') {
+        auth();
+        $url = upload_file('file', $uploadDir);
+        if ($url) out(['fileUrl' => $url, 'filename' => basename($url)]);
+        out(['message' => 'Error'], 400);
+    }
+
+    if ($route === 'informe-gestion' && $method === 'GET') {
+        $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         $items = [];
-        foreach ($all as $hit) {
-            preg_match('/<h3>([\s\S]*?)<\/h3>/i',     $hit[2], $tm);
-            preg_match('/<p[^>]*>([\s\S]*?)<\/p>/i',  $hit[2], $dm);
-            preg_match('/<iframe[^>]*src="([^"]*\.pdf)[^"]*"/i', $hit[2], $im);
+        $files = is_dir($dirPath) ? scandir($dirPath) : [];
+        foreach ($files as $f) {
+            if ($f === '.' || $f === '..' || strtolower(pathinfo($f, PATHINFO_EXTENSION)) !== 'pdf') continue;
+            $m = $meta[$f] ?? [];
             $items[] = [
-                'id'          => $hit[1],
-                'title'       => dent(strip_tags($tm[1] ?? '')),
-                'description' => dent(strip_tags($dm[1] ?? '')),
-                'pdfUrl'      => $im[1] ?? '#',
+                'id'          => md5($f),
+                'filename'    => $f,
+                'title'       => $m['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+                'description' => $m['description'] ?? 'Documento Institucional disponible.',
+                'pdfUrl'      => '/CAS/intranet_CAS/intranet/' . $uploadDir . '/' . $f
             ];
         }
+        // Orden descendente por defecto
+        usort($items, fn($a, $b) => strcmp($b['filename'], $a['filename']));
         out($items);
     }
 
-    if ($method === 'POST') {
+    if ($route === 'informe-gestion' && $method === 'POST') {
         auth();
-        $in  = body();
-        $id  = 'inf_' . time();
-        $rel = '../../' . $uploadDir . '/' . ($in['filename'] ?? '');
-        $card = "\n<div class=\"card info-card\" data-id=\"$id\"><h3>" . eent($in['title'] ?? '') . "</h3><p style=\"margin-bottom:1.5rem;\">" . eent($in['description'] ?? '') . "</p><div style=\"width:100%;height:800px;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.1);border:1px solid #e0e0e0;background:#f9f9f9;\"><iframe src=\"$rel#toolbar=0\" width=\"100%\" height=\"100%\" style=\"border:none;\"></iframe></div><div style=\"margin-top:1.5rem;text-align:right;\"><a href=\"$rel\" target=\"_blank\" class=\"btn-pdf-download\" style=\"display:inline-flex;\">Abrir en pantalla completa</a></div></div>";
-        $content = file_get_contents($htmlPath);
-        $content = preg_replace('/(<\/nav>)/', '$1' . "\n" . $card, $content, 1);
-        file_put_contents($htmlPath, $content);
-        out(['id' => $id], 201);
+        $in = body();
+        $f  = basename($in['pdfUrl'] ?? ''); // extraemos nombre original de fileUrl/pdfUrl
+        if (!$f) $f = $in['filename'] ?? '';
+        
+        if ($f) {
+            $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+            $meta[$f] = [
+                'title'       => $in['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+                'description' => $in['description'] ?? ''
+            ];
+            write_json($metaPath, $meta);
+            out(['success' => true, 'id' => md5($f)], 201);
+        }
+        out(['error' => 'No filename provided'], 400);
     }
-}
 
-if ($route === 'informe-gestion/upload' && $method === 'POST') {
-    auth();
-    $url = upload_file('file', 'data/menu header/la cas/Informe de Gestión');
-    if ($url) out(['fileUrl' => $url]);
-    out(['message' => 'Error'], 400);
-}
-
-if (preg_match('/^informe-gestion\/([a-zA-Z0-9_\-]+)$/', $route, $m) && $method === 'DELETE') {
-    auth();
-    $id = $m[1];
-    $htmlPath = __DIR__ . '/header_menu/cas/informe-gestion.html';
-    if (file_exists($htmlPath)) {
-        $content = file_get_contents($htmlPath);
-        $idEsc   = preg_quote($id, '/');
-        $pat     = '/<div class="card info-card"[^>]*data-id="' . $idEsc . '"[^>]*>[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/i';
-        if (preg_match($pat, $content, $hit)) {
-            if (preg_match('/(?:href|src)="([^"]+\.pdf)/i', $hit[0], $fi)) {
-                $rel = str_replace('../../', '', $fi[1]);
-                $abs = __DIR__ . '/' . ltrim($rel, '/');
-                if (file_exists($abs)) @unlink($abs);
+    if (preg_match('/^informe-gestion\/([a-zA-Z0-9_\-]+)$/', $route, $matchId)) {
+        auth();
+        $id = $matchId[1];
+        if ($method === 'DELETE') {
+            $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+            foreach (scandir($dirPath) as $f) {
+                if (md5($f) === $id) {
+                    @unlink($dirPath . '/' . $f);
+                    unset($meta[$f]);
+                    write_json($metaPath, $meta);
+                    out(['success' => true]);
+                }
             }
-            $content = preg_replace($pat, '', $content, 1);
-            file_put_contents($htmlPath, $content);
+            out(['success' => true]); // even if not found
         }
     }
-    out(['success' => true]);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -836,15 +842,43 @@ if (strpos($route, 'pcb') === 0) {
 
 if ($route === 'search' && $method === 'GET') {
     $q = strtolower(trim($_GET['q'] ?? ''));
-    if (strlen($q) < 2) out([]);
+    $cat = strtolower(trim($_GET['category'] ?? 'all'));
+    $sDate = empty($_GET['startDate']) ? null : strtotime($_GET['startDate']);
+    $eDate = empty($_GET['endDate']) ? null : strtotime($_GET['endDate']);
 
     $results = [];
     $seen    = [];
 
+    // Filter by date helper
+    $isValidDate = function ($dateStr) use ($sDate, $eDate) {
+        if (!$sDate && !$eDate) return true;
+        if (!$dateStr) return false;
+        $ts = strtotime($dateStr);
+        if (!$ts) return true; // si no tiene fecha parseable, preferimos mostrarlo
+        if ($sDate && $ts < $sDate) return false;
+        if ($eDate && $ts > $eDate + 86400) return false; // up to end of selected day
+        return true;
+    };
+
+    // Filter by text helper
+    $matchText = function ($text) use ($q) {
+        if ($q === '') return true;
+        return strpos(strtolower($text), $q) !== false;
+    };
+
     // A) Noticias
-    foreach (read_json(__DIR__ . '/data/noticias.json') as $n) {
-        if (strpos(strtolower($n['title'] . ' ' . $n['description']), $q) !== false)
-            $results[] = ['type'=>'Noticia','title'=>$n['title'],'url'=>'/header_menu/cas/noticas-cas.html','description'=>$n['description']];
+    if ($cat === 'all' || strpos($cat, 'noticia') !== false) {
+        foreach (read_json(__DIR__ . '/data/noticias.json') as $n) {
+            if ($matchText($n['title'] . ' ' . $n['description']) && $isValidDate($n['createdAt'] ?? '')) {
+                $results[] = [
+                    'type'    => 'Noticia',
+                    'title'   => $n['title'],
+                    'href'    => '/CAS/intranet_CAS/intranet/header_menu/cas/noticas-cas.html',
+                    'snippet' => $n['description'],
+                    'date'    => $n['createdAt'] ?? '',
+                ];
+            }
+        }
     }
 
     // B) file-item links in all HTML files
@@ -853,14 +887,33 @@ if ($route === 'search' && $method === 'GET') {
         $files = glob(__DIR__ . '/' . $d . '/*.html') ?: [];
         foreach ($files as $f) {
             $content = file_get_contents($f);
-            preg_match_all('/<a [^>]*class="file-item"[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/i', $content, $all, PREG_SET_ORDER);
+            preg_match_all('/<a [^>]*class="(?:file-item|pdf-folder-card)"[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/i', $content, $all, PREG_SET_ORDER);
             foreach ($all as $hit) {
                 $href = $hit[1]; if (!$href || $href === '#' || isset($seen[$href])) continue;
                 preg_match('/<div class="file-name">([\s\S]*?)<\/div>/i', $hit[2], $nm);
+                if (empty($nm)) preg_match('/<h4>([\s\S]*?)<\/h4>/i', $hit[2], $nm);
+                
                 $name = trim(dent(strip_tags($nm[1] ?? basename($href))));
-                if (strpos(strtolower($name), $q) !== false || strpos(strtolower($href), $q) !== false) {
-                    if (strpos($href, '../../') === 0) $href = '/' . substr($href, 6);
-                    $results[] = ['type'=>'Documento','title'=>$name,'url'=>$href,'description'=>basename($f)];
+                
+                // Determine implicit category from folder
+                $fileCat = 'Documento';
+                if (strpos($f, 'sgi') !== false) $fileCat = 'SGI';
+                if (strpos($f, 'git') !== false) $fileCat = 'GIT';
+                if (strpos($f, 'herramientas') !== false) $fileCat = 'Herramienta';
+
+                if (($cat === 'all' || strtolower($fileCat) === $cat || strpos(strtolower($fileCat), $cat) !== false) && 
+                    ($matchText($name) || $matchText($href))) {
+                    
+                    if (strpos($href, '../../') === 0) $href = '/CAS/intranet_CAS/intranet/' . substr($href, 6);
+                    else if (strpos($href, 'http') !== 0 && strpos($href, '/') !== 0) $href = '/CAS/intranet_CAS/intranet/' . $d . '/' . $href;
+
+                    $results[] = [
+                        'type'    => $fileCat,
+                        'title'   => $name,
+                        'href'    => $href,
+                        'snippet' => 'Encontrado en ' . basename($f),
+                        'date'    => date('Y-m-d', filemtime($f))
+                    ];
                     $seen[$href] = true;
                 }
             }
@@ -870,26 +923,45 @@ if ($route === 'search' && $method === 'GET') {
     // C) Physical files in data/
     $dataDirs = ['data/menu header','data/Talento humano','data/Herramientas'];
     $docExts  = ['pdf','docx','doc','xlsx','xls','pptx','ppt'];
-    function scanDocs($dir, $q, $docExts, &$results, &$seen, $root) {
+    
+    // Convert logic to use recursive function correctly without pass-by-ref errors in older PHP
+    $scanDocs = null;
+    $scanDocs = function ($dir, $root) use (&$scanDocs, $docExts, $q, $cat, $isValidDate, $matchText, &$results, &$seen) {
         if (!is_dir($dir)) return;
         foreach (scandir($dir) as $f) {
             if ($f === '.' || $f === '..') continue;
             $full = $dir . '/' . $f;
-            if (is_dir($full)) { scanDocs($full, $q, $docExts, $results, $seen, $root); continue; }
+            if (is_dir($full)) { $scanDocs($full, $root); continue; }
             $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
             if (!in_array($ext, $docExts)) continue;
-            if (strpos(strtolower($f), $q) !== false) {
-                $rel = '/' . ltrim(str_replace('\\','/',substr($full, strlen($root))),'/');
+
+            $fileCat = strtoupper($ext);
+            $modTime = filemtime($full);
+            
+            if (($cat === 'all' || strtolower($fileCat) === $cat) && 
+                ($matchText($f)) && 
+                ($isValidDate(date('Y-m-d', $modTime)))) {
+                
+                $rel = '/CAS/intranet_CAS/intranet/' . ltrim(str_replace('\\','/',substr($full, strlen($root))),'/');
                 if (!isset($seen[$rel])) {
-                    $results[] = ['type'=>strtoupper($ext),'title'=>pathinfo($f, PATHINFO_FILENAME),'url'=>$rel,'description'=>basename(dirname($full))];
+                    $results[] = [
+                        'type'    => $fileCat,
+                        'title'   => pathinfo($f, PATHINFO_FILENAME),
+                        'href'    => $rel,
+                        'snippet' => 'Archivo físico en ' . basename(dirname($full)),
+                        'date'    => date('Y-m-d', $modTime)
+                    ];
                     $seen[$rel] = true;
                 }
             }
         }
-    }
-    foreach ($dataDirs as $d) scanDocs(__DIR__ . '/' . $d, $q, $docExts, $results, $seen, __DIR__);
+    };
 
-    out(array_slice($results, 0, 30));
+    foreach ($dataDirs as $d) {
+        $scanDocs(__DIR__ . '/' . $d, __DIR__);
+    }
+
+    out(array_slice($results, 0, 50));
 }
 
 // ══════════════════════════════════════════════════════════════

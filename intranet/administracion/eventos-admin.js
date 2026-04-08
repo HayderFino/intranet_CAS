@@ -1,5 +1,5 @@
 const EventosAdmin = {
-  API: "../api/eventos",
+  API: "/CAS/intranet_CAS/intranet/api/eventos",
 
   load: async function () {
     const list = document.getElementById("eventosList");
