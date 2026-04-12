@@ -1,193 +1,274 @@
-# MANUAL TÉCNICO Y DE OPERACIÓN: INTRANET CAS
-## 🏢 Corporación Autónoma Regional de Santander (CAS)
-**Versión: 3.0.0 — Marzo 2026**
+# Manual Técnico y de Operación — Intranet CAS
 
-Este documento es la guía definitiva para la administración, mantenimiento y expansión del portal de Intranet de la CAS.
+## Arquitectura PHP/XAMPP — Referencia para Desarrolladores
 
 ---
 
-## 1. Resumen de Proyecto: ¿Qué se ha hecho?
+## 1. Stack Tecnológico
 
-El portal ha evolucionado a lo largo de 10 fases hacia una plataforma robusta y con búsqueda universal. Los principales hitos alcanzados son:
-
-- **Migración a MongoDB**: Transición de archivos JSON a una base de datos NoSQL para Noticias y Agenda.
-- **Arquitectura MVC**: Separación clara de rutas, modelos y controladores.
-- **CRUD Completo**: Para SNIF, Provisión de Empleos, Revisión de Red, CITA, SIRH, Boletines, Manuales SGI, RESPEL, RUA, PCB, Convocatorias, Estudios Técnicos, Planes Talento Humano, Plan Monitoreo SIGEP, Manual de Funciones.
-- **Panel de Administración Unificado**: Interfaz centralizada para gestionar todos los módulos.
-- **🆕 Motor de Búsqueda Universal**: Sistema que indexa automáticamente TODOS los documentos y carpetas de la intranet.
-- **Invalidación de Caché en Tiempo Real**: Los archivos nuevos aparecen en el buscador al instante tras ser subidos.
+| Componente | Tecnología | Notas |
+|:-----------|:----------|:------|
+| Servidor web | Apache (XAMPP) | mod_rewrite habilitado |
+| Backend | PHP 8.x | Sin frameworks externos |
+| Frontend | HTML5, CSS3 Vanilla, JS ES6+ | Sin React, Vue ni Angular |
+| Persistencia | JSON planos + Sistema de archivos | Sin base de datos |
+| Autenticación | Sesiones PHP + bcrypt | Sin JWT ni OAuth |
+| Enrutamiento | `.htaccess` mod_rewrite | Todo pasa por `api.php` |
 
 ---
 
-## 2. Estructura de Carpetas
+## 2. Archivo Central: `api.php`
 
-```text
-/intranet                            ← Raíz del servidor
-├── /administracion                  ← Panel de gestión
-│   ├── index.html                   ← Dashboard con estadísticas
-│   ├── login.html                   ← Acceso administradores
-│   └── *.js                         ← Módulos admin (admin-logic.js, sgi-admin.js, etc.)
-├── /data                            ← Repositorio central de archivos físicos
-│   └── /menu header
-│       ├── /sgi
-│       │   ├── /Documentos institucionales   ← Membretes, logos, papelería
-│       │   ├── /Procesos Estratégicos
-│       │   ├── /procesos misionales
-│       │   ├── /Evaluación y Seguimiento
-│       │   └── /manuales
-│       ├── /git
-│       │   ├── /boletines
-│       │   ├── /gobierno digital
-│       │   ├── /manuales de usuario
-│       │   └── /normativa GIT
-│       ├── /MECI
-│       │   └── /Anticorrupcion
-│       └── /la cas
-├── /header_menu
-│   ├── /cas                         ← Noticias, Agenda, Talento Humano, Normativa, etc.
-│   ├── /sgi                         ← Todas las secciones del SGI (26 HTML)
-│   ├── /git                         ← Normatividad, Gobierno Digital, Manuales Usuario, Boletines
-│   └── /git/manuales_usuario        ← CITA, SIRH, SNIF, Revisión de Red
-├── /herramientas                    ← RESPEL, RUA, PCB, búsqueda, cartografía, galería, correo
-├── /src
-│   ├── /controllers                 ← Controladores de negocio
-│   ├── /models                      ← Modelos + UniversalCrawler + SgiModel
-│   └── /routes                      ← Rutas API REST
-├── server.js                        ← Punto de entrada
-└── package.json
+El archivo `api.php` es el **único controlador PHP** del sistema. Contiene toda la lógica de negocio, dividida en secciones bien marcadas:
+
+| Sección | Funcionalidad |
+|:--------|:-------------|
+| `1. AUTH` | Login, logout, check de sesión |
+| `2. SIMPLE JSON CRUD` | News, eventos, agenda, banner, directorio, users |
+| `3. IMAGE/FILE UPLOAD` | Subida genérica de archivos con `move_uploaded_file()` |
+| `4. SGI HTML-DB` | CRUD de documentos SGI incrustados en HTML |
+| `5. MÓDULOS HTML-DB GENÉRICOS` | 14 módulos que persisten en carpetas físicas + metadata.json |
+| `6. INFORME DE GESTIÓN` | Gestión de PDFs de informes de gestión |
+| `7. RESPEL` | CRUD JSON por sub-sección (documentos/obligaciones/gestores/empresas) |
+| `8. RUA` | CRUD JSON para RUA hídrico |
+| `9. PCB` | HTML-as-DB + tabla JSON para PCB |
+| `10. SEARCH GLOBAL` | Motor de búsqueda universal en PHP |
+| `11. USERS` | Gestión de usuarios (solo superadmin) |
+| `12. MISC` | Health check (`test-server`) |
+
+### Helpers Globales Disponibles
+
+```php
+out($data, $code)         // Responder JSON y terminar
+body()                    // Leer JSON del cuerpo de la petición
+auth($superadmin)         // Verificar sesión (y rol si $superadmin=true)
+read_json($path)          // Leer archivo JSON como array
+write_json($path, $data)  // Escribir array como archivo JSON
+upload_file($field, $dir) // Subir $_FILES[$field] a $dir, retornar URL relativa
+dent($s)                  // Decodificar entidades HTML → caracteres reales
+eent($s)                  // Codificar caracteres → entidades HTML
+html_remove_block()       // Eliminar un bloque HTML con data-id
+html_get_items()          // Extraer items HTML con data-id
 ```
 
 ---
 
-## 3. Motor de Búsqueda Universal
+## 3. Sistema de Enrutamiento
 
-### Componentes
-| Archivo | Rol |
-|:--------|:----|
-| `src/models/universalCrawler.js` | Rastreador de archivos físicos + links en HTML |
-| `src/models/sgiModel.js` | Extractor de documentos desde los HTML del SGI |
-| `src/controllers/searchController.js` | Orquestador de búsqueda con 7 fuentes + índice de páginas |
-| `herramientas/busqueda.html` | Interfaz de usuario (filtros: texto, categoría, fechas) |
-| `herramientas/search-logic.js` | Frontend: búsqueda en tiempo real, resaltado, animaciones |
+El archivo `.htaccess` redirige todas las peticiones a `/api/*`:
 
-### Flujo de Búsqueda
-```
-Usuario escribe en barra → GET /api/search?q=membrete
-    ↓
-searchController.js:
-  1. Noticias (MongoDB)
-  2. Informes de Gestión
-  3. Modelos estructurados (15 módulos con archivos)
-  4. SGI getAllSections() → todos los HTML del SGI
-  5. Agenda
-  6. UniversalCrawler.search() → archivos físicos + links HTML
-  7. Índice de páginas estáticas (60+ páginas por keywords)
-    ↓
-Resultados deduplicados → ordenados por fecha → enviados al frontend
-    ↓
-search-logic.js renderiza cards con resaltado de términos
+```apache
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.+)$ api.php?route=$1 [QSA,L]
+RewriteRule ^api/?$ api.php?route= [QSA,L]
 ```
 
-### Actualización del Índice
-```
-Evento de escritura (POST/PUT/DELETE en /api/)
-    ↓
-Middleware global en server.js detecta respuesta 2xx
-    ↓
-UniversalCrawler.invalidate()
-    ↓
-Próxima búsqueda → índice reconstruido con nuevos archivos
+En `api.php`, el enrutamiento se resuelve con:
+```php
+$route  = trim($_GET['route'] ?? '', '/');
+$method = $_SERVER['REQUEST_METHOD'];
 ```
 
-> **Sin invalidación explícita**: el índice se reconstruye automáticamente cada **60 segundos**.
+Luego se usan bloques `if` o `preg_match()` para despachar cada ruta.
 
 ---
 
-## 4. Manual de Operación para el Administrador
+## 4. Patrones de Persistencia
 
-### Acceso al Panel
-Navegar a: `http://localhost:3000/administracion` e ingresar con credenciales de administrador.
+### 4.1. JSON Plano (news, eventos, agenda, banner, directorio, users)
 
-### Módulos y sus Fuentes de Datos
-| Módulo | Tipo | Dónde guarda |
-|:-------|:-----|:-------------|
-| NotiCAS | MongoDB | Colección `news` |
-| Agenda CAS | MongoDB | Colección `agenda` |
-| SGI (todas las secciones) | HTML-as-DB | `header_menu/sgi/*.html` + `/data/menu header/sgi/` |
-| RESPEL | HTML-as-DB | `herramientas/respel.html` |
-| RUA | HTML-as-DB | `herramientas/rua.html` |
-| PCB | HTML-as-DB | `herramientas/pcb.html` |
-| Boletines GIT | HTML-as-DB | `header_menu/git/boletines.html` |
-| Manuales SGI | HTML-as-DB | `header_menu/sgi/manuales.html` |
-| Manual de Funciones | HTML-as-DB | `header_menu/cas/manual-funciones.html` |
-| Plan Monitoreo SIGEP | HTML-as-DB | `header_menu/cas/plan-monitoreo-sigep.html` |
-| Planes Talento | HTML-as-DB | `header_menu/cas/planes.html` |
-| Convocatorias | HTML-as-DB | `header_menu/cas/convocatorias.html` |
-| Estudios Técnicos | HTML-as-DB | `header_menu/cas/estudios-tecnicos.html` |
-| Provisión de Empleos | HTML-as-DB | `header_menu/cas/provision-empleos.html` |
-| CITA | HTML-as-DB | `header_menu/git/manuales_usuario/cita.html` |
-| SIRH | HTML-as-DB | `header_menu/git/manuales_usuario/sirh.html` |
-| SNIF | HTML-as-DB | `header_menu/git/manuales_usuario/snif.html` |
-| Revisión de Red | HTML-as-DB | `header_menu/git/manuales_usuario/revision-red.html` |
+```php
+$JSON_MAP = [
+    'news'    => 'data/noticias.json',
+    'eventos' => 'data/eventos.json',
+    // ...
+];
+```
 
-### Tip: Agregar Documentos al Buscador Sin el Panel
-Si necesitas agregar archivos directamente sin el panel de administración:
-1. Copia el archivo `.pdf` o `.docx` a la subcarpeta correspondiente en `/data/menu header/`.
-2. En máximo **60 segundos** el `UniversalCrawler` lo detectará y aparecerá en el buscador.
+Cada colección es un array JSON. El CRUD es completo (GET/POST/PUT/DELETE). Los IDs se generan con `uniqid()`.
+
+### 4.2. HTML-as-DB (SGI, PCB)
+
+Los documentos SGI se insertan como nodos `<a class="file-item" data-id="...">` dentro de archivos HTML estáticos. La API:
+- **GET**: parsea el HTML con regex y devuelve JSON
+- **POST**: inserta un nuevo nodo HTML dentro del `<div class="file-list-grid">`
+- **DELETE**: elimina el nodo con el `data-id` correspondiente y borra el archivo físico
+
+### 4.3. Directorio Físico + metadata.json (módulos genéricos)
+
+Para módulos como `manual-funciones`, `boletines`, `cita`, etc.:
+- Los archivos se guardan físicamente en la carpeta correspondiente
+- Un archivo `metadata.json` en la misma carpeta guarda el nombre amigable del archivo
+- El GET escanea la carpeta con `scandir()` y combina con metadata
 
 ---
 
-## 5. Requisitos y Ejecución
+## 5. Sistema de Autenticación
 
-### Dependencias del Sistema
-- **Node.js** v18 o superior
-- **MongoDB** v7.0 o superior
+### Flujo de Login
+```
+POST /api/auth/login  { username, password }
+    ↓
+Lee default_user.json
+    ↓
+password_verify($input, $hash_bcrypt)
+    ↓
+Si OK → $_SESSION['userId'], ['role'], ['permissions']
+    ↓
+Responde { success: true, user: { ... } }
+```
 
-### Librerías NPM Clave
-- `express` — servidor web
-- `mongoose` — ODM para MongoDB
-- `multer` — manejo de carga de archivos
-- `cors` — política de origen cruzado
-- `express-session` — manejo de sesiones de administrador
+### Roles y Permisos
+- **`superadmin`**: acceso total a todos los módulos
+- **`admin`**: acceso solo a los módulos habilitados en su objeto `permissions`
 
-### Comandos de Inicio
-```powershell
-# Desde la carpeta intranet/intranet
-npm install          # Primera vez o tras cambios
-npm start            # Inicia en http://localhost:3000
+El objeto `permissions` tiene 28 claves booleanas (una por módulo). El panel frontend lee estos permisos al cargar y oculta/muestra secciones dinámicamente.
+
+### Agregar un Nuevo Usuario
+Desde el panel de administración → sección **Gestión de Usuarios**, o editando directamente `default_user.json`:
+
+```json
+{
+    "username": "nuevo_usuario",
+    "password": "$2y$10$...",  // Hash generado por PHP password_hash()
+    "displayName": "Nombre Completo",
+    "role": "admin",
+    "permissions": {
+        "news": true,
+        "banner": false,
+        // ...
+    }
+}
+```
+
+> [!CAUTION]
+> Nunca guardes contraseñas en texto plano en `default_user.json`. Siempre usa `password_hash($pass, PASSWORD_BCRYPT)` para generar el hash.
+
+---
+
+## 6. Motor de Búsqueda — Detalles Técnicos
+
+La ruta `GET /api/search?q=texto&category=all&startDate=&endDate=` ejecuta:
+
+1. **Carga noticias.json** y filtra por texto y fecha
+2. **Escanea HTML** de `header_menu/` con `glob()` y `preg_match_all()`, extrayendo elementos `.file-item` y `.pdf-folder-card`
+3. **Escanea directorios físicos** en `data/` con función recursiva que busca archivos con extensiones `pdf`, `docx`, `doc`, `xlsx`, `xls`, `pptx`, `ppt`
+4. Devuelve máximo **50 resultados** combinados
+
+Diferencias con el antiguo buscador Node.js:
+| Aspecto | Antes (Node.js) | Ahora (PHP) |
+|:--------|:----------------|:------------|
+| Caché de índice | 60 seg en memoria | Sin caché (scan en tiempo real) |
+| Fuentes | 7 fuentes paralelas | 3 fuentes secuenciales |
+| Noticias | MongoDB | `noticias.json` |
+| Performance | Alta (caché) | Aceptable (archivos locales) |
+
+---
+
+## 7. Gestión de Archivos Subidos
+
+```php
+function upload_file($field, $destDir) {
+    $dir  = __DIR__ . '/' . ltrim($destDir, '/');
+    mkdir($dir, 0777, true);                           // Crear carpeta si no existe
+    $name = time() . '-' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $f['name']); // Sanitizar nombre
+    move_uploaded_file($f['tmp_name'], $dir . '/' . $name);
+    return '/' . ltrim($destDir, '/') . '/' . $name;  // URL relativa
+}
+```
+
+Los archivos se nombran con timestamp para evitar colisiones. La URL retornada es relativa al raíz de htdocs.
+
+---
+
+## 8. Agregar un Nuevo Módulo al Sistema
+
+### Paso 1: Crear la carpeta de datos
+```
+intranet/data/menu header/nueva-seccion/
+```
+
+### Paso 2: Agregar al mapa `$HTMLDB` en `api.php`
+```php
+$HTMLDB = [
+    // ... módulos existentes ...
+    'nueva-seccion' => [
+        'header_menu/cas/nueva-seccion.html',
+        'data/menu header/la cas/nueva-seccion',
+        'pdf-folder-card',
+        'nueva-seccion-grid'
+    ],
+];
+```
+
+### Paso 3: Crear la página HTML de vista
+Copiar la estructura de una página existente en `header_menu/cas/` y adaptarla.
+
+### Paso 4: Agregar módulo al panel de admin
+Agregar un bloque en `administracion/index.html` y un archivo `nueva-seccion-admin.js` con la lógica CRUD.
+
+### Paso 5: Agregar permiso al `default_user.json`
+```json
+"permissions": {
+    "nueva_seccion": true/false
+}
 ```
 
 ---
 
-## 6. Middlewares del Servidor
+## 9. Consideraciones de Seguridad
 
-| Middleware | Función |
-|:-----------|:--------|
-| `cors()` | Permite peticiones CORS |
-| `express.json()` | Parsear cuerpo JSON |
-| `express.static()` | Servir HTML, CSS, JS y archivos `/data` |
-| `express-session` | Autenticación de administradores |
-| `multer` | Carga de archivos (PDFs, Word, imágenes) |
-| **🆕 Invalidación de caché** | Cualquier `POST/PUT/DELETE` exitoso → `UniversalCrawler.invalidate()` |
-
----
-
-## 7. Versiones del Sistema
-
-| Versión | Descripción |
-| :--- | :--- |
-| **1.0 – 1.3** | Base estática, MVC inicial y estandarización HTML. |
-| **2.0.0** | Migración a MongoDB: Noticias y Agenda. |
-| **2.1.0** | CRUD completo para manuales CITA. |
-| **2.2.0** | CRUD para SNIF, Provisión de Empleos y Revisión de Red. |
-| **2.3.0** | Convocatorias, Planes, Estudios Técnicos, Categorías SGI. |
-| **2.4.0** | Botón "Ingresar" generalizado con ruta absoluta `/administracion/login.html`. |
-| **3.0.0** | **Motor de Búsqueda Universal**: UniversalCrawler, indexación automática, invalidación de caché en tiempo real, búsqueda en tiempo real con resaltado de términos. |
+| Aspecto | Estado | Recomendación |
+|:--------|:-------|:-------------|
+| Contraseñas | ✅ bcrypt | Mantener PASSWORD_BCRYPT |
+| Sesiones | ✅ PHP sessions | Configurar `session.cookie_secure` en producción |
+| CORS | ⚠️ Abierto (`*`) | Restringir a dominios de la organización en producción |
+| Listado de directorios | ✅ `Options -Indexes` en .htaccess | OK |
+| Inyección de archivos | ⚠️ Básico | Validar extensiones en upload |
+| Acceso a `/data/` | ⚠️ Público | Considerar bloqueo con .htaccess si los archivos son confidenciales |
 
 ---
 
-> [!TIP]
-> **Para nuevos módulos**: Si requiere persistencia en base de datos, siga el patrón de `newsController.js`. Si requiere inserción en HTML, siga el patrón de `sgiController.js`.
+## 10. Solución de Problemas Comunes
 
-> [!NOTE]
-> **Para expandir la búsqueda a nuevas carpetas**: Agregue la ruta relativa al array `DATA_DIRS` en `universalCrawler.js`. El sistema la indexará automáticamente.
+### El panel de admin no carga / redirige a login
+- Verificar que las sesiones PHP estén habilitadas en XAMPP
+- Comprobar que Apache esté corriendo
+- Limpiar cookies del navegador
+
+### Error 404 en `/api/...`
+- Verificar que `mod_rewrite` esté activo en Apache
+- Verificar que `AllowOverride All` esté configurado en `httpd.conf`
+- Confirmar que el archivo `.htaccess` existe en `/intranet/`
+
+### Los archivos subidos no aparecen
+- Verificar permisos de escritura en la carpeta `/data/`
+- En Windows/XAMPP: la carpeta `htdocs` normalmente tiene permisos completos
+- Comprobar `upload_max_filesize` y `post_max_size` en `php.ini`
+
+### La búsqueda no encuentra archivos nuevos
+- El buscador escanea en tiempo real: el archivo debe estar en `/data/menu header/`
+- Verificar que la extensión del archivo sea soportada: `pdf`, `docx`, `doc`, `xlsx`, `xls`, `pptx`, `ppt`
+
+### Error al conectar a la API (CORS)
+- Las cabeceras CORS ya están incluidas en `api.php`
+- Si hay problemas, verificar que la petición incluya `credentials: 'include'` en el fetch
+
+---
+
+## 11. Configuración PHP Recomendada (php.ini)
+
+```ini
+upload_max_filesize = 50M
+post_max_size       = 55M
+memory_limit        = 256M
+max_execution_time  = 60
+session.gc_maxlifetime = 3600
+```
+
+Ubicación del archivo en XAMPP Windows:
+```
+C:\xampp\php\php.ini
+```

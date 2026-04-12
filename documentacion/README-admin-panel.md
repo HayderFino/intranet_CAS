@@ -1,136 +1,139 @@
-# 📋 README — Panel de Administración Intranet CAS
+# Panel de Administración — Guía de Operación
 
-> **Servidor:** `http://localhost:3000`  
-> **Panel Admin:** `http://localhost:3000/administracion`  
-> **Iniciado con:** `node server.js` desde `intranet/`
+## Referencia para Administradores de la Intranet CAS
 
 ---
 
-## ¿Cómo funciona el sistema de administración?
-
-El panel es una **página única (SPA)** donde todos los módulos están cargados en `administracion/index.html` y se muestran u ocultan mediante JavaScript (`admin-logic.js`). 
-
-Existen dos tipos de persistencia:
-1. **MongoDB (Mongoose)**: Para Noticias, Agenda y CITA.
-2. **Sistema de Archivos Dinámico (CRUD)**: Para SNIF, Provisión de Empleos y Revisión de Red (metadatos en JSON/API + Archivos).
-3. **HTML-as-DB**: Para SGI, RESPEL, RUA, PCB y Boletines.
+## 1. Acceso
 
 ```
-Formulario Admin
-    ↓ fetch()
-Express (server.js)
-    ↓ Route → Controller
-    ↙               ↘
-MongoDB (NoSQL)    Archivo HTML (Inyección)
+http://localhost/CAS/intranet_CAS/intranet/administracion/login.html
 ```
 
----
+**Credenciales del superadministrador:**
+- **Usuario:** `Admin`
+- **Contraseña:** `1234` *(cambiar en el primer uso)*
 
-## 🗂️ Módulos del Panel
-
----
-
-### 1. 📰 Noticias (NotiCAS)
-
-**Descripción:** Gestión de noticias institucionales.  
-**Almacenamiento:** MongoDB → colección `news`  
-**API:** `/api/news`  
-**Archivo público:** `header_menu/cas/noticas-cas.html` (consumido vía API).
-
-| Acción | Método | Endpoint |
-|--------|--------|----------|
-| Listar | GET | `/api/news` |
-| Crear | POST | `/api/news` (multipart con imagen) |
-| Actualizar | PUT | `/api/news/:id` |
-| Eliminar | DELETE | `/api/news/:id` |
+> [!CAUTION]
+> Cambiar la contraseña por defecto inmediatamente después del primer acceso desde la sección **Gestión de Usuarios**.
 
 ---
 
-### 2. 📅 Agenda CAS
+## 2. Roles del Sistema
 
-**Descripción:** Eventos institucionales.  
-**Almacenamiento:** MongoDB → colección `agenda`  
-**API:** `/api/agenda`
-
----
-
-### 3. 🛠️ Manuales CITA (NUEVO)
-
-**Descripción:** Gestión de manuales técnicos CITA organizados por categorías.  
-**Almacenamiento:** MongoDB → colección `citas`  
-**Archivos:** `/intranet/data/uploads/citas/:categoria/`
-
-| Acción | Método | Endpoint |
-|--------|--------|----------|
-| Listar | GET | `/api/cita` |
-| Crear | POST | `/api/cita` (multipart con PDF) |
-| Eliminar | DELETE | `/api/cita/:id` |
-
-**Categorías soportadas:** Mecánica, Eléctrica, Electrónica, Estructural, Otros.  
-*Nota: El sistema crea automáticamente la carpeta de la categoría si no existe al subir el primer archivo.*
+| Rol | Descripción |
+|:----|:------------|
+| `superadmin` | Acceso total a todos los módulos, incluyendo Gestión de Usuarios |
+| `admin` | Acceso solo a los módulos habilitados en sus permisos individuales |
 
 ---
 
-### 4. 🌿 SGI — Procesos Estratégicos y Misionales
+## 3. Módulos del Panel
 
-**Descripción:** Documentos del Sistema de Gestión Integrado.  
-**Almacenamiento:** HTML-as-DB (modifica el HTML público).  
-**API:** `/api/sgi/:section`
+### 3.1 NotiCAS — Noticias Institucionales
+- **Crear**: Título, descripción, imagen (subida como multipart)
+- **API**: `POST /api/news` + `POST /api/news/upload`
+- **Eliminar**: `DELETE /api/news/{id}`
 
-**Secciones:** `planeacion`, `mejora`, `admin-recursos`, `planeacion-ambiental`, `vigilancia-control`.
+### 3.2 Eventos y Agenda
+- **Crear evento**: Nombre, fecha, lugar, descripción → `POST /api/eventos`
+- **Crear ítem agenda**: Título, fecha, hora → `POST /api/agenda`
+- **Eliminar**: `DELETE /api/eventos/{id}` o `DELETE /api/agenda/{id}`
+
+### 3.3 Banner Pasarela
+- **Crear banner**: Sube imagen → `POST /api/banner/upload`, luego registra → `POST /api/banner`
+- **Eliminar**: `DELETE /api/banner/{id}`
+- El banner se muestra en la pasarela de la página principal
+
+### 3.4 SGI — Sistema de Gestión Integrado (22 secciones)
+
+Secciones disponibles:
+`planeacion`, `mejora`, `admin-recursos`, `planeacion-ambiental`, `vigilancia-control`, `control-interno`, `documentos`, `talento-humano`, `gestion-documental`, `gestion-financiera`, `gestion-tecnologias`, `juridico`, `contratacion`, `gestion-integral`, `procesos-estrategicos`, `procesos-misionales`, `procesos-apoyo`, `control-disciplinario`, `cobro-coactivo`, `bienes-servicios`, `objetivos-calidad`, `politicas`, `manuales`
+
+**Flujo para agregar documento:**
+1. Subir archivo: `POST /api/sgi/upload` (multipart con campos `file`, `section`, `category`)
+2. Registrar en HTML: `POST /api/sgi/{seccion}` con `{ name, fileUrl, category }`
+3. El documento aparece inmediatamente en la sección correspondiente
+
+### 3.5 Informe de Gestión
+- Sube PDF directamente: `POST /api/informe-gestion/upload`
+- Registra metadata: `POST /api/informe-gestion` con `{ pdfUrl, title, description }`
+- Los PDFs se listan automáticamente en `header_menu/cas/informe-gestion.html`
+
+### 3.6 RESPEL
+Cuatro sub-secciones: `documentos`, `obligaciones`, `gestores`, `empresas`
+- Sube documento: `POST /api/respel/upload`
+- Crea entrada: `POST /api/respel/{seccion}`
+- Actualiza: `PUT /api/respel/{seccion}/{id}`
+- Elimina: `DELETE /api/respel/{seccion}/{id}`
+
+### 3.7 RUA y PCB
+- RUA: CRUD sobre `data/Herramientas/Rua/rua.json`
+- PCB: Documentos en `herramientas/pcb.html` + tabla JSON en `data/Herramientas/pcb-tabla.json`
+
+### 3.8 Módulos de Talento Humano
+| Módulo | Ruta API |
+|:-------|:---------|
+| Manual de Funciones | `/api/manual-funciones` |
+| Plan Monitoreo SIGEP | `/api/plan-monitoreo` |
+| Planes Talento Humano | `/api/planes-talento` |
+| Convocatorias | `/api/convocatorias` |
+| Estudios Técnicos | `/api/estudios-tecnicos` |
+| Provisión de Empleos | `/api/provision-empleos` |
+
+Todos siguen el mismo patrón: subir archivo → registrar metadata.
+
+### 3.9 Módulos GIT (Manuales de Usuario)
+| Módulo | Ruta API |
+|:-------|:---------|
+| CITA | `/api/cita` |
+| SIRH | `/api/sirh` |
+| SNIF | `/api/snif` |
+| Revisión de Red | `/api/revision-red` |
+| Boletines GIT | `/api/boletines` |
+| Políticas SGI | `/api/politicas-sgi` |
+| Manuales SGI | `/api/manuales-sgi` |
+
+### 3.10 Directorio Institucional
+- Crear contacto: `POST /api/directorio` con `{ nombre, cargo, correo, telefono }`
+- Editar: `PUT /api/directorio/{id}`
+- Eliminar: `DELETE /api/directorio/{id}`
+
+### 3.11 Gestión de Usuarios *(Solo superadmin)*
+- Listar: `GET /api/users`
+- Crear: `POST /api/users` — la contraseña se hashea automáticamente con bcrypt
+- Actualizar: `PUT /api/users/{id}` — si se envía `password`, se re-hashea
+- Eliminar: `DELETE /api/users/{id}`
+
+**28 permisos configurables:**
+`banner`, `eventos`, `correos`, `informe_gestion`, `news`, `agenda_cas`, `sgi_planeacion`, `sgi_mejora`, `sgi_recursos`, `sgi_ambiental`, `sgi_vigilancia`, `sgi_control`, `sgi_manuales`, `sgi_politicas`, `respel`, `rua`, `boletines_git`, `pcb`, `cita`, `sirh`, `revision_red`, `snif`, `users`, `manual_funciones`, `sigep`, `planes_talento`, `convocatorias`, `estudios_tecnicos`, `provision_empleos`
 
 ---
 
-### 5. ☢️ RESPEL / 💧 RUA / ⚡ PCB
+## 4. Archivos del Panel
 
-**Descripción:** Herramientas técnicas de medio ambiente.  
-**Almacenamiento:** HTML-as-DB.  
-**API:** `/api/respel`, `/api/rua`, `/api/pcb`.
-
----
-
-### 6. 🔒 Boletines GIT
-
-**Descripción:** Boletines de seguridad informática.  
-**Almacenamiento:** HTML-as-DB.  
-**API:** `/api/boletines`.
-
----
-
-### 7. 📁 Módulos de Documentación (SNIF, Provisión, Revisión Red)
-
-**Descripción:** Gestión completa de archivos para módulos específicos de GIT y Talento Humano.  
-**Archivos:** `/intranet/data/uploads/[snif|provision_empleos|revision_red]/`  
-**Lógica:** JavaScript especializado (`snif-admin.js`, etc.) con persistencia en metadatos.
-
-| Módulo | Sección | Ruta de Carga |
-|--------|---------|---------------|
-| SNIF | Documentación | `data/uploads/snif/` |
-| Provisión | Carrera | `data/uploads/provision_empleos/` |
-| Revisión Red | Sedes | `data/uploads/revision_red/` |
+| Archivo | Función |
+|:--------|:--------|
+| `administracion/index.html` | Estructura HTML del panel completo |
+| `administracion/login.html` | Formulario de autenticación |
+| `administracion/admin-logic.js` | Motor JS: carga dinámica de módulos, permisos, navegación |
+| `administracion/admin-styles.css` | Hoja de estilos del panel |
+| `administracion/banner-admin.js` | Lógica del módulo Banner |
+| `administracion/cita-admin.js` | Lógica del módulo CITA |
+| `administracion/informe-gestion-admin.js` | Lógica del módulo Informe de Gestión |
+| `administracion/users-admin.js` | Lógica de Gestión de Usuarios |
+| `administracion/[modulo]-admin.js` | Un archivo por cada módulo adicional |
 
 ---
 
-## 📌 Marcadores HTML (Solo para Módulos HTML-as-DB)
+## 5. Verificación del Estado del Servidor
 
-| Módulo | Marcador |
-|--------|----------|
-| RUA | `<!-- END_RUA_GRID -->` |
-| RESPEL | `<!-- END_RESPEL_GRID -->` |
-| Boletines | `<!-- END_BOLETINES_GRID -->` |
-| PCB | `<!-- END_PCB_GRID -->` |
+Abrir en el navegador:
+```
+http://localhost/CAS/intranet_CAS/intranet/api/test-server
+```
 
----
-
-## ⚠️ Consideraciones importantes
-
-### MongoDB
-- Asegúrese de que el servicio `mongod` esté activo antes de iniciar el servidor Node.js.
-- Los modelos se encuentran en `src/models/MongoNews.js`, `src/models/Agenda.js` y `src/models/Cita.js`.
-
-### Upload de archivos
-Multer requiere que los campos de texto (`section`, `category`) lleguen **antes** que el archivo (`file`) en el `FormData`.
-
----
-
-*Actualizado el 2 de marzo de 2026*
+Respuesta exitosa:
+```json
+{ "status": "ok", "engine": "PHP", "time": "2026-04-12T..." }
+```
