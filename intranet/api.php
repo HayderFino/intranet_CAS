@@ -450,117 +450,84 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         out(['message' => 'Error upload'], 400);
     }
 
+    $dirPath  = __DIR__ . '/' . $uploadDir;
+    $metaPath = $dirPath . '/metadata.json';
+    if (!is_dir($dirPath)) @mkdir($dirPath, 0777, true);
+
     // --- GET list ---
     if ($route === $modRoute && $method === 'GET') {
-        if (!file_exists($htmlPath)) out([]);
-        $content = file_get_contents($htmlPath);
-        $pattern = '/<a [^>]*class="' . preg_quote($cardClass, '/') . '"[^>]*data-id="([^"]*)"[^>]*>([\s\S]*?)<\/a>/i';
-        preg_match_all($pattern, $content, $all, PREG_SET_ORDER);
+        $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         $items = [];
-        foreach ($all as $hit) {
-            preg_match('/href="([^"]*)"/i', $hit[0], $hr);
-            preg_match('/<h4>([\s\S]*?)<\/h4>/i', $hit[2], $nm4);
-            preg_match('/<div class="file-name">([\s\S]*?)<\/div>/i', $hit[2], $nmDiv);
-            $name = dent(strip_tags($nm4[1] ?? $nmDiv[1] ?? 'Sin nombre'));
-            $href = $hr[1] ?? '#';
-            // Normalize relative paths
-            if (strpos($href, '../../') === 0) $href = '/' . substr($href, 6);
-            $items[] = ['id' => $hit[1], 'name' => trim($name), 'href' => $href, 'fileUrl' => $href];
+        $files = is_dir($dirPath) ? scandir($dirPath) : [];
+        foreach ($files as $f) {
+            if ($f === '.' || $f === '..' || is_dir($dirPath . '/' . $f)) continue;
+            if (strtolower($f) === 'metadata.json') continue;
+            $m = $meta[$f] ?? [];
+            
+            $items[] = [
+                'id'       => md5($f),
+                'filename' => $f,
+                'name'     => $m['name'] ?? $m['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+                'href'     => '/CAS/intranet_CAS/intranet/' . $uploadDir . '/' . rawurlencode($f),
+                'fileUrl'  => '/CAS/intranet_CAS/intranet/' . $uploadDir . '/' . implode('/', array_map('rawurlencode', explode('/', ltrim($f, '/')))),
+                'imageUrl' => '/CAS/intranet_CAS/intranet/' . $uploadDir . '/' . rawurlencode($f) // for boletines if needed
+            ];
         }
+        usort($items, fn($a, $b) => strcmp($b['filename'], $a['filename']));
         out($items);
     }
 
     // --- POST create ---
     if ($route === $modRoute && $method === 'POST') {
         auth();
-        if (!file_exists($htmlPath)) out(['message' => 'HTML not found'], 404);
-        $in      = body();
-        $newId   = $in['id'] ?? ('mod_' . time());
-        $fileUrl = $in['fileUrl'] ?? '#';
-        $name    = $in['name']    ?? 'Sin nombre';
-
-        $ext = strtolower(pathinfo($fileUrl, PATHINFO_EXTENSION));
-        [$iconColor, $btnBg, $typeStr] = match(true) {
-            in_array($ext, ['xls','xlsx']) => ['#1d6f42', '#1d6f42', 'Descargar XLSX'],
-            in_array($ext, ['doc','docx']) => ['#2b579a', '#2b579a', 'Descargar DOCX'],
-            in_array($ext, ['ppt','pptx']) => ['#d24726', '#d24726', 'Descargar PPT'],
-            default                        => ['var(--primary)', 'var(--primary)', 'Descargar PDF'],
-        };
-
-        $cardHtml = "\n<a href=\"$fileUrl\" class=\"$cardClass\" data-id=\"$newId\"><div class=\"file-icon\" style=\"color:$iconColor;\"><svg viewBox=\"0 0 24 24\"><path d=\"M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z\"/></svg></div><h4>" . eent($name) . "</h4><span class=\"btn-pdf-download\" style=\"background:$btnBg;\">$typeStr</span></a>";
-
-        $content = file_get_contents($htmlPath);
-        // Insert after grid container opening tag
-        if ($gridId) {
-            $tag   = "id=\"$gridId\"";
-            $pos   = strpos($content, $tag);
-            if ($pos !== false) {
-                $gt  = strpos($content, '>', $pos);
-                $content = substr($content, 0, $gt + 1) . $cardHtml . substr($content, $gt + 1);
-            } else {
-                // Fallback: append before </section>
-                $content = str_replace('</section>', $cardHtml . "\n</section>", $content, $cnt);
-            }
-        } else {
-            $content = str_replace('</section>', $cardHtml . "\n</section>", $content, $cnt);
+        $in = body();
+        $fUrl = $in['fileUrl'] ?? $in['imageUrl'] ?? $in['href'] ?? '';
+        $f    = basename(urldecode($fUrl));
+        
+        if ($f) {
+            $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+            $meta[$f] = [
+                'name'  => $in['name'] ?? $in['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+            ];
+            write_json($metaPath, $meta);
+            out(['id' => md5($f)], 201);
         }
-        file_put_contents($htmlPath, $content);
-        out(['id' => $newId], 201);
+        out(['error' => 'No filename provided'], 400);
+    }
+
+    // --- PUT update ---
+    if (preg_match('/^' . preg_quote($modRoute, '/') . '\/([a-zA-Z0-9_\-]+)$/', $route, $m2) && $method === 'PUT') {
+        auth();
+        $id = $m2[1];
+        $in = body();
+        $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+        $found = false;
+        
+        // Buscamos el archivo físico asociado a este ID
+        foreach (scandir($dirPath) as $f) {
+            if (md5($f) === $id) {
+                $meta[$f] = [ 'name' => $in['name'] ?? $in['title'] ?? pathinfo($f, PATHINFO_FILENAME) ];
+                write_json($metaPath, $meta);
+                $found = true;
+                break;
+            }
+        }
+        if ($found) out(['success' => true]);
+        out(['error' => 'File not found'], 404);
     }
 
     // --- DELETE ---
     if (preg_match('/^' . preg_quote($modRoute, '/') . '\/([a-zA-Z0-9_\-]+)$/', $route, $m2) && $method === 'DELETE') {
         auth();
         $id = $m2[1];
-        if (file_exists($htmlPath)) {
-            $content = file_get_contents($htmlPath);
-            $idEsc   = preg_quote($id, '/');
-            $pat     = '/<a [^>]*class="' . preg_quote($cardClass, '/') . '"[^>]*data-id="' . $idEsc . '"[^>]*>[\s\S]*?<\/a>/i';
-            if (preg_match($pat, $content, $hit)) {
-                if (preg_match('/href="([^"]+)"/i', $hit[0], $hr)) {
-                    $rel = str_replace('../../', '', $hr[1]);
-                    $abs = __DIR__ . '/' . ltrim($rel, '/');
-                    if (file_exists($abs)) @unlink($abs);
-                }
-                $content = preg_replace($pat, '', $content, 1);
-                file_put_contents($htmlPath, $content);
+        $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+        foreach (scandir($dirPath) as $f) {
+            if (md5($f) === $id) {
+                @unlink($dirPath . '/' . $f);
+                unset($meta[$f]);
+                write_json($metaPath, $meta);
+                break;
             }
-        }
-        out(['success' => true]);
-    }
-
-    // --- PUT update (delete + reinsert) ---
-    if (preg_match('/^' . preg_quote($modRoute, '/') . '\/([a-zA-Z0-9_\-]+)$/', $route, $m2) && $method === 'PUT') {
-        auth();
-        $id = $m2[1];
-        if (file_exists($htmlPath)) {
-            // Remove old card
-            $content = file_get_contents($htmlPath);
-            $idEsc = preg_quote($id, '/');
-            $pat   = '/<a [^>]*class="' . preg_quote($cardClass, '/') . '"[^>]*data-id="' . $idEsc . '"[^>]*>[\s\S]*?<\/a>/i';
-            $content = preg_replace($pat, '', $content, 1);
-            file_put_contents($htmlPath, $content);
-
-            // Re-insert updated
-            $in      = body();
-            $fileUrl = $in['fileUrl'] ?? '#';
-            $name    = $in['name']    ?? 'Sin nombre';
-            $ext     = strtolower(pathinfo($fileUrl, PATHINFO_EXTENSION));
-            [$iconColor, $btnBg, $typeStr] = match(true) {
-                in_array($ext, ['xls','xlsx']) => ['#1d6f42', '#1d6f42', 'Descargar XLSX'],
-                in_array($ext, ['doc','docx']) => ['#2b579a', '#2b579a', 'Descargar DOCX'],
-                in_array($ext, ['ppt','pptx']) => ['#d24726', '#d24726', 'Descargar PPT'],
-                default                        => ['var(--primary)', 'var(--primary)', 'Descargar PDF'],
-            };
-            $cardHtml = "\n<a href=\"$fileUrl\" class=\"$cardClass\" data-id=\"$id\"><div class=\"file-icon\" style=\"color:$iconColor;\"><svg viewBox=\"0 0 24 24\"><path d=\"M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z\"/></svg></div><h4>" . eent($name) . '</h4><span class="btn-pdf-download" style="background:' . $btnBg . ';">' . $typeStr . '</span></a>';
-
-            $content = file_get_contents($htmlPath);
-            if ($gridId && strpos($content, "id=\"$gridId\"") !== false) {
-                $pos = strpos($content, "id=\"$gridId\"");
-                $gt  = strpos($content, '>', $pos);
-                $content = substr($content, 0, $gt + 1) . $cardHtml . substr($content, $gt + 1);
-            }
-            file_put_contents($htmlPath, $content);
         }
         out(['success' => true]);
     }
