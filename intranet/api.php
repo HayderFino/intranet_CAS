@@ -7,11 +7,18 @@
  * ============================================================
  */
 
+$corsAllowedOrigins = getenv('CORS_ALLOWED_ORIGINS') ?: 'http://localhost,http://127.0.0.1';
+$corsAllowedOrigins = array_values(array_filter(array_map('trim', explode(',', $corsAllowedOrigins))));
+$requestOrigin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
+if ($requestOrigin !== '' && in_array($requestOrigin, $corsAllowedOrigins, true)) {
+    header('Access-Control-Allow-Origin: ' . $requestOrigin);
+    header('Access-Control-Allow-Credentials: true');
+}
+header('Vary: Origin');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
-header('Access-Control-Allow-Credentials: true');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit(); }
 
@@ -72,9 +79,21 @@ function upload_file($field, $destDir) {
     if (!isset($_FILES[$field])) return null;
     $f    = $_FILES[$field];
     $dir  = __DIR__ . '/' . ltrim($destDir, '/');
+    $ext  = strtolower(pathinfo($f['name'] ?? '', PATHINFO_EXTENSION));
+    $blockedExt = ['php', 'phtml', 'phar', 'js', 'exe', 'bat', 'cmd', 'sh', 'com', 'msi', 'dll', 'html', 'htm'];
+
+    if ($ext !== '' && in_array($ext, $blockedExt, true)) {
+        out(['message' => 'Tipo de archivo no permitido'], 400);
+    }
+    if (!is_uploaded_file($f['tmp_name'] ?? '')) {
+        out(['message' => 'Carga inválida'], 400);
+    }
+
     if (!is_dir($dir)) mkdir($dir, 0777, true);
     $name = time() . '-' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $f['name']);
-    move_uploaded_file($f['tmp_name'], $dir . '/' . $name);
+    if (!move_uploaded_file($f['tmp_name'], $dir . '/' . $name)) {
+        out(['message' => 'No se pudo guardar el archivo'], 500);
+    }
     return '/' . ltrim($destDir, '/') . '/' . $name;
 }
 
