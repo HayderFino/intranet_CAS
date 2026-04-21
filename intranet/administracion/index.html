@@ -1668,6 +1668,44 @@
             </form>
             <div id="manualesSgiList" class="news-management-list"></div>
           </div>
+
+          <!-- ===== PROCESOS DE APOYO ===== -->
+          <div id="procesosApoyoSection" class="hidden">
+            <div class="section-header" style="margin-bottom: 1.5rem">
+              <h2>Procesos de Apoyo</h2>
+              <p style="color: #64748b; font-size: 0.9rem">
+                Gestión de documentos para los módulos de apoyo (Gestión Documental, Contratación, etc.).
+              </p>
+            </div>
+            <form id="procesosApoyoForm" class="news-form" style="margin-bottom: 2rem">
+              <input type="hidden" id="procesosApoyoEditId" />
+              <div class="form-group">
+                <label>Nombre del Documento</label>
+                <input type="text" id="procesosApoyoName" placeholder="Ej: Formato de Contratación" required />
+              </div>
+              <div class="form-group">
+                <label>Categoría</label>
+                <select id="procesosApoyoCategory" required>
+                  <option value="Gestion Documental">Gestión Documental</option>
+                  <option value="Contratacion">Contratación</option>
+                  <option value="Juridico">Jurídico</option>
+                  <option value="Bienes y Servicios">Bienes y Servicios</option>
+                  <option value="Gestion Tecnologias">Gestión de la Información y Tecnologías</option>
+                  <option value="Talento Humano">Talento Humano</option>
+                  <option value="Servicio al Ciudadano">Servicio al Ciudadano</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Archivo (PDF, Excel, Word)</label>
+                <input type="file" id="procesosApoyoFile" />
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary" id="procesosApoyoSaveBtn">Guardar Archivo</button>
+                <button type="button" class="btn-secondary hidden" id="procesosApoyoCancelBtn">Cancelar</button>
+              </div>
+            </form>
+            <div id="procesosApoyoItemsList" class="news-management-list"></div>
+          </div>
           <!-- ===== CONTROL INTERNO ===== -->
           <div id="controlInternoSection" class="hidden">
             <div class="section-header" style="margin-bottom: 1.5rem">
@@ -3145,22 +3183,22 @@
       Noticia guardada con &eacute;xito!
     </div>
 
-    <script src="admin-logic.js"></script>
-    <script src="users-admin.js"></script>
-    <script src="cita-admin.js"></script>
-    <script src="sirh-admin.js"></script>
-    <script src="revision-red-admin.js"></script>
-    <script src="snif-admin.js"></script>
-    <script src="manual-funciones-admin.js"></script>
-    <script src="plan-monitoreo-admin.js"></script>
-    <script src="planes-talento-admin.js"></script>
-    <script src="convocatorias-admin.js"></script>
-    <script src="estudios-tecnicos-admin.js"></script>
-    <script src="provision-empleos-admin.js"></script>
-    <script src="banner-admin.js"></script>
-    <script src="eventos-admin.js"></script>
-    <script src="directorio-admin.js"></script>
-    <script src="informe-gestion-admin.js"></script>
-    <script src="politicas-sgi-admin.js"></script>
+    <script src="admin-logic.js?v=2"></script>
+    <script src="users-admin.js?v=2"></script>
+    <script src="cita-admin.js?v=2"></script>
+    <script src="sirh-admin.js?v=2"></script>
+    <script src="revision-red-admin.js?v=2"></script>
+    <script src="snif-admin.js?v=2"></script>
+    <script src="manual-funciones-admin.js?v=2"></script>
+    <script src="plan-monitoreo-admin.js?v=2"></script>
+    <script src="planes-talento-admin.js?v=2"></script>
+    <script src="convocatorias-admin.js?v=2"></script>
+    <script src="estudios-tecnicos-admin.js?v=2"></script>
+    <script src="provision-empleos-admin.js?v=2"></script>
+    <script src="banner-admin.js?v=2"></script>
+    <script src="eventos-admin.js?v=2"></script>
+    <script src="directorio-admin.js?v=2"></script>
+    <script src="informe-gestion-admin.js?v=2"></script>
+    <script src="politicas-sgi-admin.js?v=2"></script>
   </body>
 </html>

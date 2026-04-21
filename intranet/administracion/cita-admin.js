@@ -145,15 +145,33 @@ const CitaAdmin = (() => {
 
     showNotify(id ? "Actualizando..." : "Subiendo archivo...", "info");
 
-    const fd = new FormData();
-    fd.append("name", elements.name.value);
-    fd.append("category", elements.category.value);
-    if (file) fd.append("file", file);
-
     try {
+      let fileUrl = "";
+      
+      // Step 1: Upload file if selected
+      if (file) {
+        const fd = new FormData();
+        fd.append("file", file);
+        const upRes = await fetch(`${API}/upload`, {
+          method: "POST",
+          body: fd,
+        });
+        if (!upRes.ok) throw new Error("Error en la subida del archivo");
+        const upData = await upRes.json();
+        fileUrl = upData.fileUrl;
+      }
+
+      // Step 2: Save metadata
+      const payload = {
+        name: elements.name.value,
+        category: elements.category.value,
+      };
+      if (fileUrl) payload.href = fileUrl;
+
       const options = {
         method: id ? "PUT" : "POST",
-        body: fd,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       };
       const url = id ? `${API}/${id}` : API;
 
@@ -164,10 +182,10 @@ const CitaAdmin = (() => {
         load();
       } else {
         const err = await res.json();
-        showNotify(err.message || "Error al procesar", "error");
+        showNotify(err.error || err.message || "Error al procesar", "error");
       }
     } catch (e) {
-      showNotify("Error de conexión con el servidor", "error");
+      showNotify(e.message || "Error de conexión con el servidor", "error");
     }
   }
 

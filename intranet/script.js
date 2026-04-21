@@ -457,8 +457,8 @@ document.addEventListener("DOMContentLoaded", () => {
         { api: 'politicas-sgi', grid: 'politicas-grid', card: 'pdf-folder-card' },
         { api: 'cita', grid: 'cita-grid', card: 'pdf-folder-card' },
         { api: 'sirh', grid: 'sirh-grid', card: 'pdf-folder-card' },
-        { api: 'snif', grid: 'snif-grid', card: 'pdf-folder-card' },
-        { api: 'revision-red', grid: 'revision-red-grid', card: 'pdf-folder-card' },
+        { api: 'snif', grid: 'snif-docs-grid', card: 'pdf-folder-card' },
+        { api: 'revision-red', grid: 'revision-red-docs-grid', card: 'pdf-folder-card' },
         { api: 'rua', grid: 'rua-docs-grid', card: 'pdf-folder-card' },
         { api: 'pcb', grid: 'pcb-docs-grid', card: 'pdf-folder-card' },
         { api: 'respel/documentos', grid: 'respel-docs-grid', card: 'pdf-folder-card' }
@@ -477,12 +477,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const r = await fetch(BASE_PATH + 'api/' + m.api);
             if (!r.ok) return;
             const items = await r.json();
+            const htmlParts = {};
             
-            // Si el grid tiene el marcador de fin, insertamos antes. Si no, reemplazamos todo.
-            const endMarkerPat = m.api.toUpperCase().replace('-','_').replace('/','_') + '_GRID';
-            const hasEndMarker = gridEl.innerHTML.includes('END_' + endMarkerPat);
-
-            const html = items.map(item => {
+            items.forEach(item => {
                const fUrl = item.fileUrl || item.href || '';
                const ext = fUrl.split('.').pop().toLowerCase();
                let color = 'var(--primary)', bg = 'var(--primary)', tstr = 'Descargar PDF';
@@ -496,8 +493,9 @@ document.addEventListener("DOMContentLoaded", () => {
                }
                const titleSafe = item.name || item.title || 'Documento';
 
+                let cardHtml = "";
                 if (m.card === 'bulletin-card') {
-                    return `<a href="${url}" class="bulletin-list-item" data-id="${item.id}" target="_blank" style="text-decoration:none; display:flex; align-items:center; gap:1.25rem; padding:1rem; background:white; border:1px solid #e2e8f0; border-radius:12px; transition:all 0.3s ease;">
+                    cardHtml = `<a href="${url}" class="bulletin-list-item" data-id="${item.id}" target="_blank" style="text-decoration:none; display:flex; align-items:center; gap:1.25rem; padding:1rem; background:white; border:1px solid #e2e8f0; border-radius:12px; transition:all 0.3s ease;">
                          <div style="width:44px; height:44px; background:#f1f5f9; border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--primary); flex-shrink:0;">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                          </div>
@@ -507,22 +505,57 @@ document.addEventListener("DOMContentLoaded", () => {
                          </div>
                          <span style="padding:0.4rem 1rem; background:var(--primary); color:white; border-radius:8px; font-size:0.75rem; font-weight:700; white-space:nowrap;">Ver Boletín</span>
                     </a>`;
-                }
-
-               return `<a href="${url}" class="${m.card}" data-id="${item.id}" target="_blank" style="text-decoration:none;">
+                } else {
+                    const codeHtml = item.code ? `<p style="font-size: 0.8rem; color: var(--text-light); margin: -0.5rem 0 0.5rem 0;">${item.code}</p>` : '';
+                    cardHtml = `<a href="${url}" class="${m.card}" data-id="${item.id}" target="_blank" style="text-decoration:none;">
                   <div class="file-icon" style="color:${color};"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
                   <h4>${titleSafe}</h4>
+                  ${codeHtml}
                   <span class="btn-pdf-download" style="background:${bg};">${tstr}</span>
                </a>`;
-            }).join('');
+                }
 
-            if (hasEndMarker) {
-                // Conservar lo que hay y añadir lo nuevo (esto es por si hay cosas fijas)
-                // Pero lo más limpio para estos grids es reemplazar el contenido dinámico.
-                // En este sistema, reemplazamos por ahora para evitar duplicados.
-                gridEl.innerHTML = html + `\n<!-- END_${endMarkerPat} -->`;
+                if (item.category) {
+                    const catId = item.category.toLowerCase()
+                        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                        .replace(/[^a-z0-9]/g, '-')
+                        .replace(/-+/g, '-')
+                        .replace(/^-|-$/g, '')
+                        + '-grid';
+                    if (!htmlParts[catId]) htmlParts[catId] = "";
+                    htmlParts[catId] += cardHtml;
+                } else {
+                    if (!htmlParts[m.grid]) htmlParts[m.grid] = "";
+                    htmlParts[m.grid] += cardHtml;
+                }
+            });
+
+            // Si es CITA, inyectamos en cada grid de categoría detectado
+            if (m.api === 'cita') {
+                Object.keys(htmlParts).forEach(gridId => {
+                    const targetGrid = document.getElementById(gridId);
+                    if (targetGrid) {
+                        const endMarkerPat = gridId.toUpperCase().replace(/-/g, '_') + '_GRID';
+                        if (targetGrid.innerHTML.includes('END_' + endMarkerPat)) {
+                             const part1 = targetGrid.innerHTML.split('<!-- END_' + endMarkerPat + ' -->')[0];
+                             targetGrid.innerHTML = part1 + htmlParts[gridId] + '\n\n                <!-- END_' + endMarkerPat + ' -->';
+                        } else {
+                            targetGrid.innerHTML = htmlParts[gridId];
+                        }
+                    }
+                });
             } else {
-                gridEl.innerHTML = html;
+                // Comportamiento normal para otros módulos
+                const targetGrid = document.getElementById(m.grid);
+                if (targetGrid) {
+                    const endMarkerPat = m.grid.toUpperCase().replace(/-/g, '_').replace(/\//g, '_') + '_GRID';
+                    if (targetGrid.innerHTML.includes('END_' + endMarkerPat)) {
+                         const part1 = targetGrid.innerHTML.split('<!-- END_' + endMarkerPat + ' -->')[0];
+                         targetGrid.innerHTML = part1 + (htmlParts[m.grid] || '') + '\n\n                <!-- END_' + endMarkerPat + ' -->';
+                    } else {
+                        targetGrid.innerHTML = htmlParts[m.grid] || '';
+                    }
+                }
             }
         } catch (e) { console.error('Error fetching', m.api, e); }
     });

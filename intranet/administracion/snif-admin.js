@@ -80,15 +80,31 @@ const SnifAdmin = (() => {
       return;
     }
 
-    const fd = new FormData();
-    fd.append("name", elements.name.value);
-    if (file) fd.append("file", file);
-
     try {
       showNotify(editId ? "Actualizando..." : "Subiendo...", "info");
+      
+      let fileUrl = "";
+      if (file) {
+        const fd = new FormData();
+        fd.append("file", file);
+        const upRes = await fetch(`${API}/upload`, {
+          method: "POST",
+          body: fd,
+        });
+        if (!upRes.ok) throw new Error("Error en la subida del archivo");
+        const upData = await upRes.json();
+        fileUrl = upData.fileUrl;
+      }
+
+      const payload = {
+        name: elements.name.value,
+      };
+      if (fileUrl) payload.href = fileUrl;
+
       const res = await fetch(editId ? `${API}/${editId}` : API, {
         method: editId ? "PUT" : "POST",
-        body: fd,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -97,10 +113,10 @@ const SnifAdmin = (() => {
         load();
       } else {
         const data = await res.json();
-        showNotify(data.message || "Error", "error");
+        showNotify(data.error || data.message || "Error", "error");
       }
     } catch (e) {
-      showNotify("Error de conexión", "error");
+      showNotify(e.message || "Error de conexión", "error");
     }
   }
 

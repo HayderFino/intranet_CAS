@@ -80,11 +80,18 @@ function write_json($path, $data) {
 function upload_file($field, $destDir) {
     if (!isset($_FILES[$field])) return null;
     $f    = $_FILES[$field];
+    if ($f['error'] !== UPLOAD_ERR_OK) return null;
+    
     $dir  = __DIR__ . '/' . ltrim($destDir, '/');
     if (!is_dir($dir)) mkdir($dir, 0777, true);
-    $name = time() . '-' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $f['name']);
-    move_uploaded_file($f['tmp_name'], $dir . '/' . $name);
-    return WEB_BASE_PATH . ltrim($destDir, '/') . '/' . $name;
+    
+    $cleanName = preg_replace('/[^a-zA-Z0-9._-]/', '_', $f['name']);
+    $name = time() . '-' . $cleanName;
+    
+    if (move_uploaded_file($f['tmp_name'], $dir . '/' . $name)) {
+        return WEB_BASE_PATH . ltrim($destDir, '/') . '/' . $name;
+    }
+    return null;
 }
 
 /**  Strip a block with data-id from an HTML file  */
@@ -479,14 +486,16 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
                 $encodedFile = rawurlencode($f);
                 $relativeUrl = WEB_BASE_PATH . ltrim($encodedDir, '/') . '/' . $encodedFile;
 
-                $items[] = [
+                $items[] = array_merge($m, [
                     'id'       => md5($f),
                     'filename' => $f,
                     'name'     => $m['name'] ?? $m['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+                    'title'    => $m['title'] ?? $m['name'] ?? pathinfo($f, PATHINFO_FILENAME),
                     'href'     => $relativeUrl,
                     'fileUrl'  => $relativeUrl,
-                    'imageUrl' => $relativeUrl
-                ];
+                    'imageUrl' => $relativeUrl,
+                    'category' => $m['category'] ?? ''
+                ]);
             }
         usort($items, fn($a, $b) => strcmp($b['filename'], $a['filename']));
         out($items);
@@ -496,18 +505,24 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     if ($route === $modRoute && $method === 'POST') {
         auth();
         $in = body();
+        if (empty($in)) out(['error' => 'Empty request body: ' . file_get_contents('php://input')], 400);
+
         $fUrl = $in['fileUrl'] ?? $in['imageUrl'] ?? $in['href'] ?? '';
-        $f    = basename(urldecode($fUrl));
-        
+        if (!$fUrl) out(['error' => 'No file URL provided. Payload received: ' . json_encode($in)], 400);
+
+        $f = basename(urldecode($fUrl));
         if ($f) {
             $meta = file_exists($metaPath) ? read_json($metaPath) : [];
-            $meta[$f] = [
-                'name'  => $in['name'] ?? $in['title'] ?? pathinfo($f, PATHINFO_FILENAME),
-            ];
+            $currentMeta = $meta[$f] ?? [];
+            unset($in['id'], $in['fileUrl'], $in['imageUrl'], $in['href']); // Remove redundant properties from metadata
+            $meta[$f] = array_merge($currentMeta, $in, [
+                'name'     => $in['name'] ?? $in['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+                'category' => $in['category'] ?? ''
+            ]);
             write_json($metaPath, $meta);
             out(['id' => md5($f)], 201);
         }
-        out(['error' => 'No filename provided'], 400);
+        out(['error' => 'Invalid filename format extracted from: ' . $fUrl], 400);
     }
 
     // --- PUT update ---
@@ -521,7 +536,12 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         // Buscamos el archivo físico asociado a este ID
         foreach (scandir($dirPath) as $f) {
             if (md5($f) === $id) {
-                $meta[$f] = [ 'name' => $in['name'] ?? $in['title'] ?? pathinfo($f, PATHINFO_FILENAME) ];
+                $currentMeta = $meta[$f] ?? [];
+                unset($in['id'], $in['fileUrl'], $in['imageUrl'], $in['href']);
+                $meta[$f] = array_merge($currentMeta, $in, [ 
+                    'name'     => $in['name'] ?? $in['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+                    'category' => $in['category'] ?? ''
+                ]);
                 write_json($metaPath, $meta);
                 $found = true;
                 break;
