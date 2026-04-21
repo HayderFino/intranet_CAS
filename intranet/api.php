@@ -132,7 +132,7 @@ function upload_file($field, $destDir)
     $name = time() . '-' . $cleanName;
 
     if (move_uploaded_file($f['tmp_name'], $dir . '/' . $name)) {
-        return WEB_BASE_PATH . ltrim($destDir, '/') . '/' . $name;
+        return ltrim($destDir, '/') . '/' . $name;
     }
     return null;
 }
@@ -179,7 +179,6 @@ function html_get_items($htmlPath, $itemRegex, $cb)
 // ══════════════════════════════════════════════════════════════
 
 if ($route === 'auth/login' && $method === 'POST') {
-    dd($route);
     $in = body();
     $users = read_json(__DIR__ . '/default_user.json');
     foreach ($users as $u) {

@@ -74,8 +74,8 @@ async function loadDynamicBanner() {
                         const hasLink = targetUrl !== "#";
                         return `
                         <div class="carousel-slide">
-                            ${hasLink ? `<a href="${targetUrl.startsWith('/') ? BASE_PATH + targetUrl.substring(1) : targetUrl}" target="_blank">` : ""}
-                                <img src="${(banner.imageUrl && banner.imageUrl.startsWith('/')) ? BASE_PATH + banner.imageUrl.substring(1) : banner.imageUrl}" alt="${banner.title}" title="${banner.title}">
+                            ${hasLink ? `<a href="${(targetUrl && !targetUrl.startsWith('http') && !targetUrl.startsWith('/')) ? BASE_PATH + targetUrl : targetUrl}" target="_blank">` : ""}
+                                <img src="${(banner.imageUrl && !banner.imageUrl.startsWith('http') && !banner.imageUrl.startsWith('/')) ? BASE_PATH + banner.imageUrl : banner.imageUrl}" alt="${banner.title}" title="${banner.title}">
                             ${hasLink ? "</a>" : ""}
                         </div>
                     `;
