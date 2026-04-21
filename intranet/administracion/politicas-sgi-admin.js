@@ -3,7 +3,7 @@
  * Módulo CRUD para Políticas Institucionales del SGI.
  */
 const PoliticasSgiAdmin = (() => {
-  const API = "/CAS/intranet_CAS/intranet/api/politicas-sgi";
+  const API = "/intranet_CAS/intranet/api/politicas-sgi";
 
   let form,
     editId,

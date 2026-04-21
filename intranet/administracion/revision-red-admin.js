@@ -6,7 +6,7 @@
 
 const RevisionRedAdmin = (() => {
   // --- Config & State ---
-  const API = "/CAS/intranet_CAS/intranet/api/revision-red";
+  const API = "/intranet_CAS/intranet/api/revision-red";
   const elements = {
     form: document.getElementById("revisionRedForm"),
     editId: null,

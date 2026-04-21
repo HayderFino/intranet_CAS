@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
     resultsCount.innerText = "Buscando...";
 
     try {
-      const url = `/CAS/intranet_CAS/intranet/api/search?q=${encodeURIComponent(query)}&category=${category}&startDate=${startDate}&endDate=${endDate}`;
+      const url = `/intranet_CAS/intranet/api/search?q=${encodeURIComponent(query)}&category=${category}&startDate=${startDate}&endDate=${endDate}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();

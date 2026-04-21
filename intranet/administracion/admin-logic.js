@@ -347,7 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadList() {
       listEl.innerHTML = '<p style="padding:1rem;">Cargando...</p>';
       try {
-        const res = await fetch(`/CAS/intranet_CAS/intranet/api/sgi/${cfg.apiSection}`);
+        const res = await fetch(`/intranet_CAS/intranet/api/sgi/${cfg.apiSection}`);
         loadedItems = await res.json();
         rebuildFilterOptions();
         renderList();
@@ -461,7 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
           fd.append("section", cfg.apiSection);
           fd.append("category", category); // subcarpeta destino
           fd.append("file", file); // archivo al final
-          const upRes = await fetch("/CAS/intranet_CAS/intranet/api/sgi/upload", {
+          const upRes = await fetch("/intranet_CAS/intranet/api/sgi/upload", {
             method: "POST",
             body: fd,
           });
@@ -470,8 +470,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         const method = id ? "PUT" : "POST";
         const url = id
-          ? `/CAS/intranet_CAS/intranet/api/sgi/${cfg.apiSection}/${id}`
-          : `/CAS/intranet_CAS/intranet/api/sgi/${cfg.apiSection}`;
+          ? `/intranet_CAS/intranet/api/sgi/${cfg.apiSection}/${id}`
+          : `/intranet_CAS/intranet/api/sgi/${cfg.apiSection}`;
         const res = await fetch(url, {
           method,
           headers: { "Content-Type": "application/json" },
@@ -492,7 +492,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function deleteItem(id) {
       if (!confirm("¿Eliminar este documento?")) return;
       try {
-        const res = await fetch(`/CAS/intranet_CAS/intranet/api/sgi/${cfg.apiSection}/${id}`, {
+        const res = await fetch(`/intranet_CAS/intranet/api/sgi/${cfg.apiSection}/${id}`, {
           method: "DELETE",
         });
         if (res.ok) {
@@ -529,7 +529,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadList() {
       listEl.innerHTML = '<p style="padding:1rem;">Cargando...</p>';
       try {
-        const res = await fetch("/CAS/intranet_CAS/intranet/api/pcb");
+        const res = await fetch("/intranet_CAS/intranet/api/pcb");
         loadedItems = await res.json();
         renderList();
       } catch (e) {
@@ -601,7 +601,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (file) {
           const fd = new FormData();
           fd.append("file", file);
-          const upRes = await fetch("/CAS/intranet_CAS/intranet/api/pcb/upload", {
+          const upRes = await fetch("/intranet_CAS/intranet/api/pcb/upload", {
             method: "POST",
             body: fd,
           });
@@ -610,7 +610,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         const title = document.getElementById("pcbTitle").value;
         const method = id ? "PUT" : "POST";
-        const url = id ? `/CAS/intranet_CAS/intranet/api/pcb/${id}` : "/CAS/intranet_CAS/intranet/api/pcb";
+        const url = id ? `/intranet_CAS/intranet/api/pcb/${id}` : "/intranet_CAS/intranet/api/pcb";
         const res = await fetch(url, {
           method,
           headers: { "Content-Type": "application/json" },
@@ -634,7 +634,7 @@ document.addEventListener("DOMContentLoaded", () => {
       )
         return;
       try {
-        const res = await fetch(`/CAS/intranet_CAS/intranet/api/pcb/${id}`, { method: "DELETE" });
+        const res = await fetch(`/intranet_CAS/intranet/api/pcb/${id}`, { method: "DELETE" });
         if (res.ok) {
           showToast("Documento eliminado");
           loadList();
@@ -662,7 +662,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadRows() {
       tablaList.innerHTML = '<p style="padding:0.5rem;">Cargando filas...</p>';
       try {
-        const res = await fetch("/CAS/intranet_CAS/intranet/api/pcb/tabla");
+        const res = await fetch("/intranet_CAS/intranet/api/pcb/tabla");
         rows = await res.json();
         renderRows();
       } catch (e) {
@@ -738,7 +738,7 @@ document.addEventListener("DOMContentLoaded", () => {
         actualizacion: document.getElementById("pcbTablaActual").value,
       };
       const method = id ? "PUT" : "POST";
-      const url = id ? `/CAS/intranet_CAS/intranet/api/pcb/tabla/${id}` : "/CAS/intranet_CAS/intranet/api/pcb/tabla";
+      const url = id ? `/intranet_CAS/intranet/api/pcb/tabla/${id}` : "/intranet_CAS/intranet/api/pcb/tabla";
       try {
         const res = await fetch(url, {
           method,
@@ -758,7 +758,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function deleteRow(id) {
       if (!confirm("¿Eliminar esta fila de la tabla?")) return;
       try {
-        const res = await fetch(`/CAS/intranet_CAS/intranet/api/pcb/tabla/${id}`, { method: "DELETE" });
+        const res = await fetch(`/intranet_CAS/intranet/api/pcb/tabla/${id}`, { method: "DELETE" });
         if (res.ok) {
           showToast("Fila eliminada");
           loadRows();
@@ -771,7 +771,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Manuales SGI ---
   (() => {
-    const API = "/CAS/intranet_CAS/intranet/api/manuales-sgi";
+    const API = "/intranet_CAS/intranet/api/manuales-sgi";
     const form = document.getElementById("manualesSgiForm");
     const editId = document.getElementById("manualesSgiEditId");
     const listEl = document.getElementById("manualesSgiList");
@@ -959,7 +959,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadList() {
       listEl.innerHTML = '<p style="padding:1rem;">Cargando...</p>';
       try {
-        const res = await fetch(`/CAS/intranet_CAS/intranet/api/sgi/${API_SECTION}`);
+        const res = await fetch(`/intranet_CAS/intranet/api/sgi/${API_SECTION}`);
         if (!res.ok) throw new Error("Status: " + res.status);
         allItems = await res.json();
         renderList();
@@ -1059,7 +1059,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fd.append("category", category);
         fd.append("file", fileInput.files[0]);
         try {
-          const upRes = await fetch("/CAS/intranet_CAS/intranet/api/sgi/upload", {
+          const upRes = await fetch("/intranet_CAS/intranet/api/sgi/upload", {
             method: "POST",
             body: fd,
           });
@@ -1074,8 +1074,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = { name, category, fileUrl };
       const method = id ? "PUT" : "POST";
       const url = id
-        ? `/CAS/intranet_CAS/intranet/api/sgi/${API_SECTION}/${id}`
-        : `/CAS/intranet_CAS/intranet/api/sgi/${API_SECTION}`;
+        ? `/intranet_CAS/intranet/api/sgi/${API_SECTION}/${id}`
+        : `/intranet_CAS/intranet/api/sgi/${API_SECTION}`;
       try {
         const res = await fetch(url, {
           method,
@@ -1095,7 +1095,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function deleteItem(id) {
       if (!confirm("¿Eliminar este documento?")) return;
       try {
-        const res = await fetch(`/CAS/intranet_CAS/intranet/api/sgi/${API_SECTION}/${id}`, {
+        const res = await fetch(`/intranet_CAS/intranet/api/sgi/${API_SECTION}/${id}`, {
           method: "DELETE",
         });
         if (res.ok) {
@@ -1148,7 +1148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     respelItemsList.innerHTML =
       '<p style="padding: 1rem;">Cargando listado...</p>';
     try {
-      const res = await fetch(`/CAS/intranet_CAS/intranet/api/respel/${section}`);
+      const res = await fetch(`/intranet_CAS/intranet/api/respel/${section}`);
       loadedRespelItems = await res.json();
       renderRespelList();
       updateStats();
@@ -1244,7 +1244,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const fd = new FormData();
         fd.append("section", section);
         fd.append("file", file);
-        const upRes = await fetch("/CAS/intranet_CAS/intranet/api/respel/upload", {
+        const upRes = await fetch("/intranet_CAS/intranet/api/respel/upload", {
           method: "POST",
           body: fd,
         });
@@ -1266,8 +1266,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const method = id ? "PUT" : "POST";
       const url = id
-        ? `/CAS/intranet_CAS/intranet/api/respel/${section}/${id}`
-        : `/CAS/intranet_CAS/intranet/api/respel/${section}`;
+        ? `/intranet_CAS/intranet/api/respel/${section}/${id}`
+        : `/intranet_CAS/intranet/api/respel/${section}`;
 
       const res = await fetch(url, {
         method: method,
@@ -1294,7 +1294,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     const section = respelCurrentSection.value;
     try {
-      const res = await fetch(`/CAS/intranet_CAS/intranet/api/respel/${section}/${id}`, {
+      const res = await fetch(`/intranet_CAS/intranet/api/respel/${section}/${id}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -1316,7 +1316,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ruaItemsList.innerHTML =
       '<p style="padding: 1rem;">Cargando listado RUA...</p>';
     try {
-      const res = await fetch("/CAS/intranet_CAS/intranet/api/rua");
+      const res = await fetch("/intranet_CAS/intranet/api/rua");
       loadedRuaItems = await res.json();
       renderRuaList();
       updateStats();
@@ -1392,7 +1392,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (file) {
         const fd = new FormData();
         fd.append("file", file);
-        const upRes = await fetch("/CAS/intranet_CAS/intranet/api/rua/upload", {
+        const upRes = await fetch("/intranet_CAS/intranet/api/rua/upload", {
           method: "POST",
           body: fd,
         });
@@ -1406,7 +1406,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       const method = id ? "PUT" : "POST";
-      const url = id ? `/CAS/intranet_CAS/intranet/api/rua/${id}` : "/CAS/intranet_CAS/intranet/api/rua";
+      const url = id ? `/intranet_CAS/intranet/api/rua/${id}` : "/intranet_CAS/intranet/api/rua";
 
       const res = await fetch(url, {
         method: method,
@@ -1429,7 +1429,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function deleteRuaItem(id) {
     if (!confirm("¿Eliminar este registro RUA?")) return;
     try {
-      const res = await fetch(`/CAS/intranet_CAS/intranet/api/rua/${id}`, { method: "DELETE" });
+      const res = await fetch(`/intranet_CAS/intranet/api/rua/${id}`, { method: "DELETE" });
       if (res.ok) {
         showToast("Eliminado");
         loadRuaList();
@@ -1449,7 +1449,7 @@ document.addEventListener("DOMContentLoaded", () => {
     boletinesItemsList.innerHTML =
       '<p style="padding: 1rem;">Cargando boletines...</p>';
     try {
-      const res = await fetch("/CAS/intranet_CAS/intranet/api/boletines");
+      const res = await fetch("/intranet_CAS/intranet/api/boletines");
       loadedBoletinesItems = await res.json();
       renderBoletinesList();
     } catch (error) {
@@ -1531,7 +1531,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (file) {
         const fd = new FormData();
         fd.append("file", file);
-        const upRes = await fetch("/CAS/intranet_CAS/intranet/api/boletines/upload", {
+        const upRes = await fetch("/intranet_CAS/intranet/api/boletines/upload", {
           method: "POST",
           body: fd,
         });
@@ -1546,7 +1546,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       const method = id ? "PUT" : "POST";
-      const url = id ? `/CAS/intranet_CAS/intranet/api/boletines/${id}` : "/CAS/intranet_CAS/intranet/api/boletines";
+      const url = id ? `/intranet_CAS/intranet/api/boletines/${id}` : "/intranet_CAS/intranet/api/boletines";
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
@@ -1571,7 +1571,7 @@ document.addEventListener("DOMContentLoaded", () => {
     )
       return;
     try {
-      const res = await fetch(`/CAS/intranet_CAS/intranet/api/boletines/${id}`, { method: "DELETE" });
+      const res = await fetch(`/intranet_CAS/intranet/api/boletines/${id}`, { method: "DELETE" });
       if (res.ok) {
         showToast("Boletín eliminado");
         loadBoletinesList();
@@ -1614,19 +1614,19 @@ document.addEventListener("DOMContentLoaded", () => {
         informesR,
         politicasR,
       ] = await Promise.all([
-        fetch("/CAS/intranet_CAS/intranet/api/news"),
-        fetch("/CAS/intranet_CAS/intranet/api/eventos"),
-        fetch("/CAS/intranet_CAS/intranet/api/sgi/planeacion"),
-        fetch("/CAS/intranet_CAS/intranet/api/sgi/mejora"),
-        fetch("/CAS/intranet_CAS/intranet/api/sgi/control-interno"),
-        fetch("/CAS/intranet_CAS/intranet/api/respel/documentos"),
-        fetch("/CAS/intranet_CAS/intranet/api/respel/empresas"),
-        fetch("/CAS/intranet_CAS/intranet/api/rua"),
-        fetch("/CAS/intranet_CAS/intranet/api/snif"),
-        fetch("/CAS/intranet_CAS/intranet/api/provision-empleos"),
-        fetch("/CAS/intranet_CAS/intranet/api/convocatorias"),
-        fetch("/CAS/intranet_CAS/intranet/api/informe-gestion"),
-        fetch("/CAS/intranet_CAS/intranet/api/politicas-sgi"),
+        fetch("/intranet_CAS/intranet/api/news"),
+        fetch("/intranet_CAS/intranet/api/eventos"),
+        fetch("/intranet_CAS/intranet/api/sgi/planeacion"),
+        fetch("/intranet_CAS/intranet/api/sgi/mejora"),
+        fetch("/intranet_CAS/intranet/api/sgi/control-interno"),
+        fetch("/intranet_CAS/intranet/api/respel/documentos"),
+        fetch("/intranet_CAS/intranet/api/respel/empresas"),
+        fetch("/intranet_CAS/intranet/api/rua"),
+        fetch("/intranet_CAS/intranet/api/snif"),
+        fetch("/intranet_CAS/intranet/api/provision-empleos"),
+        fetch("/intranet_CAS/intranet/api/convocatorias"),
+        fetch("/intranet_CAS/intranet/api/informe-gestion"),
+        fetch("/intranet_CAS/intranet/api/politicas-sgi"),
       ]);
 
       const news = newsR.ok ? await newsR.json() : [];
@@ -1737,7 +1737,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sgiItemsList.innerHTML =
       '<p style="padding: 1rem;">Cargando documentos...</p>';
     try {
-      const res = await fetch(`/CAS/intranet_CAS/intranet/api/sgi/${section}`);
+      const res = await fetch(`/intranet_CAS/intranet/api/sgi/${section}`);
       loadedSgiItems = await res.json();
       renderSgiList();
     } catch (error) {
@@ -1833,7 +1833,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fd.append("category", category);
         fd.append("file", file);
 
-        const upRes = await fetch("/CAS/intranet_CAS/intranet/api/sgi/upload", {
+        const upRes = await fetch("/intranet_CAS/intranet/api/sgi/upload", {
           method: "POST",
           body: fd,
         });
@@ -1851,7 +1851,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const method = id ? "PUT" : "POST";
-      const url = id ? `/CAS/intranet_CAS/intranet/api/sgi/${section}/${id}` : `/CAS/intranet_CAS/intranet/api/sgi/${section}`;
+      const url = id ? `/intranet_CAS/intranet/api/sgi/${section}/${id}` : `/intranet_CAS/intranet/api/sgi/${section}`;
 
       const res = await fetch(url, {
         method: method,
@@ -1876,7 +1876,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!confirm("¿Eliminar documento?")) return;
     const section = sgiCurrentSection.value;
     try {
-      const res = await fetch(`/CAS/intranet_CAS/intranet/api/sgi/${section}/${id}`, {
+      const res = await fetch(`/intranet_CAS/intranet/api/sgi/${section}/${id}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -1893,7 +1893,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const newsItemsList = document.getElementById("newsItemsList");
     newsItemsList.innerHTML = "<p>Cargando noticias...</p>";
     try {
-      const res = await fetch("/CAS/intranet_CAS/intranet/api/news");
+      const res = await fetch("/intranet_CAS/intranet/api/news");
       const news = await res.json();
 
       // Actualizar el contador de noticias en el Dashboard
@@ -1924,7 +1924,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.deleteNews = async (id) => {
     if (!confirm("¿Eliminar noticia?")) return;
-    await fetch(`/CAS/intranet_CAS/intranet/api/news/${id}`, { method: "DELETE" });
+    await fetch(`/intranet_CAS/intranet/api/news/${id}`, { method: "DELETE" });
     loadNewsList();
     showToast("Eliminada");
   };
@@ -1993,14 +1993,14 @@ document.addEventListener("DOMContentLoaded", () => {
     fd.append("image", document.getElementById("imageInput").files[0]);
 
     try {
-      const upRes = await fetch("/CAS/intranet_CAS/intranet/api/news/upload", {
+      const upRes = await fetch("/intranet_CAS/intranet/api/news/upload", {
         method: "POST",
         body: fd,
       });
       if (!upRes.ok) throw new Error("Error al subir imagen");
       const { imageUrl } = await upRes.json();
 
-      const newsRes = await fetch("/CAS/intranet_CAS/intranet/api/news", {
+      const newsRes = await fetch("/intranet_CAS/intranet/api/news", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -2029,7 +2029,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadAgendaList() {
     const list = document.getElementById("agendaItemsList");
     list.innerHTML = "Cargando...";
-    const res = await fetch("/CAS/intranet_CAS/intranet/api/agenda");
+    const res = await fetch("/intranet_CAS/intranet/api/agenda");
     const data = await res.json();
     list.innerHTML = "";
     data.forEach((item) => {
@@ -2041,7 +2041,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   window.deleteAgenda = async (id) => {
-    await fetch(`/CAS/intranet_CAS/intranet/api/agenda/${id}`, { method: "DELETE" });
+    await fetch(`/intranet_CAS/intranet/api/agenda/${id}`, { method: "DELETE" });
     loadAgendaList();
   };
 
@@ -2056,7 +2056,7 @@ document.addEventListener("DOMContentLoaded", () => {
         hour: "2-digit",
         minute: "2-digit",
       });
-      await fetch("/CAS/intranet_CAS/intranet/api/agenda", {
+      await fetch("/intranet_CAS/intranet/api/agenda", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -2071,7 +2071,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- SNIF Logic ---
   const SnifAdmin = (() => {
-    const API = "/CAS/intranet_CAS/intranet/api/snif";
+    const API = "/intranet_CAS/intranet/api/snif";
     const MAX_SIZE_MB = 20;
     const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
     const FORBIDDEN_EXTS = [
@@ -2250,7 +2250,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Autenticación y Sesión ---
   async function checkSession() {
     try {
-      const res = await fetch("/CAS/intranet_CAS/intranet/api/auth/check");
+      const res = await fetch("/intranet_CAS/intranet/api/auth/check");
       const data = await res.json();
 
       if (data.success) {
@@ -2424,7 +2424,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnLogout.onclick = async (e) => {
       e.preventDefault();
       try {
-        await fetch("/CAS/intranet_CAS/intranet/api/auth/logout");
+        await fetch("/intranet_CAS/intranet/api/auth/logout");
         window.location.href = "login.html";
       } catch (err) {
         console.error("Error al cerrar sesión:", err);

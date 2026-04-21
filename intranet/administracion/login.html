@@ -162,7 +162,7 @@
           const errorDiv = document.getElementById("errorMessage");
 
           try {
-            const response = await fetch("/CAS/intranet_CAS/intranet/api/auth/login", {
+            const response = await fetch("/intranet_CAS/intranet/api/auth/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, password }),

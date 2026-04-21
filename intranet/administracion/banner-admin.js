@@ -1,5 +1,5 @@
 const BannerAdmin = {
-  API_URL: "/CAS/intranet_CAS/intranet/api/banner",
+  API_URL: "/intranet_CAS/intranet/api/banner",
 
   load: async function () {
     const listContainer = document.getElementById("bannerList");

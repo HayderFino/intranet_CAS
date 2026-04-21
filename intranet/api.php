@@ -20,6 +20,15 @@ session_start();
 $route  = trim($_GET['route'] ?? '', '/');
 $method = $_SERVER['REQUEST_METHOD'];
 
+// Detectar la ruta base del proyecto de forma dinámica
+$WEB_BASE_PATH = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+if ($WEB_BASE_PATH !== '/') $WEB_BASE_PATH .= '/';
+
+// Define the root directory for data (absolute on disk)
+define('DATA_ROOT', __DIR__ . '/');
+
+
+
 // ══════════════════════════════════════════════════════════════
 //  HELPERS
 // ══════════════════════════════════════════════════════════════
@@ -233,12 +242,12 @@ if ($route === 'sgi/upload' && $method === 'POST') {
     $category = $_POST['category'] ?? '';
 
     $sgiUploadBase = [
-        'planeacion'          => 'data/menu header/sgi/Procesos Estratégicos/Planeación Estratégica',
-        'mejora'              => 'data/menu header/sgi/Procesos Estratégicos/mejora continua',
-        'admin-recursos'      => 'data/menu header/sgi/procesos misionales/Administración de la Oferta de Recursos Naturales Renovables disponibles, Educación Ambiental y Participación Ciudadana',
-        'planeacion-ambiental'=> 'data/menu header/sgi/procesos misionales/Planeación y Ordenamiento Ambiental',
+        'planeacion'          => 'data/menu header/sgi/Procesos Estrategicos/Planeacion Estrategica',
+        'mejora'              => 'data/menu header/sgi/Procesos Estrategicos/mejora continua',
+        'admin-recursos'      => 'data/menu header/sgi/procesos misionales/Administracion de la Oferta de Recursos Naturales Renovables disponibles, Educacion Ambiental y Participacion Ciudadana',
+        'planeacion-ambiental'=> 'data/menu header/sgi/procesos misionales/Planeacion y Ordenamiento Ambiental',
         'vigilancia-control'  => 'data/menu header/sgi/procesos misionales/Vigilancia, Seguimiento y Control Ambiental',
-        'control-interno'     => 'data/menu header/sgi/Evaluación y Seguimiento/Control interno',
+        'control-interno'     => 'data/menu header/sgi/Evaluacion y Seguimiento/Control interno',
     ];
 
     $base = $sgiUploadBase[$section] ?? 'data/menu header/sgi';
@@ -427,8 +436,8 @@ $HTMLDB = [
     'plan-monitoreo'       => ['header_menu/cas/plan-monitoreo-sigep.html','data/menu header/la cas/talento humano/Plan de Monitoreo SIGEP','pdf-folder-card','plan-monitoreo-grid'],
     'planes-talento'       => ['header_menu/cas/planes.html',             'data/menu header/la cas/talento humano/Planes',               'pdf-folder-card', 'planes-grid'],
     'convocatorias'        => ['header_menu/cas/convocatorias.html',      'data/menu header/la cas/talento humano/Convocatorias',         'pdf-folder-card', 'convocatorias-grid'],
-    'estudios-tecnicos'    => ['header_menu/cas/estudios-tecnicos.html',  'data/menu header/la cas/talento humano/Estudios Técnicos',     'pdf-folder-card', 'estudios-tecnicos-grid'],
-    'provision-empleos'    => ['header_menu/cas/provision-empleos.html',  'data/menu header/la cas/talento humano/Provisión de empleos',  'pdf-folder-card', 'provision-empleos-grid'],
+    'estudios-tecnicos'    => ['header_menu/cas/estudios-tecnicos.html',  'data/menu header/la cas/talento humano/Estudios Tecnicos',     'pdf-folder-card', 'estudios-tecnicos-grid'],
+    'provision-empleos'    => ['header_menu/cas/provision-empleos.html',  'data/menu header/la cas/talento humano/Provision de empleos',  'pdf-folder-card', 'provision-empleos-grid'],
     'manuales-sgi'         => ['header_menu/sgi/manuales.html',           'data/menu header/sgi/manuales',                               'pdf-folder-card', 'manuales-sgi-grid'],
     'boletines'            => ['header_menu/git/boletines.html',          'data/menu header/git/boletines',                              'bulletin-card',   null],
     'politicas-sgi'        => ['header_menu/sgi/politicas.html',          'data/menu header/sgi/Politicas',                              'pdf-folder-card', 'politicas-grid'],
@@ -457,22 +466,28 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     // --- GET list ---
     if ($route === $modRoute && $method === 'GET') {
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
-        $items = [];
-        $files = is_dir($dirPath) ? scandir($dirPath) : [];
-        foreach ($files as $f) {
-            if ($f === '.' || $f === '..' || is_dir($dirPath . '/' . $f)) continue;
-            if (strtolower($f) === 'metadata.json') continue;
-            $m = $meta[$f] ?? [];
-            
-            $items[] = [
-                'id'       => md5($f),
-                'filename' => $f,
-                'name'     => $m['name'] ?? $m['title'] ?? pathinfo($f, PATHINFO_FILENAME),
-                'href'     => '/CAS/intranet_CAS/intranet/' . $uploadDir . '/' . rawurlencode($f),
-                'fileUrl'  => '/CAS/intranet_CAS/intranet/' . $uploadDir . '/' . implode('/', array_map('rawurlencode', explode('/', ltrim($f, '/')))),
-                'imageUrl' => '/CAS/intranet_CAS/intranet/' . $uploadDir . '/' . rawurlencode($f) // for boletines if needed
-            ];
-        }
+            $items = [];
+            $files = is_dir($dirPath) ? scandir($dirPath) : [];
+            foreach ($files as $f) {
+                if ($f === '.' || $f === '..' || is_dir($dirPath . '/' . $f)) continue;
+                if (strtolower($f) === 'metadata.json') continue;
+                $m = $meta[$f] ?? [];
+                
+                // Codificar cada segmento de la ruta para evitar errores con espacios o acentos en URLs
+                $dirSegments = explode('/', ltrim($uploadDir, '/'));
+                $encodedDir = implode('/', array_map('rawurlencode', $dirSegments));
+                $encodedFile = rawurlencode($f);
+                $relativeUrl = '/' . $encodedDir . '/' . $encodedFile;
+
+                $items[] = [
+                    'id'       => md5($f),
+                    'filename' => $f,
+                    'name'     => $m['name'] ?? $m['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+                    'href'     => $relativeUrl,
+                    'fileUrl'  => $relativeUrl,
+                    'imageUrl' => $relativeUrl
+                ];
+            }
         usort($items, fn($a, $b) => strcmp($b['filename'], $a['filename']));
         out($items);
     }
@@ -539,7 +554,7 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
 
 
 if (strpos($route, 'informe-gestion') === 0) {
-    $uploadDir = 'data/menu header/la cas/Informe de Gestión';
+    $uploadDir = 'data/menu header/la cas/Informe de Gestion';
     $dirPath   = __DIR__ . '/' . $uploadDir;
     $metaPath  = $dirPath . '/metadata.json';
     if (!is_dir($dirPath)) @mkdir($dirPath, 0777, true);
@@ -558,12 +573,14 @@ if (strpos($route, 'informe-gestion') === 0) {
         foreach ($files as $f) {
             if ($f === '.' || $f === '..' || strtolower(pathinfo($f, PATHINFO_EXTENSION)) !== 'pdf') continue;
             $m = $meta[$f] ?? [];
+            $dirSegments = explode('/', ltrim($uploadDir, '/'));
+            $encodedDir = implode('/', array_map('rawurlencode', $dirSegments));
             $items[] = [
                 'id'          => md5($f),
                 'filename'    => $f,
                 'title'       => $m['title'] ?? pathinfo($f, PATHINFO_FILENAME),
                 'description' => $m['description'] ?? 'Documento Institucional disponible.',
-                'pdfUrl'      => '/CAS/intranet_CAS/intranet/' . $uploadDir . '/' . $f
+                'pdfUrl'      => '/' . $encodedDir . '/' . rawurlencode($f)
             ];
         }
         // Orden descendente por defecto
@@ -840,7 +857,7 @@ if ($route === 'search' && $method === 'GET') {
                 $results[] = [
                     'type'    => 'Noticia',
                     'title'   => $n['title'],
-                    'href'    => '/CAS/intranet_CAS/intranet/header_menu/cas/noticas-cas.html',
+                    'href'    => $WEB_BASE_PATH . 'header_menu/cas/noticas-cas.html',
                     'snippet' => $n['description'],
                     'date'    => $n['createdAt'] ?? '',
                 ];
@@ -871,8 +888,8 @@ if ($route === 'search' && $method === 'GET') {
                 if (($cat === 'all' || strtolower($fileCat) === $cat || strpos(strtolower($fileCat), $cat) !== false) && 
                     ($matchText($name) || $matchText($href))) {
                     
-                    if (strpos($href, '../../') === 0) $href = '/CAS/intranet_CAS/intranet/' . substr($href, 6);
-                    else if (strpos($href, 'http') !== 0 && strpos($href, '/') !== 0) $href = '/CAS/intranet_CAS/intranet/' . $d . '/' . $href;
+                    if (strpos($href, '../../') === 0) $href = $WEB_BASE_PATH . substr($href, 6);
+                    else if (strpos($href, 'http') !== 0 && strpos($href, '/') !== 0) $href = $WEB_BASE_PATH . $d . '/' . $href;
 
                     $results[] = [
                         'type'    => $fileCat,
@@ -893,7 +910,7 @@ if ($route === 'search' && $method === 'GET') {
     
     // Convert logic to use recursive function correctly without pass-by-ref errors in older PHP
     $scanDocs = null;
-    $scanDocs = function ($dir, $root) use (&$scanDocs, $docExts, $q, $cat, $isValidDate, $matchText, &$results, &$seen) {
+    $scanDocs = function ($dir, $root) use (&$scanDocs, $docExts, $q, $cat, $isValidDate, $matchText, &$results, &$seen, $WEB_BASE_PATH) {
         if (!is_dir($dir)) return;
         foreach (scandir($dir) as $f) {
             if ($f === '.' || $f === '..') continue;
@@ -909,7 +926,7 @@ if ($route === 'search' && $method === 'GET') {
                 ($matchText($f)) && 
                 ($isValidDate(date('Y-m-d', $modTime)))) {
                 
-                $rel = '/CAS/intranet_CAS/intranet/' . ltrim(str_replace('\\','/',substr($full, strlen($root))),'/');
+                $rel = $WEB_BASE_PATH . ltrim(str_replace('\\','/',substr($full, strlen($root))),'/');
                 if (!isset($seen[$rel])) {
                     $results[] = [
                         'type'    => $fileCat,

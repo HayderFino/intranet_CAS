@@ -3,7 +3,7 @@
  */
 
 window.ProvisionEmpleosAdmin = (() => {
-  const API = "/CAS/intranet_CAS/intranet/api/provision-empleos";
+  const API = "/intranet_CAS/intranet/api/provision-empleos";
   let items = [];
 
   function getElements() {

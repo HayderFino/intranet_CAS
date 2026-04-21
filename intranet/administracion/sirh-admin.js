@@ -5,7 +5,7 @@
 
 const SirhAdmin = (() => {
   // --- Config & State ---
-  const API = "/CAS/intranet_CAS/intranet/api/sirh";
+  const API = "/intranet_CAS/intranet/api/sirh";
   const elements = {
     form: document.getElementById("sirhForm"),
     editId: null,
