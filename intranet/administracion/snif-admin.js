@@ -4,7 +4,7 @@
  */
 
 const SnifAdmin = (() => {
-  const API = "/intranet_CAS/intranet/api/snif";
+  const API = "../api/snif";
   const elements = {
     form: document.getElementById("snifForm"),
     name: document.getElementById("snifName"),

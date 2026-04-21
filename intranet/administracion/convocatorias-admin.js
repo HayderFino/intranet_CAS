@@ -3,7 +3,7 @@
  */
 
 window.ConvocatoriasAdmin = (() => {
-  const API = "/intranet_CAS/intranet/api/convocatorias";
+  const API = "../api/convocatorias";
   let items = [];
 
   function getElements() {

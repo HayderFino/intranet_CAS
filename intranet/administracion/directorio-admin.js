@@ -1,5 +1,5 @@
 const DirectorioAdmin = {
-  API: "/intranet_CAS/intranet/api/directorio",
+  API: "../api/directorio",
 
   load: async function () {
     const list = document.getElementById("directorioList");
