@@ -721,6 +721,19 @@ main {
   flex-direction: column;
 }
 
+.bulletin-list-item {
+  display: flex !important;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.bulletin-list-item:hover {
+  transform: translateX(8px);
+  background: #f8fafc !important;
+  border-color: var(--primary) !important;
+  box-shadow: var(--shadow-sm);
+}
+
 .bulletin-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-md);

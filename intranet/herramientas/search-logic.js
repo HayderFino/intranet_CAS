@@ -58,7 +58,9 @@ document.addEventListener("DOMContentLoaded", () => {
     resultsCount.innerText = "Buscando...";
 
     try {
-      const url = `/intranet_CAS/intranet/api/search?q=${encodeURIComponent(query)}&category=${category}&startDate=${startDate}&endDate=${endDate}`;
+      // Calcular ruta base relativa a la raiz del proyecto (asumiendo que estamos en /herramientas/)
+      const apiPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/herramientas/')) + '/api/';
+      const url = `${apiPath}search?q=${encodeURIComponent(query)}&category=${category}&startDate=${startDate}&endDate=${endDate}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();

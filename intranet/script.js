@@ -453,68 +453,77 @@ document.addEventListener("DOMContentLoaded", () => {
         { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'pdf-folder-card' },
         { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'pdf-folder-card' },
         { api: 'manuales-sgi', grid: 'manuales-sgi-grid', card: 'pdf-folder-card' },
-        { api: 'boletines', grid: null, card: 'bulletin-card' },
+        { api: 'boletines', grid: 'boletines-historico-grid', card: 'bulletin-card' },
         { api: 'politicas-sgi', grid: 'politicas-grid', card: 'pdf-folder-card' },
         { api: 'cita', grid: 'cita-grid', card: 'pdf-folder-card' },
         { api: 'sirh', grid: 'sirh-grid', card: 'pdf-folder-card' },
         { api: 'snif', grid: 'snif-grid', card: 'pdf-folder-card' },
-        { api: 'revision-red', grid: 'revision-red-grid', card: 'pdf-folder-card' }
+        { api: 'revision-red', grid: 'revision-red-grid', card: 'pdf-folder-card' },
+        { api: 'rua', grid: 'rua-docs-grid', card: 'pdf-folder-card' },
+        { api: 'pcb', grid: 'pcb-docs-grid', card: 'pdf-folder-card' },
+        { api: 'respel/documentos', grid: 'respel-docs-grid', card: 'pdf-folder-card' }
     ];
 
     modules.forEach(async m => {
-        let gridEl = null;
-
-        // Para boletines buscamos directamente el flex container .file-list-grid o section
-        if (!m.grid) {
-            gridEl = document.querySelector('.file-list-grid');
-            if (!gridEl && window.location.href.includes('boletines')) {
-                 const section = document.querySelector('.main-scroll-area section:nth-of-type(2)');
-                 if (section) gridEl = section;
-            }
-        } else {
-            gridEl = document.getElementById(m.grid);
-        }
-
-        if (!gridEl && !window.location.href.includes(m.api)) return;
-        if (!gridEl) {
-             const c = document.querySelector('.file-list-grid') || document.querySelector('.main-scroll-area section:last-child');
-             if (c && c.tagName!=='H1') gridEl = c;
-        }
-        
+        const gridEl = document.getElementById(m.grid);
         if (!gridEl) return;
+
+        // Seguridad extra: Solo cargar boletines en su página específica
+        if (m.api === 'boletines' && !window.location.pathname.includes('boletines.html')) {
+            return;
+        }
 
         try {
             const r = await fetch(BASE_PATH + 'api/' + m.api);
             if (!r.ok) return;
             const items = await r.json();
             
-            gridEl.innerHTML = items.map(item => {
-               const ext = (item.fileUrl || '').split('.').pop().toLowerCase();
+            // Si el grid tiene el marcador de fin, insertamos antes. Si no, reemplazamos todo.
+            const endMarkerPat = m.api.toUpperCase().replace('-','_').replace('/','_') + '_GRID';
+            const hasEndMarker = gridEl.innerHTML.includes('END_' + endMarkerPat);
+
+            const html = items.map(item => {
+               const fUrl = item.fileUrl || item.href || '';
+               const ext = fUrl.split('.').pop().toLowerCase();
                let color = 'var(--primary)', bg = 'var(--primary)', tstr = 'Descargar PDF';
                if (['xls','xlsx'].includes(ext)) { color = '#1d6f42'; bg = '#1d6f42'; tstr = 'Descargar XLSX'; }
                else if (['doc','docx'].includes(ext)) { color = '#2b579a'; bg = '#2b579a'; tstr = 'Descargar DOCX'; }
                else if (['ppt','pptx'].includes(ext)) { color = '#d24726'; bg = '#d24726'; tstr = 'Descargar PPT'; }
                
-               let url = item.fileUrl.startsWith('/') ? BASE_PATH + item.fileUrl.substring(1) : item.fileUrl;
+               let url = fUrl;
+               if (fUrl && !fUrl.startsWith('http') && !fUrl.startsWith('/')) {
+                   url = BASE_PATH + fUrl;
+               }
                const titleSafe = item.name || item.title || 'Documento';
 
-               if (m.card === 'bulletin-card') {
-                   // Boletines style
-                   return `<a href="${url}" class="bulletin-card" data-id="${item.id}" target="_blank">
-                        <div class="bulletin-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round."><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-                        <div class="bulletin-content">
-                            <h4 style="margin:0 0 0.5rem 0;color:var(--text-dark);font-size:1.1rem;">${titleSafe}</h4>
-                            <span style="display:inline-block;padding:0.25rem 0.75rem;background:var(--primary);color:white;border-radius:99px;font-size:0.75rem;font-weight:600;">Ver Boletin</span>
-                        </div>
+                if (m.card === 'bulletin-card') {
+                    return `<a href="${url}" class="bulletin-list-item" data-id="${item.id}" target="_blank" style="text-decoration:none; display:flex; align-items:center; gap:1.25rem; padding:1rem; background:white; border:1px solid #e2e8f0; border-radius:12px; transition:all 0.3s ease;">
+                         <div style="width:44px; height:44px; background:#f1f5f9; border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--primary); flex-shrink:0;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                         </div>
+                         <div style="flex:1;">
+                            <h4 style="margin:0; color:var(--text-dark); font-size:1rem; font-weight:600;">${titleSafe}</h4>
+                            <p style="margin:2px 0 0; color:#64748b; font-size:0.8rem;">Documento de Seguridad Digital</p>
+                         </div>
+                         <span style="padding:0.4rem 1rem; background:var(--primary); color:white; border-radius:8px; font-size:0.75rem; font-weight:700; white-space:nowrap;">Ver Boletín</span>
                     </a>`;
-               }
+                }
 
                return `<a href="${url}" class="${m.card}" data-id="${item.id}" target="_blank" style="text-decoration:none;">
                   <div class="file-icon" style="color:${color};"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
                   <h4>${titleSafe}</h4>
                   <span class="btn-pdf-download" style="background:${bg};">${tstr}</span>
                </a>`;
-            }).join('') || '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 2rem; width: 100%;">No hay archivos en este directorio.</p>';
+            }).join('');
+
+            if (hasEndMarker) {
+                // Conservar lo que hay y añadir lo nuevo (esto es por si hay cosas fijas)
+                // Pero lo más limpio para estos grids es reemplazar el contenido dinámico.
+                // En este sistema, reemplazamos por ahora para evitar duplicados.
+                gridEl.innerHTML = html + `\n<!-- END_${endMarkerPat} -->`;
+            } else {
+                gridEl.innerHTML = html;
+            }
         } catch (e) { console.error('Error fetching', m.api, e); }
     });
 });

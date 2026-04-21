@@ -202,11 +202,13 @@
         </div>
       </div>
     </main>
-    <script src="../../script.js?v=3"></script>
+    <script src="../../script.js?v=5"></script>
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
           try {
-              const res = await fetch("/intranet_CAS/intranet/api/informe-gestion");
+              // Calcular ruta de API relativa (estamos en /header_menu/cas/)
+              const apiPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/header_menu/')) + '/api/informe-gestion';
+              const res = await fetch(apiPath);
               if (!res.ok) throw new Error("Error fetching documents");
               const items = await res.json();
               const list = document.getElementById("informe-list");

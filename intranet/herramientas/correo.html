@@ -448,7 +448,7 @@
       </div>
     </main>
 
-    <script src="../script.js?v=3"></script>
+    <script src="../script.js?v=5"></script>
     <script>
       let TODO_DIRECTORIO = [];
       const COLORS = [
@@ -530,7 +530,7 @@
       async function iniciarDirectorio() {
         const tbody = document.getElementById("dirTbody");
         try {
-          const res = await fetch("/api/directorio");
+          const res = await fetch("../api/directorio");
           if (!res.ok) throw new Error();
           TODO_DIRECTORIO = await res.json();
           buildDepFilter(TODO_DIRECTORIO);

@@ -65,7 +65,7 @@ const UsersAdmin = (() => {
       e.preventDefault();
       const id = userEditId.value;
       const method = id ? "PUT" : "POST";
-      const url = id ? `/intranet_CAS/intranet/api/users/${id}` : "/intranet_CAS/intranet/api/users";
+      const url = id ? `../api/users/${id}` : "../api/users";
 
       const permissions = {};
       const permsElements = getPerms();
@@ -108,7 +108,7 @@ const UsersAdmin = (() => {
 
   async function loadUsers() {
     try {
-      const res = await fetch("/intranet_CAS/intranet/api/users");
+      const res = await fetch("../api/users");
       const users = await res.json();
 
       listContainer.innerHTML = users
@@ -141,7 +141,7 @@ const UsersAdmin = (() => {
 
   async function editUser(id) {
     try {
-      const res = await fetch("/intranet_CAS/intranet/api/users");
+      const res = await fetch("../api/users");
       const users = await res.json();
       const user = users.find((u) => u._id === id);
 
@@ -174,7 +174,7 @@ const UsersAdmin = (() => {
     if (!confirm("¿Estás seguro de eliminar este usuario?")) return;
 
     try {
-      const res = await fetch(`/intranet_CAS/intranet/api/users/${id}`, { method: "DELETE" });
+      const res = await fetch(`../api/users/${id}`, { method: "DELETE" });
       if (res.ok) {
         window.showToast("Usuario eliminado");
         loadUsers();
@@ -202,3 +202,4 @@ const UsersAdmin = (() => {
 
 window.UsersAdmin = UsersAdmin;
 if (document.getElementById("usersSection")) UsersAdmin.init();
+
