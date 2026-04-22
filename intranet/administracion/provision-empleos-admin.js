@@ -3,8 +3,46 @@
  */
 
 window.ProvisionEmpleosAdmin = (() => {
-  const API = "../api/provision-empleos";
+  function resolveApiUrls() {
+    const marker = "/administracion/";
+    const path = window.location.pathname || "";
+    const idx = path.lastIndexOf(marker);
+    const urls = [];
+
+    if (idx !== -1) {
+      urls.push(`${path.substring(0, idx)}/api/provision-empleos`);
+    }
+
+    urls.push("../api.php?route=provision-empleos");
+    urls.push("/api/provision-empleos");
+
+    return [...new Set(urls)];
+  }
+
+  const API_URLS = resolveApiUrls();
   let items = [];
+
+  async function apiFetch(path = "", options = {}) {
+    const suffix = path ? `/${path}` : "";
+    let lastRes = null;
+    let lastErr = null;
+
+    for (const base of API_URLS) {
+      try {
+        const res = await fetch(`${base}${suffix}`, options);
+        if (res.status === 404) {
+          lastRes = res;
+          continue;
+        }
+        return res;
+      } catch (e) {
+        lastErr = e;
+      }
+    }
+
+    if (lastErr) throw lastErr;
+    return lastRes;
+  }
 
   function getElements() {
     return {
@@ -27,7 +65,8 @@ window.ProvisionEmpleosAdmin = (() => {
 
     els.list.innerHTML = '<p style="padding:1rem;">Cargando listado...</p>';
     try {
-      const res = await fetch(API);
+      const res = await apiFetch();
+      if (!res) throw new Error("No se encontró una ruta API válida");
       if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
       items = await res.json();
       render();
@@ -95,7 +134,7 @@ window.ProvisionEmpleosAdmin = (() => {
     if (fileInput) fd.append("file", fileInput);
 
     try {
-      const res = await fetch(id ? `${API}/${id}` : API, {
+      const res = await apiFetch(id || "", {
         method: id ? "PUT" : "POST",
         body: fd,
       });
@@ -155,7 +194,7 @@ window.ProvisionEmpleosAdmin = (() => {
   async function deleteByBtn(id) {
     if (!confirm("¿Eliminar este documento definitivamente?")) return;
     try {
-      const res = await fetch(`${API}/${id}`, { method: "DELETE" });
+      const res = await apiFetch(id, { method: "DELETE" });
       if (res.ok) {
         load();
       } else alert("Error al eliminar");

@@ -5,7 +5,7 @@
 
 const SirhAdmin = (() => {
   // --- Config & State ---
-  const API = "../api/sirh";
+  const API = "../api.php?route=sirh";
   const elements = {
     form: document.getElementById("sirhForm"),
     editId: null,

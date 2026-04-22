@@ -1,5 +1,5 @@
 const DirectorioAdmin = {
-  API: "../api/directorio",
+  API: "../api.php?route=directorio",
 
   load: async function () {
     const list = document.getElementById("directorioList");

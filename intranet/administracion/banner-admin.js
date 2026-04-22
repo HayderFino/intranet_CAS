@@ -1,5 +1,5 @@
 const BannerAdmin = {
-  API_URL: "../api/banner",
+  API_URL: "../api.php?route=banner",
 
   load: async function () {
     const listContainer = document.getElementById("bannerList");
