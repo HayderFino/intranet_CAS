@@ -6,7 +6,7 @@
 
 const RevisionRedAdmin = (() => {
   // --- Config & State ---
-  const API = "../api/revision-red";
+  const API = "../api.php?route=revision-red";
   const elements = {
     form: document.getElementById("revisionRedForm"),
     editId: null,

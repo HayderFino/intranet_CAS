@@ -9,10 +9,10 @@ window.ProvisionEmpleosAdmin = (() => {
     const idx = path.lastIndexOf(marker);
 
     if (idx !== -1) {
-      return `${path.substring(0, idx)}/api/provision-empleos`;
+      return `${path.substring(0, idx)}/api.php?route=provision-empleos`;
     }
 
-    return "../api/provision-empleos";
+    return "../api.php?route=provision-empleos";
   }
 
   const API = resolveApiUrl();

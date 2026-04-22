@@ -3,7 +3,7 @@
  */
 
 window.ConvocatoriasAdmin = (() => {
-  const API = "../api/convocatorias";
+  const API = "../api.php?route=convocatorias";
   let items = [];
 
   function getElements() {

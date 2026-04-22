@@ -55,7 +55,7 @@ async function loadDynamicBanner() {
   if (!bannerContainer) return;
 
   try {
-    const response = await fetch(BASE_PATH + "api/banner");
+    const response = await fetch(BASE_PATH + "api.php?route=banner");
     if (!response.ok) throw new Error("Error al obtener banners");
     const banners = await response.json();
 
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Limpiar si hay placeholder o items previos
       newsGrid.innerHTML = "";
 
-      fetch(BASE_PATH + "api/news")
+      fetch(BASE_PATH + "api.php?route=news")
         .then((res) => res.json())
         .then((news) => {
           if (news && news.length > 0) {
@@ -246,31 +246,31 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       // Fetch múltiples fuentes en paralelo
       const endpoints = [
-        { url: BASE_PATH + "api/eventos", type: "evento" },
-        { url: BASE_PATH + "api/news", type: "noticia" },
-        { url: BASE_PATH + "api/informe-gestion", type: "informe" },
+        { url: BASE_PATH + "api.php?route=eventos", type: "evento" },
+        { url: BASE_PATH + "api.php?route=news", type: "noticia" },
+        { url: BASE_PATH + "api.php?route=informe-gestion", type: "informe" },
         {
-          url: BASE_PATH + "api/estudios-tecnicos",
+          url: BASE_PATH + "api.php?route=estudios-tecnicos",
           type: "manual",
           cat: "Estudio Técnico",
         },
         {
-          url: BASE_PATH + "api/provision-empleos",
+          url: BASE_PATH + "api.php?route=provision-empleos",
           type: "manual",
           cat: "Provisión Empleo",
         },
-        { url: BASE_PATH + "api/convocatorias", type: "manual", cat: "Convocatoria" },
-        { url: BASE_PATH + "api/plan-monitoreo", type: "manual", cat: "Plan Monitoreo" },
-        { url: BASE_PATH + "api/planes-talento", type: "manual", cat: "Plan Talento" },
+        { url: BASE_PATH + "api.php?route=convocatorias", type: "manual", cat: "Convocatoria" },
+        { url: BASE_PATH + "api.php?route=plan-monitoreo", type: "manual", cat: "Plan Monitoreo" },
+        { url: BASE_PATH + "api.php?route=planes-talento", type: "manual", cat: "Plan Talento" },
         {
-          url: BASE_PATH + "api/manual-funciones",
+          url: BASE_PATH + "api.php?route=manual-funciones",
           type: "manual",
           cat: "Manual Funciones",
         },
-        { url: BASE_PATH + "api/cita", type: "manual", cat: "CITA" },
-        { url: BASE_PATH + "api/sirh", type: "manual", cat: "SIRH" },
-        { url: BASE_PATH + "api/snif", type: "manual", cat: "SNIF" },
-        { url: BASE_PATH + "api/revision-red", type: "manual", cat: "REVISIÓN RED" },
+        { url: BASE_PATH + "api.php?route=cita", type: "manual", cat: "CITA" },
+        { url: BASE_PATH + "api.php?route=sirh", type: "manual", cat: "SIRH" },
+        { url: BASE_PATH + "api.php?route=snif", type: "manual", cat: "SNIF" },
+        { url: BASE_PATH + "api.php?route=revision-red", type: "manual", cat: "REVISIÓN RED" },
       ];
 
       const responses = await Promise.all(
@@ -474,7 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const r = await fetch(BASE_PATH + 'api/' + m.api);
+            const r = await fetch(BASE_PATH + 'api.php?route=' + m.api);
             if (!r.ok) return;
             const items = await r.json();
             const htmlParts = {};

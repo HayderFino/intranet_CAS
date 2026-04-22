@@ -3,7 +3,7 @@
  */
 
 const PlanMonitoreoAdmin = (() => {
-  const API = "../api/plan-monitoreo";
+  const API = "../api.php?route=plan-monitoreo";
   const MAX_SIZE_MB = 20;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
   const FORBIDDEN_EXTS = [

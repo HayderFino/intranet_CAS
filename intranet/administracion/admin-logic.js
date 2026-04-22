@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Configuración de rutas dinámicas para APIs
-  const API_BASE = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/administracion/')) + '/api';
+  const API_BASE = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/administracion/')) + '/api.php?route=';
 
   // Verificar sesión antes de cargar nada
   checkSession();
