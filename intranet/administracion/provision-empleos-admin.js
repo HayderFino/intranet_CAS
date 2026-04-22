@@ -3,7 +3,19 @@
  */
 
 window.ProvisionEmpleosAdmin = (() => {
-  const API = "../api/provision-empleos";
+  function resolveApiUrl() {
+    const marker = "/administracion/";
+    const path = window.location.pathname || "";
+    const idx = path.lastIndexOf(marker);
+
+    if (idx !== -1) {
+      return `${path.substring(0, idx)}/api/provision-empleos`;
+    }
+
+    return "../api/provision-empleos";
+  }
+
+  const API = resolveApiUrl();
   let items = [];
 
   function getElements() {
