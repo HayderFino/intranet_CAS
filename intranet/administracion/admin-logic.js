@@ -2338,6 +2338,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Seguridad
       { id: "nav-users", perm: p.users },
       { id: "nav-group-security", perm: p.users },
+
+      // MECI
+      { id: "nav-meci", perm: p.meci },
     ];
 
     permissionMap.forEach((item) => {
@@ -2388,6 +2391,10 @@ document.addEventListener("DOMContentLoaded", () => {
           "nav-estudios-tecnicos",
           "nav-provision-empleos",
         ],
+      },
+      {
+        id: "nav-group-meci",
+        items: ["nav-meci"],
       },
     ];
 

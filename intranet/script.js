@@ -461,7 +461,8 @@ document.addEventListener("DOMContentLoaded", () => {
         { api: 'revision-red', grid: 'revision-red-docs-grid', card: 'pdf-folder-card' },
         { api: 'rua', grid: 'rua-docs-grid', card: 'pdf-folder-card' },
         { api: 'pcb', grid: 'pcb-docs-grid', card: 'pdf-folder-card' },
-        { api: 'respel/documentos', grid: 'respel-docs-grid', card: 'pdf-folder-card' }
+        { api: 'respel/documentos', grid: 'respel-docs-grid', card: 'pdf-folder-card' },
+        { api: 'respel/empresas', grid: 'respel-empresas-tbody', card: 'table-row' }
     ];
 
     modules.forEach(async m => {
@@ -494,7 +495,18 @@ document.addEventListener("DOMContentLoaded", () => {
                const titleSafe = item.name || item.title || 'Documento';
 
                 let cardHtml = "";
-                if (m.card === 'bulletin-card') {
+                if (m.card === 'table-row') {
+                    const rowBg = item.isAlternate ? '#f9fbe7' : '#fff';
+                    cardHtml = `
+                    <tr style="background: ${rowBg}">
+                      <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e0e0e0;">${titleSafe}</td>
+                      <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e0e0e0; text-align: center;">${item.actNum || '-'}</td>
+                      <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e0e0e0; text-align: center;">${item.actDate || '-'}</td>
+                      <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e0e0e0; text-align: center;">
+                        <a href="${url}" target="_blank" class="respel-file-badge">&#128196; ${item.fileName || 'VER DOCUMENTO'}</a>
+                      </td>
+                    </tr>`;
+                } else if (m.card === 'bulletin-card') {
                     cardHtml = `<a href="${url}" class="bulletin-list-item" data-id="${item.id}" target="_blank" style="text-decoration:none; display:flex; align-items:center; gap:1.25rem; padding:1rem; background:white; border:1px solid #e2e8f0; border-radius:12px; transition:all 0.3s ease;">
                          <div style="width:44px; height:44px; background:#f1f5f9; border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--primary); flex-shrink:0;">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>

@@ -46,6 +46,9 @@ const UsersAdmin = (() => {
       // Seguridad
       users: document.getElementById("perm-users"),
 
+      // MECI
+      meci: document.getElementById("perm-meci"),
+
       // Talento Humano
       manual_funciones: document.getElementById("perm-manual_funciones"),
       sigep: document.getElementById("perm-sigep"),

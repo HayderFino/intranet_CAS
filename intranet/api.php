@@ -529,6 +529,8 @@ $HTMLDB = [
     'sirh' => ['header_menu/git/manuales_usuario/sirh.html', 'data/menu header/git/manuales usuario/SIRH', 'pdf-folder-card', 'sirh-grid'],
     'snif' => ['header_menu/git/manuales_usuario/snif.html', 'data/menu header/git/manuales usuario/SNIF', 'pdf-folder-card', 'snif-grid'],
     'revision-red' => ['header_menu/git/manuales_usuario/revision-red.html', 'data/menu header/git/manuales usuario/Revision Red', 'pdf-folder-card', 'revision-red-grid'],
+    'rua' => ['herramientas/rua.html', 'data/Herramientas/Rua', 'pdf-folder-card', 'rua-docs-grid'],
+    'pcb' => ['herramientas/pcb.html', 'data/Herramientas/PCB', 'pdf-folder-card', 'pcb-docs-grid'],
 ];
 
 foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
