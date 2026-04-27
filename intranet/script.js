@@ -75,7 +75,7 @@ async function loadDynamicBanner() {
                         return `
                         <div class="carousel-slide">
                             ${hasLink ? `<a href="${(targetUrl && !targetUrl.startsWith('http') && !targetUrl.startsWith('/')) ? BASE_PATH + targetUrl : targetUrl}" target="_blank">` : ""}
-                                <img src="${(banner.imageUrl && !banner.imageUrl.startsWith('http') && !banner.imageUrl.startsWith('/')) ? BASE_PATH + banner.imageUrl : banner.imageUrl}" alt="${banner.title}" title="${banner.title}">
+                                <img src="${(banner.imageUrl && banner.imageUrl.startsWith('http')) ? banner.imageUrl : BASE_PATH + banner.imageUrl.replace(/^\/+/, '')}" alt="${banner.title}" title="${banner.title}">
                             ${hasLink ? "</a>" : ""}
                         </div>
                     `;
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
               newsCard.className = "card news-item dynamic-news";
               newsCard.style.cursor = "pointer";
               newsCard.innerHTML = `
-                                <img src="${(item.imageUrl && item.imageUrl.startsWith('/')) ? BASE_PATH + item.imageUrl.substring(1) : item.imageUrl}" alt="${item.title}" class="news-image" style="width: 100%; border-radius: 1rem; height: 200px; object-fit: cover;">
+                                <img src="${(item.imageUrl && item.imageUrl.startsWith('http')) ? item.imageUrl : BASE_PATH + item.imageUrl.replace(/^\/+/, '')}" alt="${item.title}" class="news-image" style="width: 100%; border-radius: 1rem; height: 200px; object-fit: cover;">
                                 <div class="news-body" style="padding: 1.5rem;">
                                     <h3 style="margin-top: 0; font-size: 1.1rem; line-height: 1.4;">${item.title}</h3>
                                     <p class="news-description-truncated" style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">${item.description}</p>
@@ -417,7 +417,7 @@ window.openNewsModal = (item) => {
   const modalData = document.getElementById("modal-news-data");
   modalData.innerHTML = `
         <div style="width: 100%; background: #0f172a; border-radius: 1rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; overflow: hidden; height: 450px; box-shadow: var(--shadow);">
-            <img src="${(item.imageUrl && item.imageUrl.startsWith('/')) ? BASE_PATH + item.imageUrl.substring(1) : item.imageUrl}" alt="${item.title}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            <img src="${(item.imageUrl && item.imageUrl.startsWith('http')) ? item.imageUrl : BASE_PATH + item.imageUrl.replace(/^\/+/, '')}" alt="${item.title}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
         </div>
         <span style="background: rgba(5, 150, 105, 0.1); color: var(--primary); padding: 4px 12px; border-radius: 99px; font-size: 0.8rem; font-weight: 600;">${item.category || "Noticias"}</span>
         <h2 style="margin: 1rem 0; font-size: 2rem; color: #0f172a; line-height: 1.2;">${item.title}</h2>

@@ -22,7 +22,7 @@ const BannerAdmin = {
         card.className = "news-manage-card";
         card.innerHTML = `
                     <div class="news-info">
-                        <img src="${banner.imageUrl}" style="width: 100px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 1rem; float: left;">
+                        <img src="${banner.imageUrl.startsWith('http') ? banner.imageUrl : '../' + banner.imageUrl.replace(/^\/+/, '')}" style="width: 100px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 1rem; float: left;">
                         <h4>${banner.title}</h4>
                         <p style="font-size: 0.8rem; color: #64748b;">
                             Orden: ${banner.order} | ${banner.link || "Sin link"}<br>

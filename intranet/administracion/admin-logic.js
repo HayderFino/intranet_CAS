@@ -1919,7 +1919,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const card = document.createElement("div");
         card.className = "news-manage-card";
         card.innerHTML = `
-                    <img src="${API_BASE.replace("/api","")}${item.imageUrl}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                    <img src="${item.imageUrl.startsWith('http') ? item.imageUrl : API_BASE.split('/api.php')[0] + '/' + item.imageUrl.replace(/^\/+/, '')}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                     <div class="news-info" style="flex: 1; margin-left: 1rem; overflow: hidden;">
                         <h4 style="margin: 0;">${item.title}</h4>
                         <p style="font-size: 0.8rem; color: #64748b; margin: 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.description}</p>
