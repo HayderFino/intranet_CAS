@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     informeGestion: document.getElementById("informeGestionSection"),
     politicasSgi: document.getElementById("politicasSgiSection"),
     users: document.getElementById("usersSection"),
+    meci: document.getElementById("meciSection"),
   };
 
   const navItems = {
@@ -66,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     informeGestion: document.getElementById("nav-informe-gestion"),
     politicasSgi: document.getElementById("nav-politicas-sgi"),
     users: document.getElementById("nav-users"),
+    meci: document.getElementById("nav-meci"),
   };
 
   // --- Navigation Logic ---
@@ -258,6 +260,13 @@ document.addEventListener("DOMContentLoaded", () => {
     sections.politicasSgi.classList.remove("hidden");
     navItems.politicasSgi.classList.add("active");
     if (typeof PoliticasSgiAdmin !== "undefined") PoliticasSgiAdmin.load();
+  };
+
+  navItems.meci.onclick = () => {
+    hideAll();
+    sections.meci.classList.remove("hidden");
+    navItems.meci.classList.add("active");
+    if (window.MeciAdmin) window.MeciAdmin.init();
   };
 
   // --- Procesos Misionales SGI (genérico) ---

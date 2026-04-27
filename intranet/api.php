@@ -1195,5 +1195,167 @@ if (preg_match('/^users\/([a-zA-Z0-9_\-]+)$/', $route, $m) && $method === 'PUT')
 if ($route === 'test-server')
     out(['status' => 'ok', 'engine' => 'PHP', 'time' => date('c')]);
 
+// ══════════════════════════════════════════════════════════════
+//  13. MECI (Modelo Estándar de Control Interno)
+// ══════════════════════════════════════════════════════════════
+
+if (strpos($route, 'meci') === 0) {
+    $meciBase = 'data/menu header/MECI';
+    
+    $meciMap = [
+        'meci/anticorrupcion' => ['dir' => 'Anticorrupcion', 'subfolders' => true],
+        'meci/documentos-varios' => ['dir' => 'Documentos varios', 'subfolders' => false],
+        'meci/documentos' => ['dir' => 'Documentos', 'subfolders' => false],
+    ];
+
+    $mCfg = null;
+    $mRoute = null;
+    foreach($meciMap as $r => $c) {
+        if (strpos($route, $r) === 0) {
+            $mCfg = $c;
+            $mRoute = $r;
+            break;
+        }
+    }
+
+    if ($mCfg) {
+        $relPath = $meciBase . '/' . $mCfg['dir'];
+        $absPath = DATA_ROOT . $relPath;
+
+        // Special mapping for Anticorrupcion subfolders labels
+        $meciSubMap = [];
+        if ($mRoute === 'meci/anticorrupcion') {
+            $meciSubMap = [
+                '' => 'Planes y Riesgos',
+                'Documentos Anticorrupción' => 'Documentos Base',
+                'Fortalecimiento de Valores' => 'Valores y Actores',
+                'Actores del Plan Anticorrupción' => 'Actores del Plan'
+            ];
+        }
+        $meciSubRevMap = array_flip($meciSubMap);
+
+        // --- UPLOAD ---
+        if ($route === "$mRoute/upload" && $method === 'POST') {
+            auth();
+            $sub = $_POST['subfolder'] ?? '';
+            // Map back to real folder name if mapping exists
+            if (isset($meciSubRevMap[$sub])) $sub = $meciSubRevMap[$sub];
+            
+            $dest = $sub ? "$relPath/$sub" : $relPath;
+            $url = upload_file('file', $dest);
+            if ($url) {
+                // Return path relative to intranet root (api.php location)
+                out(['fileUrl' => ltrim($url, '/')]);
+            }
+            out(['message' => 'Error upload'], 400);
+        }
+
+        // --- LIST ---
+        if ($route === $mRoute && $method === 'GET') {
+            $items = [];
+            $foldersToScan = [''];
+            if ($mCfg['subfolders'] && is_dir($absPath)) {
+                $foldersToScan = array_merge([''], array_filter(scandir($absPath), fn($f) => $f !== '.' && $f !== '..' && is_dir("$absPath/$f")));
+            }
+
+            foreach($foldersToScan as $sub) {
+                $scanDir = ($sub !== '') ? "$absPath/$sub" : $absPath;
+                if (!is_dir($scanDir)) continue;
+                
+                $metaPath = "$scanDir/metadata.json";
+                $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+                
+                // Determine label for this subfolder
+                $subLabel = $meciSubMap[$sub] ?? $sub;
+
+                foreach(scandir($scanDir) as $f) {
+                    if ($f === '.' || $f === '..' || is_dir("$scanDir/$f") || $f === 'metadata.json') continue;
+                    
+                    $m = $meta[$f] ?? [];
+                    $folderPath = $relPath . ($sub !== '' ? "/$sub" : "");
+                    // Simple relative path without complex encoding
+                    $url = $folderPath . '/' . $f;
+                    
+                    $items[] = array_merge($m, [
+                        'id' => md5(($sub ? "$sub/" : "") . $f),
+                        'filename' => $f,
+                        'name' => $m['name'] ?? pathinfo($f, PATHINFO_FILENAME),
+                        'href' => $url,
+                        'subfolder' => $subLabel,
+                        'category' => $subLabel
+                    ]);
+                }
+            }
+            usort($items, fn($a, $b) => strcmp($b['filename'], $a['filename']));
+            out($items);
+        }
+
+        // --- CREATE ---
+        if ($route === $mRoute && $method === 'POST') {
+            auth();
+            $in = body();
+            $fUrl = $in['fileUrl'] ?? '';
+            if (!$fUrl) out(['error' => 'No file URL'], 400);
+            
+            $f = basename(urldecode($fUrl));
+            $sub = $in['subfolder'] ?? '';
+            // Map back to real folder name
+            if (isset($meciSubRevMap[$sub])) $sub = $meciSubRevMap[$sub];
+
+            $destDir = ($sub !== '') ? "$absPath/$sub" : $absPath;
+            $metaPath = "$destDir/metadata.json";
+            
+            $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+            $meta[$f] = [
+                'name' => $in['name'] ?? pathinfo($f, PATHINFO_FILENAME),
+                'updatedAt' => date('c')
+            ];
+            write_json($metaPath, $meta);
+            out(['success' => true], 201);
+        }
+
+        // --- DELETE / UPDATE ---
+        if (preg_match('/^' . preg_quote($mRoute, '/') . '\/([a-zA-Z0-9_\-]+)$/', $route, $rm)) {
+            auth();
+            $id = $rm[1];
+            
+            $foldersToScan = [''];
+            if ($mCfg['subfolders'] && is_dir($absPath)) {
+                $foldersToScan = array_merge([''], array_filter(scandir($absPath), fn($f) => $f !== '.' && $f !== '..' && is_dir("$absPath/$f")));
+            }
+
+            foreach($foldersToScan as $sub) {
+                $scanDir = ($sub !== '') ? "$absPath/$sub" : $absPath;
+                if (!is_dir($scanDir)) continue;
+                
+                foreach(scandir($scanDir) as $f) {
+                    if (md5(($sub ? "$sub/" : "") . $f) === $id) {
+                        $metaPath = "$scanDir/metadata.json";
+                        $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+                        
+                        if ($method === 'DELETE') {
+                            @unlink("$scanDir/$f");
+                            unset($meta[$f]);
+                            write_json($metaPath, $meta);
+                            out(['success' => true]);
+                        }
+                        
+                        if ($method === 'PUT') {
+                            $in = body();
+                            $meta[$f] = array_merge($meta[$f] ?? [], [
+                                'name' => $in['name'] ?? $meta[$f]['name'] ?? pathinfo($f, PATHINFO_FILENAME),
+                                'updatedAt' => date('c')
+                            ]);
+                            write_json($metaPath, $meta);
+                            out(['success' => true]);
+                        }
+                    }
+                }
+            }
+            out(['error' => 'File not found'], 404);
+        }
+    }
+}
+
 // 404
 out(['error' => 'Route not found', 'route' => $route], 404);

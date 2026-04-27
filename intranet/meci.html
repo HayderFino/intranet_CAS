@@ -1323,20 +1323,94 @@
 
           <script>
             function showTab(tabId) {
-              // Hide all panes
-              document
-                .querySelectorAll(".tab-pane")
-                .forEach((pane) => (pane.style.display = "none"));
-              // Remove active class from buttons
-              document
-                .querySelectorAll(".tab-btn")
-                .forEach((btn) => btn.classList.remove("active"));
-
-              // Show selected pane
+              document.querySelectorAll(".tab-pane").forEach((pane) => (pane.style.display = "none"));
+              document.querySelectorAll(".tab-btn").forEach((btn) => btn.classList.remove("active"));
               document.getElementById(tabId).style.display = "block";
-              // Add active class to clicked button
               event.currentTarget.classList.add("active");
             }
+
+            document.addEventListener("DOMContentLoaded", async () => {
+              const API = "api.php?route=";
+              
+              // Cargar Documentos MECI
+              try {
+                const res = await fetch(API + "meci/documentos");
+                const items = await res.json();
+                const container = document.querySelector("#docs-meci ul");
+                if (items.length > 0) {
+                  container.innerHTML = items.map(i => `
+                    <li style="margin-bottom: 0.8rem">
+                      <a href="${i.href}" target="_blank" style="text-decoration: none; color: #0077c2; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;">
+                        <span style="color: #e63946">&rsaquo;</span> ${i.name}
+                      </a>
+                    </li>
+                  `).join("");
+                }
+              } catch(e) { console.error("Error cargando documentos", e); }
+
+              // Cargar Documentos Varios
+              try {
+                const res = await fetch(API + "meci/documentos-varios");
+                const items = await res.json();
+                const container = document.querySelector("#docs-varios ul");
+                if (items.length > 0) {
+                  container.innerHTML = items.map(i => `
+                    <li style="margin-bottom: 0.8rem">
+                      <a href="${i.href}" target="_blank" style="text-decoration: none; color: #0077c2; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;">
+                        <span style="color: #e63946">&rsaquo;</span> ${i.name}
+                      </a>
+                    </li>
+                  `).join("");
+                }
+              } catch(e) { console.error("Error cargando documentos varios", e); }
+
+              // Cargar Anticorrupción (Agrupado)
+              try {
+                const res = await fetch(API + "meci/anticorrupcion");
+                const items = await res.json();
+                const container = document.querySelector("#docs-anticorrupcion div");
+                if (items.length > 0) {
+                  const groups = {
+                    "Planes y Riesgos": [],
+                    "Documentos Base": [],
+                    "Valores y Actores": [],
+                    "Actores del Plan": []
+                  };
+                  items.forEach(i => {
+                    const cat = i.subfolder || i.category || "Planes y Riesgos";
+                    if (groups[cat]) groups[cat].push(i);
+                  });
+
+                  let html = "";
+                  // Grupo 1: Planes y Riesgos
+                  if (groups["Planes y Riesgos"].length > 0) {
+                    html += `<div><h5 style="color: var(--primary-dark); margin-bottom: 1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">Planes y Riesgos</h5><ul style="list-style: none; padding: 0">`;
+                    html += groups["Planes y Riesgos"].map(i => `<li style="margin-bottom: 0.6rem"><a href="${i.href}" style="text-decoration: none; color: #0077c2; display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem;"><span style="color: #e63946">&rsaquo;</span> ${i.name}</a></li>`).join("");
+                    html += `</ul></div>`;
+                  }
+                  // Grupo 2: Documentos Base
+                  if (groups["Documentos Base"].length > 0) {
+                    html += `<div><h5 style="color: var(--primary-dark); margin-bottom: 1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">Documentos Base</h5><ul style="list-style: none; padding: 0">`;
+                    html += groups["Documentos Base"].map(i => `<li style="margin-bottom: 0.6rem"><a href="${i.href}" target="_blank" style="text-decoration: none; color: #0077c2; display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem;"><span style="color: #e63946">&rsaquo;</span> ${i.name}</a></li>`).join("");
+                    html += `</ul></div>`;
+                  }
+                  // Grupo 3: Valores y Actores (Combinado en el UI)
+                  if (groups["Valores y Actores"].length > 0 || groups["Actores del Plan"].length > 0) {
+                    html += `<div><h5 style="color: var(--primary-dark); margin-bottom: 1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">Valores y Actores</h5><ul style="list-style: none; padding: 0">`;
+                    if (groups["Valores y Actores"].length > 0) {
+                      html += `<li style="margin-bottom: 0.4rem; font-weight: 600; font-size: 0.8rem; color: #666; margin-top: 0.5rem;">Fortalecimiento de Valores:</li>`;
+                      html += groups["Valores y Actores"].map(i => `<li style="margin-bottom: 0.4rem"><a href="${i.href}" style="text-decoration: none; color: #0077c2; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><span style="color: #e63946">&rsaquo;</span> ${i.name}</a></li>`).join("");
+                    }
+                    if (groups["Actores del Plan"].length > 0) {
+                      html += `<li style="margin-bottom: 0.4rem; font-weight: 600; font-size: 0.8rem; color: #666; margin-top: 1rem;">Actores del Plan:</li>`;
+                      html += groups["Actores del Plan"].map(i => `<li style="margin-bottom: 0.4rem"><a href="${i.href}" target="_blank" style="text-decoration: none; color: #0077c2; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><span style="color: #e63946">&rsaquo;</span> ${i.name}</a></li>`).join("");
+                    }
+                    html += `</ul></div>`;
+                  }
+                  container.innerHTML = html;
+                }
+              } catch(e) { console.error("Error cargando anticorrupcion", e); }
+            });
           </script>
         </div>
       </div>

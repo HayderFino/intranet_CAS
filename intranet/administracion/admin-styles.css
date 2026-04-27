@@ -92,6 +92,34 @@ body {
   margin-top: 0;
 }
 
+.nav-subgroup {
+  margin-bottom: 0.5rem;
+}
+
+.nav-subgroup-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+  margin: 1rem 1rem 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-subgroup-title::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background: #334155;
+  border-radius: 50%;
+}
+
+.nav-subgroup ul li {
+  margin-left: 0.75rem;
+}
+
 .admin-nav a {
   color: #94a3b8;
   text-decoration: none;
@@ -458,4 +486,15 @@ button {
   .form-row {
     grid-template-columns: 1fr;
   }
+}
+
+/* MECI Tabs */
+.meci-tab {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.meci-tab-active {
+  background-color: var(--admin-primary) !important;
+  color: white !important;
 }
