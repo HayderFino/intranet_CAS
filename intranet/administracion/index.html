@@ -167,6 +167,20 @@
               </ul>
             </div>
 
+            <div class="nav-subgroup">
+              <span class="nav-subgroup-title">Procesos de Apoyo</span>
+              <ul>
+                <li id="nav-procesos-apoyo">
+                  <a href="#">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                    </svg>
+                    Procesos de Apoyo
+                  </a>
+                </li>
+              </ul>
+            </div>
+
             <li id="nav-manuales-sgi">
               <a href="#"
                 ><svg viewBox="0 0 24 24">
@@ -590,6 +604,84 @@
                   Carpeta de datos:
                   <span style="color: #64748b; font-weight: 600">/data</span>
                 </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== SECCIÓN: Procesos de Apoyo (Independiente) ===== -->
+          <div id="procesosApoyoSection" class="section hidden">
+            <div class="admin-form-container" style="max-width: 100%">
+              <h2>Administración de Procesos de Apoyo</h2>
+              <p style="color: #64748b; font-size: 0.88rem; margin-bottom: 1.5rem;">
+                Selecciona una carpeta para gestionar los documentos del proceso correspondiente.
+              </p>
+              
+              <!-- Vista de Cuadrícula de Procesos (Folders) -->
+              <div id="paGridContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                <!-- Inyectado por JS -->
+              </div>
+
+              <!-- Area de Administración (Oculta por defecto) -->
+              <div id="paAdminArea" class="hidden">
+                <div style="margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                  <button type="button" id="paBackBtn" class="btn-secondary" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem;">
+                    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;"><path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    Volver a Procesos
+                  </button>
+                  <h3 id="paCurrentProcessTitle" style="margin: 0; color: var(--primary-dark); font-size: 1.1rem;">-</h3>
+                </div>
+
+                <div class="form-group hidden" style="margin-bottom: 2rem; background: #f1f5f9; padding: 1.5rem; border-radius: 10px; border: 1px solid #e2e8f0;">
+                  <label for="paProcessSelect" style="font-weight: 700; color: var(--primary-dark); display: block; margin-bottom: 0.5rem;">Cambiar Proceso:</label>
+                  <select id="paProcessSelect" style="width: 100%; padding: 0.85rem; border: 2px solid var(--primary); border-radius: 8px; font-weight: 600; font-size: 1rem; color: var(--primary-dark);">
+                    <option value="sgi-gestion-documental">Gestión Documental</option>
+                    <option value="sgi-contratacion">Contratación</option>
+                    <option value="sgi-juridico">Jurídico</option>
+                    <option value="sgi-bienes-servicios">Bienes y Servicios</option>
+                    <option value="sgi-gestion-tecnologias">Gestión de la Información y Tecnologías</option>
+                    <option value="sgi-talento-humano">Talento Humano</option>
+                    <option value="sgi-control-disciplinario">Control Interno Disciplinario</option>
+                    <option value="sgi-cobro-coactivo">Cobro Coactivo</option>
+                    <option value="sgi-gestion-financiera">Gestión Financiera</option>
+                    <option value="sgi-gestion-integral">Gestión Integral</option>
+                  </select>
+                </div>
+
+                <form id="paForm" class="news-form" style="margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 2rem;">
+                  <input type="hidden" id="paEditId">
+                  <div class="form-group">
+                    <label for="paName">Nombre del Documento / Archivo</label>
+                    <input type="text" id="paName" placeholder="Ej: Caracterización del Proceso" required>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="paCategory">Subcarpeta (Categoría)</label>
+                      <select id="paCategory" required>
+                        <!-- Options injected by JS -->
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="paFile">Subir Archivo</label>
+                      <input type="file" id="paFile">
+                    </div>
+                  </div>
+                  <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="paSaveBtn">Subir Documento</button>
+                    <button type="button" class="btn-secondary hidden" id="paCancelBtn">Cancelar Edición</button>
+                  </div>
+                </form>
+
+                <div class="list-filter" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                  <label for="paFilterCategory" style="font-weight: 600; color: #64748b; font-size: 0.9rem">Filtrar por Subcarpeta:</label>
+                  <select id="paFilterCategory" style="flex: 1; max-width: 300px; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+                    <option value="all">Todas las subcarpetas</option>
+                  </select>
+                  <span id="paCount" style="margin-left: auto; font-size: 0.8rem; color: #64748b;"></span>
+                </div>
+
+                <div id="paList" class="news-management-list">
+                  <!-- Items injected by JS -->
+                </div>
               </div>
             </div>
           </div>
@@ -1750,42 +1842,7 @@
           </div>
 
           <!-- ===== PROCESOS DE APOYO ===== -->
-          <div id="procesosApoyoSection" class="hidden">
-            <div class="section-header" style="margin-bottom: 1.5rem">
-              <h2>Procesos de Apoyo</h2>
-              <p style="color: #64748b; font-size: 0.9rem">
-                Gestión de documentos para los módulos de apoyo (Gestión Documental, Contratación, etc.).
-              </p>
-            </div>
-            <form id="procesosApoyoForm" class="news-form" style="margin-bottom: 2rem">
-              <input type="hidden" id="procesosApoyoEditId" />
-              <div class="form-group">
-                <label>Nombre del Documento</label>
-                <input type="text" id="procesosApoyoName" placeholder="Ej: Formato de Contratación" required />
-              </div>
-              <div class="form-group">
-                <label>Categoría</label>
-                <select id="procesosApoyoCategory" required>
-                  <option value="Gestion Documental">Gestión Documental</option>
-                  <option value="Contratacion">Contratación</option>
-                  <option value="Juridico">Jurídico</option>
-                  <option value="Bienes y Servicios">Bienes y Servicios</option>
-                  <option value="Gestion Tecnologias">Gestión de la Información y Tecnologías</option>
-                  <option value="Talento Humano">Talento Humano</option>
-                  <option value="Servicio al Ciudadano">Servicio al Ciudadano</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Archivo (PDF, Excel, Word)</label>
-                <input type="file" id="procesosApoyoFile" />
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn-primary" id="procesosApoyoSaveBtn">Guardar Archivo</button>
-                <button type="button" class="btn-secondary hidden" id="procesosApoyoCancelBtn">Cancelar</button>
-              </div>
-            </form>
-            <div id="procesosApoyoItemsList" class="news-management-list"></div>
-          </div>
+          <!-- Old procesosApoyoSection removed to avoid duplication -->
           <!-- ===== CONTROL INTERNO ===== -->
           <div id="controlInternoSection" class="hidden">
             <div class="section-header" style="margin-bottom: 1.5rem">
@@ -2713,9 +2770,9 @@
             </div>
 
             <!-- Preview Area -->
-            <div id="previewArea" class="preview-area hidden">
+            <div id="provisionPreviewArea" class="preview-area hidden">
               <h3>Vista Previa</h3>
-              <div id="previewCard" class="preview-card">
+              <div id="provisionPreviewCard" class="preview-card">
                 <!-- Content injected by JS -->
               </div>
             </div>
@@ -3279,7 +3336,7 @@
                 <!-- Items inyectados por JS -->
               </div>
             </div>
-          </div>
+            <!-- End of Section -->
         </section>
       </main>
     </div>
@@ -3289,7 +3346,7 @@
       Noticia guardada con &eacute;xito!
     </div>
 
-    <script src="admin-logic.js?v=2"></script>
+    <script src="admin-logic.js?v=3"></script>
     <script src="users-admin.js?v=2"></script>
     <script src="cita-admin.js?v=2"></script>
     <script src="sirh-admin.js?v=2"></script>
@@ -3307,5 +3364,6 @@
     <script src="informe-gestion-admin.js?v=2"></script>
     <script src="politicas-sgi-admin.js?v=2"></script>
     <script src="meci-admin.js?v=2"></script>
+    <script src="procesos-apoyo-admin.js?v=3"></script>
   </body>
 </html>

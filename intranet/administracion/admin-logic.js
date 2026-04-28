@@ -1,12 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Configuración de rutas dinámicas para APIs
-  const API_BASE = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/administracion/')) + '/api.php?route=';
+  const API_BASE = (() => {
+    const path = window.location.pathname;
+    const adminIdx = path.indexOf('/administracion/');
+    if (adminIdx !== -1) {
+      return path.substring(0, adminIdx) + '/api.php?route=';
+    }
+    const adminShortIdx = path.indexOf('/administracion');
+    if (adminShortIdx !== -1) {
+      return path.substring(0, adminShortIdx) + '/api.php?route=';
+    }
+    return '../api.php?route=';
+  })();
+
+  // Helper para asignar eventos de forma segura
+  const safeClick = (el, fn) => {
+    if (el) el.onclick = (e) => {
+      if (e) e.preventDefault();
+      fn();
+    };
+  };
 
   // Verificar sesión antes de cargar nada
   checkSession();
 
   // Sync initial state
-  loadNewsList();
+  setTimeout(() => {
+    const newsItemsList = document.getElementById("newsItemsList");
+    if (newsItemsList) loadNewsList();
+  }, 100);
 
   // --- UI Elements ---
   const toast = document.getElementById("toast");
@@ -38,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     politicasSgi: document.getElementById("politicasSgiSection"),
     users: document.getElementById("usersSection"),
     meci: document.getElementById("meciSection"),
+    procesosApoyo: document.getElementById("procesosApoyoSection"),
   };
 
   const navItems = {
@@ -68,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     politicasSgi: document.getElementById("nav-politicas-sgi"),
     users: document.getElementById("nav-users"),
     meci: document.getElementById("nav-meci"),
+    procesosApoyo: document.getElementById("nav-procesos-apoyo"),
   };
 
   // --- Navigation Logic ---
@@ -80,194 +104,208 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  navItems.dashboard.onclick = () => {
+  safeClick(navItems.dashboard, () => {
     hideAll();
-    sections.dashboard.classList.remove("hidden");
-    navItems.dashboard.classList.add("active");
+    if (sections.dashboard) sections.dashboard.classList.remove("hidden");
+    if (navItems.dashboard) navItems.dashboard.classList.add("active");
     updateStats();
-  };
-  navItems.newNews.onclick = () => {
+  });
+
+  safeClick(navItems.newNews, () => {
     hideAll();
-    sections.newsForm.classList.remove("hidden");
-    navItems.newNews.classList.add("active");
-  };
-  navItems.listNews.onclick = () => {
+    if (sections.newsForm) sections.newsForm.classList.remove("hidden");
+    if (navItems.newNews) navItems.newNews.classList.add("active");
+  });
+
+  safeClick(navItems.listNews, () => {
     hideAll();
-    sections.newsList.classList.remove("hidden");
-    navItems.listNews.classList.add("active");
+    if (sections.newsList) sections.newsList.classList.remove("hidden");
+    if (navItems.listNews) navItems.listNews.classList.add("active");
     loadNewsList();
-  };
-  navItems.agenda.onclick = () => {
+  });
+
+  safeClick(navItems.agenda, () => {
     hideAll();
-    sections.agenda.classList.remove("hidden");
-    navItems.agenda.classList.add("active");
+    if (sections.agenda) sections.agenda.classList.remove("hidden");
+    if (navItems.agenda) navItems.agenda.classList.add("active");
     loadAgendaList();
-  };
-  navItems.users.onclick = () => {
+  });
+
+  safeClick(navItems.users, () => {
     hideAll();
-    sections.users.classList.remove("hidden");
-    navItems.users.classList.add("active");
+    if (sections.users) sections.users.classList.remove("hidden");
+    if (navItems.users) navItems.users.classList.add("active");
     if (window.UsersAdmin) window.UsersAdmin.init();
-  };
+  });
 
-  navItems.sgi.onclick = () => {
+  safeClick(navItems.sgi, () => {
     hideAll();
-    sections.sgi.classList.remove("hidden");
-    navItems.sgi.classList.add("active");
-    switchSgiSection("planeacion");
-  };
+    if (sections.sgi) sections.sgi.classList.remove("hidden");
+    if (navItems.sgi) navItems.sgi.classList.add("active");
+    if (typeof switchSgiSection === "function") switchSgiSection("planeacion");
+  });
 
-  navItems.mejora.onclick = () => {
+  safeClick(navItems.mejora, () => {
     hideAll();
-    sections.sgi.classList.remove("hidden");
-    navItems.mejora.classList.add("active");
-    switchSgiSection("mejora");
-  };
+    if (sections.sgi) sections.sgi.classList.remove("hidden");
+    if (navItems.mejora) navItems.mejora.classList.add("active");
+    if (typeof switchSgiSection === "function") switchSgiSection("mejora");
+  });
 
   navItems.respel = document.getElementById("nav-respel");
   sections.respel = document.getElementById("respelSection");
-
-  navItems.respel.onclick = () => {
+  safeClick(navItems.respel, () => {
     hideAll();
-    sections.respel.classList.remove("hidden");
-    navItems.respel.classList.add("active");
-    switchRespelSection("documentos");
-  };
+    if (sections.respel) sections.respel.classList.remove("hidden");
+    if (navItems.respel) navItems.respel.classList.add("active");
+    if (typeof switchRespelSection === "function") switchRespelSection("documentos");
+  });
 
   navItems.rua = document.getElementById("nav-rua");
   sections.rua = document.getElementById("ruaSection");
-
-  navItems.rua.onclick = () => {
+  safeClick(navItems.rua, () => {
     hideAll();
-    sections.rua.classList.remove("hidden");
-    navItems.rua.classList.add("active");
-    loadRuaList();
-  };
+    if (sections.rua) sections.rua.classList.remove("hidden");
+    if (navItems.rua) navItems.rua.classList.add("active");
+    if (typeof loadRuaList === "function") loadRuaList();
+  });
 
   navItems.boletines = document.getElementById("nav-boletines");
   sections.boletines = document.getElementById("boletinesSection");
-
-  navItems.boletines.onclick = () => {
+  safeClick(navItems.boletines, () => {
     hideAll();
-    sections.boletines.classList.remove("hidden");
-    navItems.boletines.classList.add("active");
-    loadBoletinesList();
-  };
+    if (sections.boletines) sections.boletines.classList.remove("hidden");
+    if (navItems.boletines) navItems.boletines.classList.add("active");
+    if (typeof loadBoletinesList === "function") loadBoletinesList();
+  });
 
-  navItems.cita.onclick = () => {
+  safeClick(navItems.cita, () => {
     hideAll();
-    sections.cita.classList.remove("hidden");
-    navItems.cita.classList.add("active");
+    if (sections.cita) sections.cita.classList.remove("hidden");
+    if (navItems.cita) navItems.cita.classList.add("active");
     if (typeof CitaAdmin !== "undefined") CitaAdmin.load();
-  };
+  });
 
-  navItems.sirh.onclick = () => {
+  safeClick(navItems.sirh, () => {
     hideAll();
-    sections.sirh.classList.remove("hidden");
-    navItems.sirh.classList.add("active");
+    if (sections.sirh) sections.sirh.classList.remove("hidden");
+    if (navItems.sirh) navItems.sirh.classList.add("active");
     if (typeof SirhAdmin !== "undefined") SirhAdmin.load();
-  };
+  });
 
-  navItems.revisionRed.onclick = () => {
+  safeClick(navItems.revisionRed, () => {
     hideAll();
-    sections.revisionRed.classList.remove("hidden");
-    navItems.revisionRed.classList.add("active");
+    if (sections.revisionRed) sections.revisionRed.classList.remove("hidden");
+    if (navItems.revisionRed) navItems.revisionRed.classList.add("active");
     if (typeof RevisionRedAdmin !== "undefined") RevisionRedAdmin.load();
-  };
+  });
 
-  navItems.snif.onclick = () => {
+  safeClick(navItems.snif, () => {
     hideAll();
-    sections.snif.classList.remove("hidden");
-    navItems.snif.classList.add("active");
+    if (sections.snif) sections.snif.classList.remove("hidden");
+    if (navItems.snif) navItems.snif.classList.add("active");
     if (typeof SnifAdmin !== "undefined") SnifAdmin.load();
-  };
+  });
 
-  navItems.manualFunciones.onclick = () => {
+  safeClick(navItems.manualFunciones, () => {
     hideAll();
-    sections.manualFunciones.classList.remove("hidden");
-    navItems.manualFunciones.classList.add("active");
+    if (sections.manualFunciones)
+      sections.manualFunciones.classList.remove("hidden");
+    if (navItems.manualFunciones) navItems.manualFunciones.classList.add("active");
     if (typeof ManualFuncionesAdmin !== "undefined")
       ManualFuncionesAdmin.load();
-  };
+  });
 
-  navItems.planMonitoreo.onclick = () => {
+  safeClick(navItems.planMonitoreo, () => {
     hideAll();
-    sections.planMonitoreo.classList.remove("hidden");
-    navItems.planMonitoreo.classList.add("active");
+    if (sections.planMonitoreo) sections.planMonitoreo.classList.remove("hidden");
+    if (navItems.planMonitoreo) navItems.planMonitoreo.classList.add("active");
     if (typeof PlanMonitoreoAdmin !== "undefined") PlanMonitoreoAdmin.load();
-  };
+  });
 
-  navItems.planesTalento.onclick = () => {
+  safeClick(navItems.planesTalento, () => {
     hideAll();
-    sections.planesTalento.classList.remove("hidden");
-    navItems.planesTalento.classList.add("active");
+    if (sections.planesTalento) sections.planesTalento.classList.remove("hidden");
+    if (navItems.planesTalento) navItems.planesTalento.classList.add("active");
     if (typeof PlanesTalentoAdmin !== "undefined") PlanesTalentoAdmin.load();
-  };
+  });
 
-  navItems.convocatorias.onclick = () => {
+  safeClick(navItems.convocatorias, () => {
     hideAll();
-    sections.convocatorias.classList.remove("hidden");
-    navItems.convocatorias.classList.add("active");
+    if (sections.convocatorias) sections.convocatorias.classList.remove("hidden");
+    if (navItems.convocatorias) navItems.convocatorias.classList.add("active");
     if (typeof ConvocatoriasAdmin !== "undefined") ConvocatoriasAdmin.load();
-  };
+  });
 
-  navItems.estudiosTecnicos.onclick = () => {
+  safeClick(navItems.estudiosTecnicos, () => {
     hideAll();
-    sections.estudiosTecnicos.classList.remove("hidden");
-    navItems.estudiosTecnicos.classList.add("active");
+    if (sections.estudiosTecnicos)
+      sections.estudiosTecnicos.classList.remove("hidden");
+    if (navItems.estudiosTecnicos)
+      navItems.estudiosTecnicos.classList.add("active");
     if (typeof EstudiosTecnicosAdmin !== "undefined")
       EstudiosTecnicosAdmin.load();
-  };
+  });
 
-  navItems.provisionEmpleos.onclick = () => {
+  safeClick(navItems.provisionEmpleos, () => {
     hideAll();
-    sections.provisionEmpleos.classList.remove("hidden");
-    navItems.provisionEmpleos.classList.add("active");
+    if (sections.provisionEmpleos)
+      sections.provisionEmpleos.classList.remove("hidden");
+    if (navItems.provisionEmpleos)
+      navItems.provisionEmpleos.classList.add("active");
     if (typeof ProvisionEmpleosAdmin !== "undefined")
       ProvisionEmpleosAdmin.load();
-  };
+  });
 
-  navItems.banner.onclick = () => {
+  safeClick(navItems.banner, () => {
     hideAll();
-    sections.banner.classList.remove("hidden");
-    navItems.banner.classList.add("active");
+    if (sections.banner) sections.banner.classList.remove("hidden");
+    if (navItems.banner) navItems.banner.classList.add("active");
     if (typeof BannerAdmin !== "undefined") BannerAdmin.load();
-  };
+  });
 
-  navItems.eventos.onclick = () => {
+  safeClick(navItems.eventos, () => {
     hideAll();
-    sections.eventos.classList.remove("hidden");
-    navItems.eventos.classList.add("active");
+    if (sections.eventos) sections.eventos.classList.remove("hidden");
+    if (navItems.eventos) navItems.eventos.classList.add("active");
     if (typeof EventosAdmin !== "undefined") EventosAdmin.load();
-  };
+  });
 
-  navItems.directorio.onclick = () => {
+  safeClick(navItems.directorio, () => {
     hideAll();
-    sections.directorio.classList.remove("hidden");
-    navItems.directorio.classList.add("active");
+    if (sections.directorio) sections.directorio.classList.remove("hidden");
+    if (navItems.directorio) navItems.directorio.classList.add("active");
     if (typeof DirectorioAdmin !== "undefined") DirectorioAdmin.load();
-  };
+  });
 
-  navItems.informeGestion.onclick = () => {
+  safeClick(navItems.informeGestion, () => {
     hideAll();
-    sections.informeGestion.classList.remove("hidden");
-    navItems.informeGestion.classList.add("active");
+    if (sections.informeGestion)
+      sections.informeGestion.classList.remove("hidden");
+    if (navItems.informeGestion) navItems.informeGestion.classList.add("active");
     if (typeof InformeGestionAdmin !== "undefined") InformeGestionAdmin.load();
-  };
+  });
 
-  navItems.politicasSgi.onclick = () => {
+  safeClick(navItems.politicasSgi, () => {
     hideAll();
-    sections.politicasSgi.classList.remove("hidden");
-    navItems.politicasSgi.classList.add("active");
+    if (sections.politicasSgi) sections.politicasSgi.classList.remove("hidden");
+    if (navItems.politicasSgi) navItems.politicasSgi.classList.add("active");
     if (typeof PoliticasSgiAdmin !== "undefined") PoliticasSgiAdmin.load();
-  };
+  });
 
-  navItems.meci.onclick = () => {
+  safeClick(navItems.meci, () => {
     hideAll();
-    sections.meci.classList.remove("hidden");
-    navItems.meci.classList.add("active");
+    if (sections.meci) sections.meci.classList.remove("hidden");
+    if (navItems.meci) navItems.meci.classList.add("active");
     if (window.MeciAdmin) window.MeciAdmin.init();
-  };
+  });
+
+  safeClick(navItems.procesosApoyo, () => {
+    hideAll();
+    if (sections.procesosApoyo) sections.procesosApoyo.classList.remove("hidden");
+    if (navItems.procesosApoyo) navItems.procesosApoyo.classList.add("active");
+    if (window.ProcesosApoyoAdmin) window.ProcesosApoyoAdmin.init();
+  });
 
   // --- Procesos Misionales SGI (genérico) ---
   // Config para las 3 secciones misionales

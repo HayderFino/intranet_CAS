@@ -518,10 +518,10 @@ $HTMLDB = [
     // route               => [html,                                      upload-dir,                                                    card-class,        grid-id]
     'manual-funciones' => ['header_menu/cas/manual-funciones.html', 'data/menu header/la cas/talento humano/Manual de Funciones', 'pdf-folder-card', 'manual-funciones-grid'],
     'plan-monitoreo' => ['header_menu/cas/plan-monitoreo-sigep.html', 'data/menu header/la cas/talento humano/Plan de Monitoreo SIGEP', 'pdf-folder-card', 'plan-monitoreo-grid'],
-    'planes-talento' => ['header_menu/cas/planes.html', 'data/menu header/la cas/talento humano/Planes', 'pdf-folder-card', 'planes-grid'],
-    'convocatorias' => ['header_menu/cas/convocatorias.html', 'data/menu header/la cas/talento humano/Convocatorias', 'pdf-folder-card', 'convocatorias-grid'],
-    'estudios-tecnicos' => ['header_menu/cas/estudios-tecnicos.html', 'data/menu header/la cas/talento humano/Estudios Tecnicos', 'pdf-folder-card', 'estudios-tecnicos-grid'],
-    'provision-empleos' => ['header_menu/cas/provision-empleos.html', 'data/menu header/la cas/talento humano/Provision de empleos', 'pdf-folder-card', 'provision-empleos-grid'],
+    'planes-talento' => ['header_menu/cas/planes.html', 'data/menu header/la cas/talento humano/Planes', 'plan-item', 'planes-grid'],
+    'convocatorias' => ['header_menu/cas/convocatorias.html', 'data/menu header/la cas/talento humano/Convocatorias', 'doc-item', 'convocatorias-grid'],
+    'estudios-tecnicos' => ['header_menu/cas/estudios-tecnicos.html', 'data/menu header/la cas/talento humano/Estudios Tecnicos', 'doc-item', 'estudios-tecnicos-grid'],
+    'provision-empleos' => ['header_menu/cas/provision-empleos.html', 'data/menu header/la cas/talento humano/Provision de empleos', 'doc-item', 'provision-empleos-grid'],
     'manuales-sgi' => ['header_menu/sgi/manuales.html', 'data/menu header/sgi/manuales', 'pdf-folder-card', 'manuales-sgi-grid'],
     'boletines' => ['header_menu/git/boletines.html', 'data/menu header/git/boletines', 'bulletin-card', 'boletines-historico-grid'],
     'politicas-sgi' => ['header_menu/sgi/politicas.html', 'data/menu header/sgi/Politicas', 'pdf-folder-card', 'politicas-grid'],
@@ -531,6 +531,16 @@ $HTMLDB = [
     'revision-red' => ['header_menu/git/manuales_usuario/revision-red.html', 'data/menu header/git/manuales usuario/Revision Red', 'pdf-folder-card', 'revision-red-grid'],
     'rua' => ['herramientas/rua.html', 'data/Herramientas/Rua', 'pdf-folder-card', 'rua-docs-grid'],
     'pcb' => ['herramientas/pcb.html', 'data/Herramientas/PCB', 'pdf-folder-card', 'pcb-docs-grid'],
+    'sgi-gestion-documental' => ['header_menu/sgi/gestion-documental.html', 'data/menu header/sgi/Procesos de Apoyo/Gestión Documental', 'pdf-folder-card', 'sgi-gestion-documental-grid'],
+    'sgi-contratacion' => ['header_menu/sgi/contratacion.html', 'data/menu header/sgi/Procesos de Apoyo/Contratación', 'pdf-folder-card', 'sgi-contratacion-grid'],
+    'sgi-juridico' => ['header_menu/sgi/juridico.html', 'data/menu header/sgi/Procesos de Apoyo/Jurídico', 'pdf-folder-card', 'sgi-juridico-grid'],
+    'sgi-bienes-servicios' => ['header_menu/sgi/bienes-servicios.html', 'data/menu header/sgi/Procesos de Apoyo/Bienes y Servicios', 'pdf-folder-card', 'sgi-bienes-servicios-grid'],
+    'sgi-gestion-tecnologias' => ['header_menu/sgi/gestion-tecnologias.html', 'data/menu header/sgi/Procesos de Apoyo/Gestión de la Información y Tecnologías', 'pdf-folder-card', 'sgi-gestion-tecnologias-grid'],
+    'sgi-talento-humano' => ['header_menu/sgi/talento-humano.html', 'data/menu header/sgi/Procesos de Apoyo/Talento Humano', 'pdf-folder-card', 'sgi-talento-humano-grid'],
+    'sgi-control-disciplinario' => ['header_menu/sgi/control-disciplinario.html', 'data/menu header/sgi/Procesos de Apoyo/Control Interno Disciplinario', 'pdf-folder-card', 'sgi-control-disciplinario-grid'],
+    'sgi-cobro-coactivo' => ['header_menu/sgi/cobro-coactivo.html', 'data/menu header/sgi/Procesos de Apoyo/Cobro Coactivo', 'pdf-folder-card', 'sgi-cobro-coactivo-grid'],
+    'sgi-gestion-financiera' => ['header_menu/sgi/gestion-financiera.html', 'data/menu header/sgi/Procesos de Apoyo/Gestión Financiera', 'pdf-folder-card', 'sgi-gestion-financiera-grid'],
+    'sgi-gestion-integral' => ['header_menu/sgi/gestion-integral.html', 'data/menu header/sgi/Procesos de Apoyo/Gestión Integral', 'pdf-folder-card', 'sgi-gestion-integral-grid'],
 ];
 
 foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
@@ -540,7 +550,13 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     if ($route === "$modRoute/upload" && $method === 'POST') {
         auth();
         $field = isset($_FILES['file']) ? 'file' : 'image';
-        $url = upload_file($field, $uploadDir);
+        
+        $targetDir = $uploadDir;
+        if (!empty($_POST['category'])) {
+            $targetDir = rtrim($uploadDir, '/') . '/' . $_POST['category'];
+        }
+        
+        $url = upload_file($field, $targetDir);
         if ($url)
             out(['fileUrl' => $url, 'imageUrl' => $url]);
         out(['message' => 'Error upload'], 400);
@@ -555,18 +571,34 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     if ($route === $modRoute && $method === 'GET') {
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         $items = [];
-        $files = is_dir($dirPath) ? scandir($dirPath) : [];
-        foreach ($files as $f) {
-            if ($f === '.' || $f === '..' || is_dir($dirPath . '/' . $f))
-                continue;
-            if (strtolower($f) === 'metadata.json')
-                continue;
-            $m = $meta[$f] ?? [];
+        
+        $allFiles = [];
+        if (is_dir($dirPath)) {
+            $folders = scandir($dirPath);
+            foreach ($folders as $f) {
+                if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+                $fullPath = $dirPath . '/' . $f;
+                if (is_dir($fullPath)) {
+                    $subFiles = scandir($fullPath);
+                    foreach ($subFiles as $sf) {
+                        if ($sf === '.' || $sf === '..') continue;
+                        $allFiles[] = $f . '/' . $sf;
+                    }
+                } else {
+                    $allFiles[] = $f;
+                }
+            }
+        }
+
+        foreach ($allFiles as $f) {
+            $base = basename($f);
+            $m = $meta[$base] ?? [];
 
             // Codificar cada segmento de la ruta para evitar errores con espacios o acentos en URLs
             $dirSegments = explode('/', ltrim($uploadDir, '/'));
             $encodedDir = implode('/', array_map('rawurlencode', $dirSegments));
-            $encodedFile = rawurlencode($f);
+            $fSegments = explode('/', $f);
+            $encodedFile = implode('/', array_map('rawurlencode', $fSegments));
             $relativeUrl = WEB_BASE_PATH . ltrim($encodedDir, '/') . '/' . $encodedFile;
 
             $items[] = array_merge($m, [
@@ -587,25 +619,54 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     // --- POST create ---
     if ($route === $modRoute && $method === 'POST') {
         auth();
-        $in = body();
-        if (empty($in))
+        // Support both JSON and multipart/form-data (for direct file uploads)
+        $in = !empty($_POST) ? $_POST : body();
+
+        // Handle direct file upload if present in the same request
+        if (isset($_FILES['file']) || isset($_FILES['image'])) {
+            $field = isset($_FILES['file']) ? 'file' : 'image';
+            
+            $targetDir = $uploadDir;
+            if (!empty($in['category'])) {
+                $targetDir = rtrim($uploadDir, '/') . '/' . $in['category'];
+            }
+            
+            $uploadedUrl = upload_file($field, $targetDir);
+            if ($uploadedUrl) {
+                $in['fileUrl'] = $uploadedUrl;
+                $in['imageUrl'] = $uploadedUrl;
+                $in['href'] = $uploadedUrl;
+            }
+        }
+
+        if (empty($in) && empty($_FILES))
             out(['error' => 'Empty request body: ' . file_get_contents('php://input')], 400);
 
         $fUrl = $in['fileUrl'] ?? $in['imageUrl'] ?? $in['href'] ?? '';
         if (!$fUrl)
             out(['error' => 'No file URL provided. Payload received: ' . json_encode($in)], 400);
 
-        $f = basename(urldecode($fUrl));
-        if ($f) {
+        // Extract relative path from fileUrl (everything after the uploadDir)
+        $relPath = '';
+        $decodedUrl = urldecode($fUrl);
+        $searchDir = rtrim($uploadDir, '/');
+        $pos = strpos($decodedUrl, $searchDir);
+        if ($pos !== false) {
+            $relPath = ltrim(substr($decodedUrl, $pos + strlen($searchDir)), '/');
+        } else {
+            $relPath = basename($decodedUrl);
+        }
+
+        if ($relPath) {
             $meta = file_exists($metaPath) ? read_json($metaPath) : [];
-            $currentMeta = $meta[$f] ?? [];
-            unset($in['id'], $in['fileUrl'], $in['imageUrl'], $in['href']); // Remove redundant properties from metadata
-            $meta[$f] = array_merge($currentMeta, $in, [
-                'name' => $in['name'] ?? $in['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+            $currentMeta = $meta[$relPath] ?? $meta[basename($relPath)] ?? [];
+            unset($in['id'], $in['fileUrl'], $in['imageUrl'], $in['href']); 
+            $meta[$relPath] = array_merge($currentMeta, $in, [
+                'name' => $in['name'] ?? $in['title'] ?? pathinfo($relPath, PATHINFO_FILENAME),
                 'category' => $in['category'] ?? ''
             ]);
             write_json($metaPath, $meta);
-            out(['id' => md5($f)], 201);
+            out(['id' => md5($relPath)], 201);
         }
         out(['error' => 'Invalid filename format extracted from: ' . $fUrl], 400);
     }
@@ -614,17 +675,52 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     if (preg_match('/^' . preg_quote($modRoute, '/') . '\/([a-zA-Z0-9_\-]+)$/', $route, $m2) && $method === 'PUT') {
         auth();
         $id = $m2[1];
+        // Support both JSON and multipart/form-data
+        // Note: PHP doesn't populate $_POST for PUT requests, but we'll try body() first
         $in = body();
+
+        if (empty($in)) {
+            // If body is empty, it might be a multipart PUT (though rare/unsupported by PHP natively)
+            // or just a bad request. We'll fallback to an empty array.
+            $in = [];
+        }
+
+        // Handle file if it somehow got through (rare for PUT in PHP without manual parsing)
+        if (isset($_FILES['file']) || isset($_FILES['image'])) {
+            $field = isset($_FILES['file']) ? 'file' : 'image';
+            $targetDir = $uploadDir;
+            if (!empty($in['category'])) {
+                $targetDir = rtrim($uploadDir, '/') . '/' . $in['category'];
+            }
+            $uploadedUrl = upload_file($field, $targetDir);
+            if ($uploadedUrl) {
+                $in['fileUrl'] = $uploadedUrl;
+                $in['imageUrl'] = $uploadedUrl;
+                $in['href'] = $uploadedUrl;
+            }
+        }
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         $found = false;
 
-        // Buscamos el archivo físico asociado a este ID
+        $allFiles = [];
         foreach (scandir($dirPath) as $f) {
-            if (md5($f) === $id) {
-                $currentMeta = $meta[$f] ?? [];
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            if (is_dir($dirPath . '/' . $f)) {
+                foreach (scandir($dirPath . '/' . $f) as $sf) {
+                    if ($sf === '.' || $sf === '..') continue;
+                    $allFiles[$sf] = $f . '/' . $sf;
+                }
+            } else {
+                $allFiles[$f] = $f;
+            }
+        }
+
+        foreach ($allFiles as $base => $rel) {
+            if (md5($rel) === $id) {
+                $currentMeta = $meta[$rel] ?? $meta[$base] ?? [];
                 unset($in['id'], $in['fileUrl'], $in['imageUrl'], $in['href']);
-                $meta[$f] = array_merge($currentMeta, $in, [
-                    'name' => $in['name'] ?? $in['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+                $meta[$rel] = array_merge($currentMeta, $in, [
+                    'name' => $in['name'] ?? $in['title'] ?? pathinfo($base, PATHINFO_FILENAME),
                     'category' => $in['category'] ?? ''
                 ]);
                 write_json($metaPath, $meta);
@@ -642,12 +738,28 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         auth();
         $id = $m2[1];
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
-        foreach (scandir($dirPath) as $f) {
-            if (md5($f) === $id) {
-                @unlink($dirPath . '/' . $f);
-                unset($meta[$f]);
-                write_json($metaPath, $meta);
-                break;
+        $folders = scandir($dirPath);
+        foreach ($folders as $f) {
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            if (is_dir($dirPath . '/' . $f)) {
+                foreach (scandir($dirPath . '/' . $f) as $sf) {
+                    if ($sf === '.' || $sf === '..') continue;
+                    $relPath = $f . '/' . $sf;
+                    if (md5($relPath) === $id) {
+                        @unlink($dirPath . '/' . $relPath);
+                        unset($meta[$relPath]);
+                        unset($meta[$sf]); // Por si acaso estaba guardado solo como el nombre base
+                        write_json($metaPath, $meta);
+                        break 2;
+                    }
+                }
+            } else {
+                if (md5($f) === $id) {
+                    @unlink($dirPath . '/' . $f);
+                    unset($meta[$f]);
+                    write_json($metaPath, $meta);
+                    break;
+                }
             }
         }
         out(['success' => true]);

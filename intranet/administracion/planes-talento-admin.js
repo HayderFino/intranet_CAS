@@ -146,27 +146,41 @@ const PlanesTalentoAdmin = (() => {
       return notify("Nombre y categoría son obligatorios", "info");
     if (!id && !file) return notify("Selecciona un archivo", "info");
 
+    let fileUrl = id ? items.find(i => i.id === id)?.fileUrl : "#";
+
     if (file) {
       const ext = "." + file.name.split(".").pop().toLowerCase();
       if (FORBIDDEN_EXTS.includes(ext))
         return notify("Tipo de archivo prohibido", "error");
       if (file.size > MAX_SIZE_BYTES)
         return notify(`Supera el límite de ${MAX_SIZE_MB}MB`, "error");
+
+      notify("Subiendo archivo...", "info");
+      const upFd = new FormData();
+      upFd.append("file", file);
+      upFd.append("category", category); // Send category to organize in subfolders
+      try {
+        const upRes = await fetch(`${API}/upload`, {
+          method: "POST",
+          body: upFd,
+        });
+        if (!upRes.ok) throw new Error("Error al subir archivo");
+        const upData = await upRes.json();
+        fileUrl = upData.fileUrl;
+      } catch (err) {
+        return notify("Error al subir archivo", "error");
+      }
     }
 
-    notify(id ? "Actualizando..." : "Subiendo...", "info");
-    const fd = new FormData();
-    fd.append("name", name);
-    fd.append("category", category);
-    if (file) fd.append("file", file);
-
+    notify(id ? "Actualizando..." : "Guardando...", "info");
     try {
       const res = await fetch(id ? `${API}/${id}` : API, {
         method: id ? "PUT" : "POST",
-        body: fd,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, category, fileUrl }),
       });
       if (res.ok) {
-        notify(id ? "Actualizado" : "Subido");
+        notify(id ? "Actualizado" : "Guardado");
         resetForm();
         load();
       } else {

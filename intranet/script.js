@@ -448,7 +448,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modules = [
         { api: 'manual-funciones', grid: 'manual-funciones-grid', card: 'pdf-folder-card' },
         { api: 'plan-monitoreo', grid: 'plan-monitoreo-grid', card: 'pdf-folder-card' },
-        { api: 'planes-talento', grid: 'planes-grid', card: 'pdf-folder-card' },
+        { api: 'planes-talento', grid: 'planes-grid', card: 'plan-item' },
         { api: 'convocatorias', grid: 'convocatorias-grid', card: 'pdf-folder-card' },
         { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'pdf-folder-card' },
         { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'pdf-folder-card' },
@@ -483,7 +483,7 @@ document.addEventListener("DOMContentLoaded", () => {
             items.forEach(item => {
                const fUrl = item.fileUrl || item.href || '';
                const ext = fUrl.split('.').pop().toLowerCase();
-               let color = 'var(--primary)', bg = 'var(--primary)', tstr = 'Descargar PDF';
+               let color = '#ef4444', bg = '#ef4444', tstr = 'Descargar PDF'; // Default to Red for PDF
                if (['xls','xlsx'].includes(ext)) { color = '#1d6f42'; bg = '#1d6f42'; tstr = 'Descargar XLSX'; }
                else if (['doc','docx'].includes(ext)) { color = '#2b579a'; bg = '#2b579a'; tstr = 'Descargar DOCX'; }
                else if (['ppt','pptx'].includes(ext)) { color = '#d24726'; bg = '#d24726'; tstr = 'Descargar PPT'; }
@@ -506,6 +506,23 @@ document.addEventListener("DOMContentLoaded", () => {
                         <a href="${url}" target="_blank" class="respel-file-badge">&#128196; ${item.fileName || 'VER DOCUMENTO'}</a>
                       </td>
                     </tr>`;
+                } else if (m.card === 'plan-item') {
+                    cardHtml = `<a href="${url}" class="plan-item" data-id="${item.id}" target="_blank">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" style="color:${color}">
+                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                        ${titleSafe}
+                    </a>`;
+                } else if (m.card === 'doc-item') {
+                    cardHtml = `<div class="doc-item" data-id="${item.id}">
+                        <div class="doc-header">
+                            <span class="doc-type">${item.type || 'DOCUMENTO'}</span>
+                            <span class="doc-date">${item.date || ''}</span>
+                        </div>
+                        <div class="doc-title">${titleSafe}</div>
+                        <div class="doc-description">${item.description || ''}</div>
+                        <a href="${url}" class="btn-download" target="_blank">Descargue aquí Documento</a>
+                    </div>`;
                 } else if (m.card === 'bulletin-card') {
                     cardHtml = `<a href="${url}" class="bulletin-list-item" data-id="${item.id}" target="_blank" style="text-decoration:none; display:flex; align-items:center; gap:1.25rem; padding:1rem; background:white; border:1px solid #e2e8f0; border-radius:12px; transition:all 0.3s ease;">
                          <div style="width:44px; height:44px; background:#f1f5f9; border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--primary); flex-shrink:0;">
@@ -542,31 +559,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // Si es CITA, inyectamos en cada grid de categoría detectado
-            if (m.api === 'cita') {
-                Object.keys(htmlParts).forEach(gridId => {
-                    const targetGrid = document.getElementById(gridId);
-                    if (targetGrid) {
-                        const endMarkerPat = gridId.toUpperCase().replace(/-/g, '_') + '_GRID';
-                        if (targetGrid.innerHTML.includes('END_' + endMarkerPat)) {
-                             const part1 = targetGrid.innerHTML.split('<!-- END_' + endMarkerPat + ' -->')[0];
-                             targetGrid.innerHTML = part1 + htmlParts[gridId] + '\n\n                <!-- END_' + endMarkerPat + ' -->';
-                        } else {
-                            targetGrid.innerHTML = htmlParts[gridId];
-                        }
-                    }
-                });
-            } else {
-                // Comportamiento normal para otros módulos
-                const targetGrid = document.getElementById(m.grid);
+            // Inyectamos en cada grid de categoría detectado (si el item tenía categoría)
+            Object.keys(htmlParts).forEach(gridId => {
+                if (gridId === m.grid) return; // Se maneja abajo
+                
+                const targetGrid = document.getElementById(gridId);
                 if (targetGrid) {
-                    const endMarkerPat = m.grid.toUpperCase().replace(/-/g, '_').replace(/\//g, '_') + '_GRID';
+                    const endMarkerPat = gridId.toUpperCase().replace(/-/g, '_').replace(/\//g, '_') + '_GRID';
                     if (targetGrid.innerHTML.includes('END_' + endMarkerPat)) {
                          const part1 = targetGrid.innerHTML.split('<!-- END_' + endMarkerPat + ' -->')[0];
-                         targetGrid.innerHTML = part1 + (htmlParts[m.grid] || '') + '\n\n                <!-- END_' + endMarkerPat + ' -->';
+                         targetGrid.innerHTML = part1 + htmlParts[gridId] + '\n\n                <!-- END_' + endMarkerPat + ' -->';
                     } else {
-                        targetGrid.innerHTML = htmlParts[m.grid] || '';
+                        targetGrid.innerHTML = htmlParts[gridId];
                     }
+                }
+            });
+
+            // Comportamiento normal para el grid principal del módulo
+            const targetGrid = document.getElementById(m.grid);
+            if (targetGrid) {
+                const endMarkerPat = m.grid.toUpperCase().replace(/-/g, '_').replace(/\//g, '_') + '_GRID';
+                if (targetGrid.innerHTML.includes('END_' + endMarkerPat)) {
+                     const part1 = targetGrid.innerHTML.split('<!-- END_' + endMarkerPat + ' -->')[0];
+                     targetGrid.innerHTML = part1 + (htmlParts[m.grid] || '') + '\n\n                <!-- END_' + endMarkerPat + ' -->';
+                } else {
+                    targetGrid.innerHTML = htmlParts[m.grid] || '';
                 }
             }
         } catch (e) { console.error('Error fetching', m.api, e); }
