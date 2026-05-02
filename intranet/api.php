@@ -48,12 +48,30 @@ function body()
     return json_decode(file_get_contents('php://input'), true) ?? [];
 }
 
-function auth($superadmin = false)
+function auth($resource = null)
 {
     if (!isset($_SESSION['userId']))
         out(['message' => 'No autorizado'], 401);
-    if ($superadmin && ($_SESSION['role'] ?? '') !== 'superadmin')
-        out(['message' => 'Requiere Super Admin'], 403);
+    
+    $role = $_SESSION['role'] ?? '';
+    $permissions = $_SESSION['permissions'] ?? [];
+    
+    // Si es superadmin, tiene acceso a todo
+    if ($role === 'superadmin') return;
+
+    // Si se requiere acceso de superadmin (como para gestionar usuarios)
+    // Pero también permitimos si tiene el permiso específico 'users'
+    if ($resource === 'users') {
+        if ($role !== 'superadmin' && !($permissions['users'] ?? false)) {
+            out(['message' => 'Requiere Super Admin o permiso de Usuarios. Tu rol: ' . $role], 403);
+        }
+        return;
+    }
+
+    // Para otros recursos, si se pasó un nombre de recurso, verificar permiso
+    if ($resource && !($permissions[$resource] ?? false)) {
+        out(['message' => 'No tienes permiso para: ' . $resource], 403);
+    }
 }
 
 /**  Decode HTML entities → real chars  */
@@ -183,7 +201,7 @@ if ($route === 'auth/login' && $method === 'POST') {
     $users = read_json(__DIR__ . '/default_user.json');
     foreach ($users as $u) {
         if ($u['username'] === ($in['username'] ?? '') && password_verify($in['password'] ?? '', $u['password'])) {
-            $_SESSION['userId'] = $u['_id'] ?? uniqid();
+            $_SESSION['userId'] = $u['id'] ?? $u['_id'] ?? uniqid();
             $_SESSION['displayName'] = $u['displayName'];
             $_SESSION['role'] = $u['role'];
             $_SESSION['permissions'] = $u['permissions'];
@@ -242,7 +260,7 @@ foreach ($JSON_MAP as $key => $file) {
 
     // CREATE
     if ($route === $key && $method === 'POST') {
-        auth($key === 'users');
+        auth($key);
         $in = body();
         $data = read_json($fullPath);
         if ($key === 'users')
@@ -256,15 +274,17 @@ foreach ($JSON_MAP as $key => $file) {
 
     // UPDATE / DELETE by id
     if (preg_match('/^' . preg_quote($key, '/') . '\/([a-zA-Z0-9_\-\.]+)$/', $route, $m)) {
-        auth($key === 'users');
+        auth($key);
         $id = $m[1];
         $data = read_json($fullPath);
 
         if ($method === 'DELETE') {
             $data = array_values(array_filter(
                 $data,
-                fn($i) =>
-                ($i['id'] ?? $i['_id']['$oid'] ?? '') !== $id
+                function($i) use ($id) {
+                    $iid = $i['id'] ?? $i['_id']['$oid'] ?? $i['_id'] ?? '';
+                    return $iid !== $id;
+                }
             ));
             write_json($fullPath, $data);
             out(['message' => 'Eliminado']);
@@ -273,7 +293,7 @@ foreach ($JSON_MAP as $key => $file) {
         if ($method === 'PUT') {
             $in = body();
             foreach ($data as &$item) {
-                $iid = $item['id'] ?? $item['_id']['$oid'] ?? '';
+                $iid = $item['id'] ?? $item['_id']['$oid'] ?? $item['_id'] ?? '';
                 if ($iid === $id) {
                     $item = array_merge($item, $in);
                     break;

@@ -130,8 +130,8 @@ const UsersAdmin = (() => {
                         </div>
                     </div>
                     <div class="item-actions">
-                        <button class="btn-edit" onclick="UsersAdmin.editUser('${user._id}')">Editar</button>
-                        ${user.username !== "Admin" ? `<button class="btn-delete" onclick="UsersAdmin.deleteUser('${user._id}')">Eliminar</button>` : ""}
+                        <button class="btn-edit" onclick="UsersAdmin.editUser('${user.id || user._id}')">Editar</button>
+                        ${user.username !== "Admin" ? `<button class="btn-delete" onclick="UsersAdmin.deleteUser('${user.id || user._id}')">Eliminar</button>` : ""}
                     </div>
                 </div>
             `,
@@ -146,10 +146,10 @@ const UsersAdmin = (() => {
     try {
       const res = await fetch("../api.php?route=users");
       const users = await res.json();
-      const user = users.find((u) => u._id === id);
+      const user = users.find((u) => (u.id || u._id) === id);
 
       if (user) {
-        userEditId.value = user._id;
+        userEditId.value = user.id || user._id;
         userDisplayName.value = user.displayName;
         userUsername.value = user.username;
         userUsername.disabled = true; // No permitir cambiar username
