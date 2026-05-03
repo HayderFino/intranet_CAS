@@ -42,7 +42,10 @@ El sistema está basado en una arquitectura **PHP puro sobre Apache/XAMPP**, sin
 ```text
 /intranet                        ← Raíz de la aplicación web
 ├── .htaccess                    ← Enrutamiento de /api/* hacia api.php
-├── api.php                      ← API REST universal (único controlador PHP)
+├── api.php                      ← Punto de entrada API REST
+├── api/                         ← Arquitectura Modular de la API
+│   ├── core/                    ← Enrutador, Helpers y Lógica de Auth
+│   └── modules/                 ← Módulos (auth, sgi, meci, search, etc.)
 ├── default_user.json            ← Usuarios del sistema (contraseñas con bcrypt)
 ├── index.html                   ← Página principal de la intranet
 ├── meci.html                    ← Módulo MECI
@@ -93,7 +96,9 @@ El sistema cuenta con un **motor de búsqueda implementado en PHP** dentro de `a
 ### 3.2. Componentes
 | Archivo | Función |
 |:--------|:--------|
-| `api.php` (ruta `search`) | Buscador PHP: escanea JSON, archivos HTML y carpetas físicas |
+| api.php | Punto de entrada: carga el núcleo y los módulos |
+| api/core/router.php | Enrutador modular con soporte para parámetros dinámicos |
+| api/modules/search.php | Buscador PHP: escanea JSON, archivos HTML y carpetas físicas |
 | `herramientas/busqueda.html` | Interfaz de búsqueda avanzada del usuario |
 | `herramientas/search-logic.js` | Lógica frontend: búsqueda en tiempo real, resaltado de términos |
 

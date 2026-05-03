@@ -17,24 +17,27 @@
 
 ---
 
-## 2. Archivo Central: `api.php`
+## 2. Arquitectura Modular y Enrutamiento
 
-El archivo `api.php` es el **único controlador PHP** del sistema. Contiene toda la lógica de negocio, dividida en secciones bien marcadas:
+El sistema utiliza una arquitectura modular distribuida en la carpeta `api/`. El archivo `api.php` actúa únicamente como punto de entrada (Bootstrapper).
 
-| Sección | Funcionalidad |
-|:--------|:-------------|
-| `1. AUTH` | Login, logout, check de sesión |
-| `2. SIMPLE JSON CRUD` | News, eventos, agenda, banner, directorio, users |
-| `3. IMAGE/FILE UPLOAD` | Subida genérica de archivos con `move_uploaded_file()` |
-| `4. SGI HTML-DB` | CRUD de documentos SGI incrustados en HTML |
-| `5. MÓDULOS HTML-DB GENÉRICOS` | 14 módulos que persisten en carpetas físicas + metadata.json |
-| `6. INFORME DE GESTIÓN` | Gestión de PDFs de informes de gestión |
-| `7. RESPEL` | CRUD JSON por sub-sección (documentos/obligaciones/gestores/empresas) |
-| `8. RUA` | CRUD JSON para RUA hídrico |
-| `9. PCB` | HTML-as-DB + tabla JSON para PCB |
-| `10. SEARCH GLOBAL` | Motor de búsqueda universal en PHP |
-| `11. USERS` | Gestión de usuarios (solo superadmin) |
-| `12. MISC` | Health check (`test-server`) |
+| Componente | Carpeta / Archivo | Descripción |
+|:-----------|:------------------|:------------|
+| **Entry Point** | `api.php` | Carga la configuración, el núcleo y los módulos. |
+| **Core** | `api/core/` | Contiene el Router, Helpers y lógica de Autenticación. |
+| **Módulos** | `api/modules/` | Lógica de negocio segmentada (SGI, MECI, Search, etc.). |
+
+### Módulos Especializados
+
+| Módulo | Archivo | Funcionalidad |
+|:-------|:--------|:--------------|
+| `auth` | `auth.php` | Login, logout, check de sesión |
+| `jsonCrud` | `jsonCrud.php` | CRUD genérico (News, eventos, agenda, banner, etc.) |
+| `uploads` | `uploads.php` | Rutas de subida de archivos |
+| `sgi` | `sgi.php` | Lógica de SGI y bases de datos HTML |
+| `herramientas`| `herramientas.php` | Módulos especializados RUA y PCB |
+| `search` | `search.php` | Motor de búsqueda universal |
+| `misc` | `misc.php` | Informe de Gestión y Health check |
 
 ### Helpers Globales Disponibles
 
@@ -65,13 +68,15 @@ RewriteRule ^api/(.+)$ api.php?route=$1 [QSA,L]
 RewriteRule ^api/?$ api.php?route= [QSA,L]
 ```
 
-En `api.php`, el enrutamiento se resuelve con:
+El sistema implementa un **Mini-Router** en `api/core/router.php` que despacha peticiones basadas en el método HTTP y la ruta:
+
 ```php
-$route  = trim($_GET['route'] ?? '', '/');
-$method = $_SERVER['REQUEST_METHOD'];
+route('GET', 'noticias', function() { ... });
+route('POST', 'noticias', function() { ... });
+route('DELETE', 'noticias/:id', function($id) { ... });
 ```
 
-Luego se usan bloques `if` o `preg_match()` para despachar cada ruta.
+Soporta parámetros dinámicos (usando `:nombre`) que son pasados automáticamente como argumentos a la función de callback.
 
 ---
 
@@ -190,17 +195,16 @@ Los archivos se nombran con timestamp para evitar colisiones. La URL retornada e
 intranet/data/menu header/nueva-seccion/
 ```
 
-### Paso 2: Agregar al mapa `$HTMLDB` en `api.php`
+### Paso 2: Registrar el módulo en la API
+
+Si es un CRUD simple, añádalo al mapa `$JSON_MAP` en `api/modules/jsonCrud.php`. 
+Si requiere lógica compleja, cree un nuevo archivo en `api/modules/` y regístrelo en `api.php`.
+
+Ejemplo de nueva ruta modular:
 ```php
-$HTMLDB = [
-    // ... módulos existentes ...
-    'nueva-seccion' => [
-        'header_menu/cas/nueva-seccion.html',
-        'data/menu header/la cas/nueva-seccion',
-        'pdf-folder-card',
-        'nueva-seccion-grid'
-    ],
-];
+route('GET', 'mi-modulo', function() {
+    out(read_json(DATA_ROOT . 'data/mi-data.json'));
+});
 ```
 
 ### Paso 3: Crear la página HTML de vista

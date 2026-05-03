@@ -12,6 +12,7 @@ Portal de intranet institucional de la **Corporación Autónoma Regional de Sant
 | Backend | PHP 8.x — `api.php` (controlador único) |
 | Frontend | HTML5 · CSS3 Vanilla · JavaScript ES6+ |
 | Persistencia | JSON planos + Sistema de archivos |
+| Arquitectura | Modular (Router + Módulos especializados) |
 | Autenticación | Sesiones PHP + bcrypt |
 
 > **No se requiere** Node.js, npm, MongoDB ni ninguna base de datos.
@@ -60,7 +61,10 @@ intranet_CAS/
 ├── documentacion/           ← Documentación técnica y operativa
 └── intranet/                ← Aplicación web
     ├── .htaccess            ← Enrutamiento /api/* → api.php
-    ├── api.php              ← API REST completa (único archivo PHP)
+    ├── api.php              ← Punto de entrada API REST
+    ├── api/                 ← Núcleo de la API (Modular)
+    │    ├── core/           ← Router, Helpers y Autenticación
+    │    └── modules/        ← Módulos especializados (SGI, MECI, etc.)
     ├── default_user.json    ← Usuarios (contraseñas bcrypt)
     ├── index.html           ← Página principal
     ├── script.js            ← Lógica JS del portal
