@@ -1,5 +1,5 @@
 const EventosAdmin = {
-  API: "../api.php?route=eventos",
+  API: "../api/eventos",
 
   load: async function () {
     const list = document.getElementById("eventosList");

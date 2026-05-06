@@ -3,7 +3,7 @@
  */
 
 const ProcesosApoyoAdmin = (() => {
-  let API = "../api.php?route=sgi-gestion-documental";
+  let API = "../api/sgi-gestion-documental";
   const MAX_SIZE_MB = 20;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
   const FORBIDDEN_EXTS = [".exe", ".bat", ".cmd", ".js", ".vbs", ".sh", ".ps1", ".msi", ".com"];
@@ -150,7 +150,7 @@ const ProcesosApoyoAdmin = (() => {
 
   function selectProcess(key) {
     currentProcess = key;
-    API = `../api.php?route=${currentProcess}`;
+    API = `../api/${currentProcess}`;
     elements.processSelect.value = key;
     elements.currentTitle.textContent = PROCESSES[key].name;
     

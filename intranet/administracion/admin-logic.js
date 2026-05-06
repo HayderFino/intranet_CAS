@@ -4,13 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const path = window.location.pathname;
     const adminIdx = path.indexOf('/administracion/');
     if (adminIdx !== -1) {
-      return path.substring(0, adminIdx) + '/api.php?route=';
+      return path.substring(0, adminIdx) + '/api/';
     }
     const adminShortIdx = path.indexOf('/administracion');
     if (adminShortIdx !== -1) {
-      return path.substring(0, adminShortIdx) + '/api.php?route=';
+      return path.substring(0, adminShortIdx) + '/api/';
     }
-    return '../api.php?route=';
+    return '../api/';
   })();
 
   // Helper para asignar eventos de forma segura
@@ -1955,7 +1955,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const card = document.createElement("div");
         card.className = "news-manage-card";
         card.innerHTML = `
-                    <img src="${item.imageUrl.startsWith('http') ? item.imageUrl : API_BASE.split('/api.php')[0] + '/' + item.imageUrl.replace(/^\/+/, '')}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                    <img src="${item.imageUrl.startsWith('http') ? item.imageUrl : API_BASE.split('/api')[0] + '/' + item.imageUrl.replace(/^\/+/, '')}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                     <div class="news-info" style="flex: 1; margin-left: 1rem; overflow: hidden;">
                         <h4 style="margin: 0;">${item.title}</h4>
                         <p style="font-size: 0.8rem; color: #64748b; margin: 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.description}</p>

@@ -8,7 +8,7 @@ const MeciAdmin = (() => {
   const API_BASE = window.location.pathname.substring(
     0,
     window.location.pathname.lastIndexOf("/administracion/")
-  ) + "/api.php?route=";
+  ) + "/api/";
 
   // Mapping de tabs a rutas de API
   const TABS = [
