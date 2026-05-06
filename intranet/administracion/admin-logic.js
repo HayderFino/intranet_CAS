@@ -868,14 +868,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         <h4>${item.title}</h4>
                         <div style="display: flex; align-items: center; gap: 0.8rem; margin-top: 0.4rem;">
                              <span style="font-size:0.75rem; color:#64748b;">${item.code || ""}</span>
-                             ${
-                               item.fileUrl && item.fileUrl !== "#"
-                                 ? `<a href="${item.fileUrl}" target="_blank" class="admin-file-badge">
+                             ${item.fileUrl && item.fileUrl !== "#"
+            ? `<a href="${item.fileUrl}" target="_blank" class="admin-file-badge">
                                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
                                     Descargar Manual
                                  </a>`
-                                 : '<span style="font-size:0.7rem; color:#94a3b8; font-style:italic;">Sin archivo</span>'
-                             }
+            : '<span style="font-size:0.7rem; color:#94a3b8; font-style:italic;">Sin archivo</span>'
+          }
                         </div>
                     </div>
                     <div class="card-actions">
@@ -891,8 +890,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .querySelectorAll(".btn-edit")
         .forEach(
           (btn) =>
-            (btn.onclick = () =>
-              startEdit(items.find((i) => i.id === btn.dataset.id))),
+          (btn.onclick = () =>
+            startEdit(items.find((i) => i.id === btn.dataset.id))),
         );
     }
 
@@ -1044,14 +1043,13 @@ document.addEventListener("DOMContentLoaded", () => {
                             <span style="background:#e2e8f0; color:#475569; padding:2px 8px; border-radius:4px; font-size:0.7rem; font-weight:600;">
                                 ${item.category}
                             </span>
-                            ${
-                              item.fileUrl && item.fileUrl !== "#"
-                                ? `<a href="${item.fileUrl}" target="_blank" class="admin-file-badge">
+                            ${item.fileUrl && item.fileUrl !== "#"
+            ? `<a href="${item.fileUrl}" target="_blank" class="admin-file-badge">
                                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
                                     Ver Archivo
                                    </a>`
-                                : '<span style="font-size:0.7rem; color:#94a3b8; font-style:italic;">Sin archivo</span>'
-                            }
+            : '<span style="font-size:0.7rem; color:#94a3b8; font-style:italic;">Sin archivo</span>'
+          }
                         </div>
                         <h4>${item.name}</h4>
                     </div>
@@ -1069,8 +1067,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .querySelectorAll(".btn-edit")
         .forEach(
           (btn) =>
-            (btn.onclick = () =>
-              startEdit(allItems.find((i) => i.id === btn.dataset.id))),
+          (btn.onclick = () =>
+            startEdit(allItems.find((i) => i.id === btn.dataset.id))),
         );
     }
 
@@ -1705,9 +1703,9 @@ document.addEventListener("DOMContentLoaded", () => {
       setStat(
         "stat-sgi-count",
         (planeacion.length || 0) +
-          (mejora.length || 0) +
-          (controlI.length || 0) +
-          (politicas.items?.length || 0),
+        (mejora.length || 0) +
+        (controlI.length || 0) +
+        (politicas.items?.length || 0),
       );
       setStat("stat-respel-count", respel.length);
       setStat("stat-empresas-count", empresas.length);
@@ -1766,7 +1764,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .map((cat) => `<option value="${cat}">${cat}</option>`)
       .join("");
     const filterOptionsHtml =
-      `<option value="all">Todas las categor&iacute;as</option>` + optionsHtml;
+      `<option value="all">Todas las categorías</option>` + optionsHtml;
 
     sgiCategory.innerHTML = optionsHtml;
     sgiFilterCategory.innerHTML = filterOptionsHtml;
@@ -1893,7 +1891,7 @@ document.addEventListener("DOMContentLoaded", () => {
           try {
             const errorJson = JSON.parse(errorText);
             errorMessage = errorJson.message || errorMessage;
-          } catch (e) {}
+          } catch (e) { }
           throw new Error(errorMessage);
         }
         const upData = await upRes.json();
@@ -2223,8 +2221,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .querySelectorAll(".btn-edit")
         .forEach(
           (btn) =>
-            (btn.onclick = () =>
-              startEdit(items.find((i) => i.id === btn.dataset.id))),
+          (btn.onclick = () =>
+            startEdit(items.find((i) => i.id === btn.dataset.id))),
         );
       elements.list
         .querySelectorAll(".btn-delete")

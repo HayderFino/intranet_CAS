@@ -60,12 +60,13 @@ function auth($resource = null)
 {
     if (!isset($_SESSION['userId']))
         out(['message' => 'No autorizado'], 401);
-    
+
     $role = $_SESSION['role'] ?? '';
     $permissions = $_SESSION['permissions'] ?? [];
-    
+
     // Si es superadmin, tiene acceso a todo
-    if ($role === 'superadmin') return;
+    if ($role === 'superadmin')
+        return;
 
     // Si se requiere acceso de superadmin (como para gestionar usuarios)
     // Pero también permitimos si tiene el permiso específico 'users'
@@ -89,13 +90,13 @@ function dent($s)
     '&oacute;' => 'ó',
     '&aacute;' => 'á',
     '&eacute;' => 'é',
-    '&iacute;' => 'í',
+    'í' => 'í',
     '&uacute;' => 'ú',
     '&ntilde;' => 'ñ',
     '&Oacute;' => 'Ó',
     '&Aacute;' => 'Á',
     '&Eacute;' => 'É',
-    '&Iacute;' => 'Í',
+    'í' => 'Í',
     '&Uacute;' => 'Ú',
     '&Ntilde;' => 'Ñ',
     '&iquest;' => '¿',
@@ -112,13 +113,13 @@ function eent($s)
     'ó' => '&oacute;',
     'á' => '&aacute;',
     'é' => '&eacute;',
-    'í' => '&iacute;',
+    'í' => 'í',
     'ú' => '&uacute;',
     'ñ' => '&ntilde;',
     'Ó' => '&Oacute;',
     'Á' => '&Aacute;',
     'É' => '&Eacute;',
-    'Í' => '&Iacute;',
+    'Í' => 'í',
     'Ú' => '&Uacute;',
     'Ñ' => '&Ntilde;',
     '¿' => '&iquest;',
@@ -289,7 +290,7 @@ foreach ($JSON_MAP as $key => $file) {
         if ($method === 'DELETE') {
             $data = array_values(array_filter(
                 $data,
-                function($i) use ($id) {
+                function ($i) use ($id) {
                     $iid = $i['id'] ?? $i['_id']['$oid'] ?? $i['_id'] ?? '';
                     return $iid !== $id;
                 }
@@ -400,11 +401,13 @@ if (in_array($route, ['sgi/planeacion-estrategica', 'sgi/planeacion']) && $metho
         $metaPath = $dirPath . '/metadata.json';
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         foreach (scandir($dirPath) as $f) {
-            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+                continue;
             $full = $dirPath . '/' . $f;
             if (is_dir($full)) {
                 foreach (scandir($full) as $sf) {
-                    if ($sf === '.' || $sf === '..') continue;
+                    if ($sf === '.' || $sf === '..')
+                        continue;
                     $rel = $f . '/' . $sf;
                     $m2 = $meta[$rel] ?? [];
                     $items[] = [
@@ -431,11 +434,13 @@ if (preg_match('/^sgi\/(planeacion|planeacion-estrategica)\/([a-f0-9]{32})$/', $
     $meta = file_exists($metaPath) ? read_json($metaPath) : [];
 
     foreach (scandir($dirPath) as $f) {
-        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+            continue;
         $full = $dirPath . '/' . $f;
         if (is_dir($full)) {
             foreach (scandir($full) as $sf) {
-                if ($sf === '.' || $sf === '..') continue;
+                if ($sf === '.' || $sf === '..')
+                    continue;
                 if (md5($f . '/' . $sf) === $targetId) {
                     @unlink($full . '/' . $sf);
                     unset($meta[$f . '/' . $sf]);
@@ -451,7 +456,7 @@ if (preg_match('/^sgi\/(planeacion|planeacion-estrategica)\/([a-f0-9]{32})$/', $
 // ── SGI DIRECTORY SCAN: mejora-continua ─────────────────────────
 $SGI_SCAN = [
     'mejora-continua' => 'data/menu header/sgi/Procesos Estrategicos/mejora continua',
-    'mejora'          => 'data/menu header/sgi/Procesos Estrategicos/mejora continua',
+    'mejora' => 'data/menu header/sgi/Procesos Estrategicos/mejora continua',
 ];
 
 if (isset($SGI_SCAN[$route === 'sgi/mejora-continua' ? 'mejora-continua' : ($route === 'sgi/mejora' ? 'mejora' : '')]) && $method === 'GET') {
@@ -463,11 +468,13 @@ if (isset($SGI_SCAN[$route === 'sgi/mejora-continua' ? 'mejora-continua' : ($rou
         $metaPath = $dirPath . '/metadata.json';
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         foreach (scandir($dirPath) as $f) {
-            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+                continue;
             $full = $dirPath . '/' . $f;
             if (is_dir($full)) {
                 foreach (scandir($full) as $sf) {
-                    if ($sf === '.' || $sf === '..') continue;
+                    if ($sf === '.' || $sf === '..')
+                        continue;
                     $rel = $f . '/' . $sf;
                     $m2 = $meta[$rel] ?? [];
                     $items[] = [
@@ -492,11 +499,13 @@ if (preg_match('/^sgi\/(mejora-continua|mejora)\/([a-f0-9]{32})$/', $route, $dm)
     $metaPath = $dirPath . '/metadata.json';
     $meta = file_exists($metaPath) ? read_json($metaPath) : [];
     foreach (scandir($dirPath) as $f) {
-        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+            continue;
         $full = $dirPath . '/' . $f;
         if (is_dir($full)) {
             foreach (scandir($full) as $sf) {
-                if ($sf === '.' || $sf === '..') continue;
+                if ($sf === '.' || $sf === '..')
+                    continue;
                 if (md5($f . '/' . $sf) === $targetId) {
                     @unlink($full . '/' . $sf);
                     unset($meta[$f . '/' . $sf]);
@@ -512,8 +521,8 @@ if (preg_match('/^sgi\/(mejora-continua|mejora)\/([a-f0-9]{32})$/', $route, $dm)
 
 // ── SGI DIRECTORY SCAN: Procesos Misionales ──────────────────────
 $SGI_MISIONAL_MAP = [
-    'admin-recursos'       => 'data/menu header/sgi/procesos misionales/Administracion de la Oferta de Recursos Naturales Renovables disponibles, Educacion Ambiental y Participacion Ciudadana',
-    'vigilancia-control'   => 'data/menu header/sgi/procesos misionales/Vigilancia, Seguimiento y Control Ambiental',
+    'admin-recursos' => 'data/menu header/sgi/procesos misionales/Administracion de la Oferta de Recursos Naturales Renovables disponibles, Educacion Ambiental y Participacion Ciudadana',
+    'vigilancia-control' => 'data/menu header/sgi/procesos misionales/Vigilancia, Seguimiento y Control Ambiental',
     'planeacion-ambiental' => 'data/menu header/sgi/procesos misionales/Planeacion y Ordenamiento Ambiental',
 ];
 
@@ -525,17 +534,19 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)$#
         $metaPath = $dirPath . '/metadata.json';
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         foreach (scandir($dirPath) as $f) {
-            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+                continue;
             $full = $dirPath . '/' . $f;
             if (is_dir($full)) {
                 foreach (scandir($full) as $sf) {
-                    if ($sf === '.' || $sf === '..') continue;
+                    if ($sf === '.' || $sf === '..')
+                        continue;
                     $rel = $f . '/' . $sf;
                     $m2 = $meta[$rel] ?? [];
                     $items[] = [
-                        'id'      => md5($rel),
-                        'name'    => $m2['name'] ?? pathinfo($sf, PATHINFO_FILENAME),
-                        'href'    => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
+                        'id' => md5($rel),
+                        'name' => $m2['name'] ?? pathinfo($sf, PATHINFO_FILENAME),
+                        'href' => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
                         'fileUrl' => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
                         'category' => $f,
                     ];
@@ -554,11 +565,13 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)/(
     $metaPath = $dirPath . '/metadata.json';
     $meta = file_exists($metaPath) ? read_json($metaPath) : [];
     foreach (scandir($dirPath) as $f) {
-        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+            continue;
         $full = $dirPath . '/' . $f;
         if (is_dir($full)) {
             foreach (scandir($full) as $sf) {
-                if ($sf === '.' || $sf === '..') continue;
+                if ($sf === '.' || $sf === '..')
+                    continue;
                 if (md5($f . '/' . $sf) === $targetId) {
                     @unlink($full . '/' . $sf);
                     unset($meta[$f . '/' . $sf]);
@@ -761,12 +774,12 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     if ($route === "$modRoute/upload" && $method === 'POST') {
         auth();
         $field = isset($_FILES['file']) ? 'file' : 'image';
-        
+
         $targetDir = $uploadDir;
         if (!empty($_POST['category'])) {
             $targetDir = rtrim($uploadDir, '/') . '/' . $_POST['category'];
         }
-        
+
         $url = upload_file($field, $targetDir);
         if ($url)
             out(['fileUrl' => $url, 'imageUrl' => $url]);
@@ -782,17 +795,19 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     if ($route === $modRoute && $method === 'GET') {
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         $items = [];
-        
+
         $allFiles = [];
         if (is_dir($dirPath)) {
             $folders = scandir($dirPath);
             foreach ($folders as $f) {
-                if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+                if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+                    continue;
                 $fullPath = $dirPath . '/' . $f;
                 if (is_dir($fullPath)) {
                     $subFiles = scandir($fullPath);
                     foreach ($subFiles as $sf) {
-                        if ($sf === '.' || $sf === '..') continue;
+                        if ($sf === '.' || $sf === '..')
+                            continue;
                         $allFiles[] = $f . '/' . $sf;
                     }
                 } else {
@@ -836,12 +851,12 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         // Handle direct file upload if present in the same request
         if (isset($_FILES['file']) || isset($_FILES['image'])) {
             $field = isset($_FILES['file']) ? 'file' : 'image';
-            
+
             $targetDir = $uploadDir;
             if (!empty($in['category'])) {
                 $targetDir = rtrim($uploadDir, '/') . '/' . $in['category'];
             }
-            
+
             $uploadedUrl = upload_file($field, $targetDir);
             if ($uploadedUrl) {
                 $in['fileUrl'] = $uploadedUrl;
@@ -871,7 +886,7 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         if ($relPath) {
             $meta = file_exists($metaPath) ? read_json($metaPath) : [];
             $currentMeta = $meta[$relPath] ?? $meta[basename($relPath)] ?? [];
-            unset($in['id'], $in['fileUrl'], $in['imageUrl'], $in['href']); 
+            unset($in['id'], $in['fileUrl'], $in['imageUrl'], $in['href']);
             $meta[$relPath] = array_merge($currentMeta, $in, [
                 'name' => $in['name'] ?? $in['title'] ?? pathinfo($relPath, PATHINFO_FILENAME),
                 'category' => $in['category'] ?? ''
@@ -915,10 +930,12 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
 
         $allFiles = [];
         foreach (scandir($dirPath) as $f) {
-            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+                continue;
             if (is_dir($dirPath . '/' . $f)) {
                 foreach (scandir($dirPath . '/' . $f) as $sf) {
-                    if ($sf === '.' || $sf === '..') continue;
+                    if ($sf === '.' || $sf === '..')
+                        continue;
                     $allFiles[$sf] = $f . '/' . $sf;
                 }
             } else {
@@ -951,10 +968,12 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         $folders = scandir($dirPath);
         foreach ($folders as $f) {
-            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+                continue;
             if (is_dir($dirPath . '/' . $f)) {
                 foreach (scandir($dirPath . '/' . $f) as $sf) {
-                    if ($sf === '.' || $sf === '..') continue;
+                    if ($sf === '.' || $sf === '..')
+                        continue;
                     $relPath = $f . '/' . $sf;
                     if (md5($relPath) === $id) {
                         @unlink($dirPath . '/' . $relPath);
@@ -1526,7 +1545,7 @@ if ($route === 'test-server')
 
 if (strpos($route, 'meci') === 0) {
     $meciBase = 'data/menu header/MECI';
-    
+
     $meciMap = [
         'meci/anticorrupcion' => ['dir' => 'Anticorrupcion', 'subfolders' => true],
         'meci/documentos-varios' => ['dir' => 'Documentos varios', 'subfolders' => false],
@@ -1535,7 +1554,7 @@ if (strpos($route, 'meci') === 0) {
 
     $mCfg = null;
     $mRoute = null;
-    foreach($meciMap as $r => $c) {
+    foreach ($meciMap as $r => $c) {
         if (strpos($route, $r) === 0) {
             $mCfg = $c;
             $mRoute = $r;
@@ -1564,8 +1583,9 @@ if (strpos($route, 'meci') === 0) {
             auth();
             $sub = $_POST['subfolder'] ?? '';
             // Map back to real folder name if mapping exists
-            if (isset($meciSubRevMap[$sub])) $sub = $meciSubRevMap[$sub];
-            
+            if (isset($meciSubRevMap[$sub]))
+                $sub = $meciSubRevMap[$sub];
+
             $dest = $sub ? "$relPath/$sub" : $relPath;
             $url = upload_file('file', $dest);
             if ($url) {
@@ -1583,24 +1603,26 @@ if (strpos($route, 'meci') === 0) {
                 $foldersToScan = array_merge([''], array_filter(scandir($absPath), fn($f) => $f !== '.' && $f !== '..' && is_dir("$absPath/$f")));
             }
 
-            foreach($foldersToScan as $sub) {
+            foreach ($foldersToScan as $sub) {
                 $scanDir = ($sub !== '') ? "$absPath/$sub" : $absPath;
-                if (!is_dir($scanDir)) continue;
-                
+                if (!is_dir($scanDir))
+                    continue;
+
                 $metaPath = "$scanDir/metadata.json";
                 $meta = file_exists($metaPath) ? read_json($metaPath) : [];
-                
+
                 // Determine label for this subfolder
                 $subLabel = $meciSubMap[$sub] ?? $sub;
 
-                foreach(scandir($scanDir) as $f) {
-                    if ($f === '.' || $f === '..' || is_dir("$scanDir/$f") || $f === 'metadata.json') continue;
-                    
+                foreach (scandir($scanDir) as $f) {
+                    if ($f === '.' || $f === '..' || is_dir("$scanDir/$f") || $f === 'metadata.json')
+                        continue;
+
                     $m = $meta[$f] ?? [];
                     $folderPath = $relPath . ($sub !== '' ? "/$sub" : "");
                     // Simple relative path without complex encoding
                     $url = $folderPath . '/' . $f;
-                    
+
                     $items[] = array_merge($m, [
                         'id' => md5(($sub ? "$sub/" : "") . $f),
                         'filename' => $f,
@@ -1620,16 +1642,18 @@ if (strpos($route, 'meci') === 0) {
             auth();
             $in = body();
             $fUrl = $in['fileUrl'] ?? '';
-            if (!$fUrl) out(['error' => 'No file URL'], 400);
-            
+            if (!$fUrl)
+                out(['error' => 'No file URL'], 400);
+
             $f = basename(urldecode($fUrl));
             $sub = $in['subfolder'] ?? '';
             // Map back to real folder name
-            if (isset($meciSubRevMap[$sub])) $sub = $meciSubRevMap[$sub];
+            if (isset($meciSubRevMap[$sub]))
+                $sub = $meciSubRevMap[$sub];
 
             $destDir = ($sub !== '') ? "$absPath/$sub" : $absPath;
             $metaPath = "$destDir/metadata.json";
-            
+
             $meta = file_exists($metaPath) ? read_json($metaPath) : [];
             $meta[$f] = [
                 'name' => $in['name'] ?? pathinfo($f, PATHINFO_FILENAME),
@@ -1643,28 +1667,29 @@ if (strpos($route, 'meci') === 0) {
         if (preg_match('/^' . preg_quote($mRoute, '/') . '\/([a-zA-Z0-9_\-]+)$/', $route, $rm)) {
             auth();
             $id = $rm[1];
-            
+
             $foldersToScan = [''];
             if ($mCfg['subfolders'] && is_dir($absPath)) {
                 $foldersToScan = array_merge([''], array_filter(scandir($absPath), fn($f) => $f !== '.' && $f !== '..' && is_dir("$absPath/$f")));
             }
 
-            foreach($foldersToScan as $sub) {
+            foreach ($foldersToScan as $sub) {
                 $scanDir = ($sub !== '') ? "$absPath/$sub" : $absPath;
-                if (!is_dir($scanDir)) continue;
-                
-                foreach(scandir($scanDir) as $f) {
+                if (!is_dir($scanDir))
+                    continue;
+
+                foreach (scandir($scanDir) as $f) {
                     if (md5(($sub ? "$sub/" : "") . $f) === $id) {
                         $metaPath = "$scanDir/metadata.json";
                         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
-                        
+
                         if ($method === 'DELETE') {
                             @unlink("$scanDir/$f");
                             unset($meta[$f]);
                             write_json($metaPath, $meta);
                             out(['success' => true]);
                         }
-                        
+
                         if ($method === 'PUT') {
                             $in = body();
                             $meta[$f] = array_merge($meta[$f] ?? [], [
