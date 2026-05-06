@@ -462,7 +462,12 @@ document.addEventListener("DOMContentLoaded", () => {
         { api: 'rua', grid: 'rua-docs-grid', card: 'pdf-folder-card' },
         { api: 'pcb', grid: 'pcb-docs-grid', card: 'pdf-folder-card' },
         { api: 'respel/documentos', grid: 'respel-docs-grid', card: 'pdf-folder-card' },
-        { api: 'respel/empresas', grid: 'respel-empresas-tbody', card: 'table-row' }
+        { api: 'respel/empresas', grid: 'respel-empresas-tbody', card: 'table-row' },
+        { api: 'sgi/planeacion-estrategica', grid: 'anexos-grid', card: 'file-item' },
+        { api: 'sgi/mejora-continua', grid: 'caracterizacion-grid', card: 'file-item' },
+        { api: 'sgi/admin-recursos', grid: 'caracterizacion-grid', card: 'file-item' },
+        { api: 'sgi/vigilancia-control', grid: 'caracterizacion-grid', card: 'file-item' },
+        { api: 'sgi/planeacion-ambiental', grid: 'caracterizacion-grid', card: 'file-item' }
     ];
 
     modules.forEach(async m => {
@@ -472,6 +477,23 @@ document.addEventListener("DOMContentLoaded", () => {
         // Seguridad extra: Solo cargar boletines en su página específica
         if (m.api === 'boletines' && !window.location.pathname.includes('boletines.html')) {
             return;
+        }
+
+        // Filtro para módulos SGI: Solo cargar en su página respectiva
+        if (m.api.startsWith('sgi/')) {
+            const section = m.api.split('/')[1];
+            // Mapeo de secciones a nombres de archivos
+            const sectionPageMap = {
+                'planeacion-estrategica': 'planeacion-estrategica.html',
+                'mejora-continua': 'mejora-continua.html',
+                'admin-recursos': 'admin-recursos.html',
+                'vigilancia-control': 'vigilancia-control.html',
+                'planeacion-ambiental': 'planeacion-ambiental.html'
+            };
+            
+            if (sectionPageMap[section] && !window.location.pathname.includes(sectionPageMap[section])) {
+                return;
+            }
         }
 
         try {
@@ -533,6 +555,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             <p style="margin:2px 0 0; color:#64748b; font-size:0.8rem;">Documento de Seguridad Digital</p>
                          </div>
                          <span style="padding:0.4rem 1rem; background:var(--primary); color:white; border-radius:8px; font-size:0.75rem; font-weight:700; white-space:nowrap;">Ver Boletín</span>
+                    </a>`;
+                } else if (m.card === 'file-item') {
+                    const fname = url.split('/').pop();
+                    cardHtml = `<a href="${url}" class="file-item" data-id="${item.id}" download="${decodeURIComponent(fname)}">
+                        <div class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+                        <div class="file-name">${titleSafe}</div>
                     </a>`;
                 } else {
                     const codeHtml = item.code ? `<p style="font-size: 0.8rem; color: var(--text-light); margin: -0.5rem 0 0.5rem 0;">${item.code}</p>` : '';

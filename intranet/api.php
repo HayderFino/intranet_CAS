@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 /**
  * ============================================================
  *  API UNIVERSAL - INTRANET CAS
@@ -20,7 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 session_start();
 
-$route = trim($_GET['route'] ?? '', '/');
+$route = trim($_GET['route'] ?? '');
+$route = trim($route, '/');
+$route = strtolower($route); // Normalize to lowercase for easier matching
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 // Detectar la ruta base del proyecto de forma dinámica (ej: /intranet_CAS/intranet)
@@ -40,6 +45,9 @@ function out($data, $code = 200)
 {
     http_response_code($code);
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
+    }
     exit();
 }
 
@@ -379,6 +387,189 @@ $SGI_HTML = [
     'politicas' => 'header_menu/sgi/politicas.html',
     'manuales' => 'header_menu/sgi/manuales.html',
 ];
+
+// ══════════════════════════════════════════════════════════════
+//  4b. SGI DIRECTORY SCAN para planeacion-estrategica
+// ══════════════════════════════════════════════════════════════
+
+if (in_array($route, ['sgi/planeacion-estrategica', 'sgi/planeacion']) && $method === 'GET') {
+    $base = 'data/menu header/sgi/Procesos Estrategicos/Planeacion Estrategica';
+    $dirPath = __DIR__ . '/' . $base;
+    $items = [];
+    if (file_exists($dirPath) && is_dir($dirPath)) {
+        $metaPath = $dirPath . '/metadata.json';
+        $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+        foreach (scandir($dirPath) as $f) {
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            $full = $dirPath . '/' . $f;
+            if (is_dir($full)) {
+                foreach (scandir($full) as $sf) {
+                    if ($sf === '.' || $sf === '..') continue;
+                    $rel = $f . '/' . $sf;
+                    $m2 = $meta[$rel] ?? [];
+                    $items[] = [
+                        'id' => md5($rel),
+                        'name' => $m2['name'] ?? pathinfo($sf, PATHINFO_FILENAME),
+                        'href' => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
+                        'fileUrl' => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
+                        'category' => $f,
+                    ];
+                }
+            }
+        }
+    }
+    out($items);
+}
+
+// DELETE /sgi/planeacion/{id}  o  /sgi/planeacion-estrategica/{id}
+if (preg_match('/^sgi\/(planeacion|planeacion-estrategica)\/([a-f0-9]{32})$/', $route, $dm) && $method === 'DELETE') {
+    auth();
+    $base = 'data/menu header/sgi/Procesos Estrategicos/Planeacion Estrategica';
+    $dirPath = __DIR__ . '/' . $base;
+    $targetId = $dm[2];
+    $metaPath = $dirPath . '/metadata.json';
+    $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+
+    foreach (scandir($dirPath) as $f) {
+        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+        $full = $dirPath . '/' . $f;
+        if (is_dir($full)) {
+            foreach (scandir($full) as $sf) {
+                if ($sf === '.' || $sf === '..') continue;
+                if (md5($f . '/' . $sf) === $targetId) {
+                    @unlink($full . '/' . $sf);
+                    unset($meta[$f . '/' . $sf]);
+                    write_json($metaPath, $meta);
+                    out(['success' => true]);
+                }
+            }
+        }
+    }
+    out(['message' => 'Archivo no encontrado'], 404);
+}
+
+// ── SGI DIRECTORY SCAN: mejora-continua ─────────────────────────
+$SGI_SCAN = [
+    'mejora-continua' => 'data/menu header/sgi/Procesos Estrategicos/mejora continua',
+    'mejora'          => 'data/menu header/sgi/Procesos Estrategicos/mejora continua',
+];
+
+if (isset($SGI_SCAN[$route === 'sgi/mejora-continua' ? 'mejora-continua' : ($route === 'sgi/mejora' ? 'mejora' : '')]) && $method === 'GET') {
+    $key = str_replace('sgi/', '', $route);
+    $base = $SGI_SCAN[$key];
+    $dirPath = __DIR__ . '/' . $base;
+    $items = [];
+    if (file_exists($dirPath) && is_dir($dirPath)) {
+        $metaPath = $dirPath . '/metadata.json';
+        $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+        foreach (scandir($dirPath) as $f) {
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            $full = $dirPath . '/' . $f;
+            if (is_dir($full)) {
+                foreach (scandir($full) as $sf) {
+                    if ($sf === '.' || $sf === '..') continue;
+                    $rel = $f . '/' . $sf;
+                    $m2 = $meta[$rel] ?? [];
+                    $items[] = [
+                        'id' => md5($rel),
+                        'name' => $m2['name'] ?? pathinfo($sf, PATHINFO_FILENAME),
+                        'href' => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
+                        'fileUrl' => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
+                        'category' => $f,
+                    ];
+                }
+            }
+        }
+    }
+    out($items);
+}
+
+if (preg_match('/^sgi\/(mejora-continua|mejora)\/([a-f0-9]{32})$/', $route, $dm) && $method === 'DELETE') {
+    auth();
+    $base = 'data/menu header/sgi/Procesos Estrategicos/mejora continua';
+    $dirPath = __DIR__ . '/' . $base;
+    $targetId = $dm[2];
+    $metaPath = $dirPath . '/metadata.json';
+    $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+    foreach (scandir($dirPath) as $f) {
+        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+        $full = $dirPath . '/' . $f;
+        if (is_dir($full)) {
+            foreach (scandir($full) as $sf) {
+                if ($sf === '.' || $sf === '..') continue;
+                if (md5($f . '/' . $sf) === $targetId) {
+                    @unlink($full . '/' . $sf);
+                    unset($meta[$f . '/' . $sf]);
+                    write_json($metaPath, $meta);
+                    out(['success' => true]);
+                }
+            }
+        }
+    }
+    out(['message' => 'Archivo no encontrado'], 404);
+}
+
+
+// ── SGI DIRECTORY SCAN: Procesos Misionales ──────────────────────
+$SGI_MISIONAL_MAP = [
+    'admin-recursos'       => 'data/menu header/sgi/procesos misionales/Administracion de la Oferta de Recursos Naturales Renovables disponibles, Educacion Ambiental y Participacion Ciudadana',
+    'vigilancia-control'   => 'data/menu header/sgi/procesos misionales/Vigilancia, Seguimiento y Control Ambiental',
+    'planeacion-ambiental' => 'data/menu header/sgi/procesos misionales/Planeacion y Ordenamiento Ambiental',
+];
+
+if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)$#i', $route, $sm) && $method === 'GET') {
+    $base = $SGI_MISIONAL_MAP[$sm[1]];
+    $dirPath = __DIR__ . '/' . $base;
+    $items = [];
+    if (file_exists($dirPath) && is_dir($dirPath)) {
+        $metaPath = $dirPath . '/metadata.json';
+        $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+        foreach (scandir($dirPath) as $f) {
+            if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+            $full = $dirPath . '/' . $f;
+            if (is_dir($full)) {
+                foreach (scandir($full) as $sf) {
+                    if ($sf === '.' || $sf === '..') continue;
+                    $rel = $f . '/' . $sf;
+                    $m2 = $meta[$rel] ?? [];
+                    $items[] = [
+                        'id'      => md5($rel),
+                        'name'    => $m2['name'] ?? pathinfo($sf, PATHINFO_FILENAME),
+                        'href'    => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
+                        'fileUrl' => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
+                        'category' => $f,
+                    ];
+                }
+            }
+        }
+    }
+    out($items);
+}
+
+if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)/([a-f0-9]{32})$#i', $route, $dm) && $method === 'DELETE') {
+    auth();
+    $base = $SGI_MISIONAL_MAP[$dm[1]];
+    $dirPath = __DIR__ . '/' . $base;
+    $targetId = $dm[2];
+    $metaPath = $dirPath . '/metadata.json';
+    $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+    foreach (scandir($dirPath) as $f) {
+        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json') continue;
+        $full = $dirPath . '/' . $f;
+        if (is_dir($full)) {
+            foreach (scandir($full) as $sf) {
+                if ($sf === '.' || $sf === '..') continue;
+                if (md5($f . '/' . $sf) === $targetId) {
+                    @unlink($full . '/' . $sf);
+                    unset($meta[$f . '/' . $sf]);
+                    write_json($metaPath, $meta);
+                    out(['success' => true]);
+                }
+            }
+        }
+    }
+    out(['message' => 'Archivo no encontrado'], 404);
+}
 
 if (preg_match('/^sgi\/([a-z0-9-]+)(?:\/([a-zA-Z0-9_\-]+))?$/', $route, $m)) {
     $section = $m[1];
