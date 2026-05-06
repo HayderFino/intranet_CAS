@@ -115,7 +115,7 @@ const InformeGestionAdmin = {
   },
 
   delete: async function (id) {
-    if (!confirm("¿Estás seguro de eliminar este informe?")) return;
+    if (!confirm("ÃÂ¿EstÃÂ¡s seguro de eliminar este informe?")) return;
 
     try {
       const res = await fetch(`${this.API_URL}/${id}`, { method: "DELETE" });
@@ -155,3 +155,5 @@ document.addEventListener("DOMContentLoaded", () => {
     cancelBtn.addEventListener("click", () => InformeGestionAdmin.resetForm());
   }
 });
+
+

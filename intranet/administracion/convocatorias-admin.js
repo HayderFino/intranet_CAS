@@ -1,5 +1,5 @@
 /**
- * Convocatorias - Admin Module (v3 con máxima depuración)
+ * Convocatorias - Admin Module (v3 con mÃÂ¡xima depuración)
  */
 
 window.ConvocatoriasAdmin = (() => {
@@ -103,7 +103,7 @@ window.ConvocatoriasAdmin = (() => {
         body: fd,
       });
       if (res.ok) {
-        alert("¡Éxito!");
+        alert("ÃÂ¡éxito!");
         resetForm();
         load();
       } else {
@@ -145,7 +145,7 @@ window.ConvocatoriasAdmin = (() => {
   }
 
   async function deleteByBtn(id) {
-    if (!confirm("¿Eliminar esta convocatoria?")) return;
+    if (!confirm("ÃÂ¿Eliminar esta convocatoria?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -180,3 +180,5 @@ document.addEventListener("DOMContentLoaded", () => {
     ConvocatoriasAdmin.init();
   }
 });
+
+

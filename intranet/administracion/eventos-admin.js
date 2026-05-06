@@ -85,7 +85,7 @@ const EventosAdmin = {
   },
 
   delete: async function (id) {
-    if (!confirm("¿Eliminar esta entrada?")) return;
+    if (!confirm("ÃÂ¿Eliminar esta entrada?")) return;
     const res = await fetch(`${this.API}/${id}`, { method: "DELETE" });
     if (res.ok) {
       showToast("Eliminado");
@@ -107,3 +107,5 @@ document.addEventListener("DOMContentLoaded", () => {
   const c = document.getElementById("eventoCancelBtn");
   if (c) c.addEventListener("click", () => EventosAdmin.resetForm());
 });
+
+

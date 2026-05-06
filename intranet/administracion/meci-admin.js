@@ -148,7 +148,7 @@ const MeciAdmin = (() => {
       const groups = {};
       // Inicializar grupos en orden
       activeTab.subfolders.forEach((sf) => (groups[sf] = []));
-      
+
       filtered.forEach((item) => {
         const sf = item.subfolder || item.category || "Planes y Riesgos";
         if (!groups[sf]) groups[sf] = [];
@@ -157,7 +157,7 @@ const MeciAdmin = (() => {
 
       for (const sf in groups) {
         if (groups[sf].length === 0) continue;
-        
+
         const groupHeader = document.createElement("div");
         groupHeader.style.cssText = "margin:1.5rem 0 0.75rem; display:flex; align-items:center; gap:0.75rem;";
         groupHeader.innerHTML = `
@@ -205,7 +205,7 @@ const MeciAdmin = (() => {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
               Ver Archivo
            </a>`
-        : '<span style="font-size:0.72rem;color:#94a3b8;font-style:italic;">⚠️ Sin archivo vinculado</span>'
+        : '<span style="font-size:0.72rem;color:#94a3b8;font-style:italic;">Ã¢Å¡Â Ã¯Â¸Â Sin archivo vinculado</span>'
       }
           </div>
         </div>
@@ -221,10 +221,10 @@ const MeciAdmin = (() => {
     if (!href || href === "#") return "#";
     // Si ya es una URL completa, no tocarla
     if (href.startsWith("http")) return href;
-    // Si ya empieza con ../, ya está corregida
+    // Si ya empieza con ../, ya estÃÂ¡ corregida
     if (href.startsWith("../")) return href;
     // Para rutas que vienen del API (ej: data/...), subir un nivel
-    // porque el admin está en una subcarpeta
+    // porque el admin estÃÂ¡ en una subcarpeta
     return "../" + href;
   }
 
@@ -304,7 +304,7 @@ const MeciAdmin = (() => {
         body: JSON.stringify(payload),
       });
       if (res.ok) {
-        toast(id ? "Documento actualizado ✓" : "Documento guardado ✓");
+        toast(id ? "Documento actualizado Ã¢Åâ" : "Documento guardado Ã¢Åâ");
         cancelEdit();
         load(TABS.indexOf(activeTab));
       } else {
@@ -317,7 +317,7 @@ const MeciAdmin = (() => {
   }
 
   async function deleteItem(id) {
-    if (!confirm("¿Eliminar este documento? Esta acción no se puede deshacer."))
+    if (!confirm("ÃÂ¿Eliminar este documento? Esta acción no se puede deshacer."))
       return;
     try {
       const res = await fetch(`${API_BASE}${activeTab.route}/${id}`, {
@@ -379,3 +379,5 @@ const MeciAdmin = (() => {
 })();
 
 window.MeciAdmin = MeciAdmin;
+
+

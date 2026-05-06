@@ -1,5 +1,5 @@
 /**
- * Estudios Técnicos - Admin Module
+ * Estudios TÃÂ©cnicos - Admin Module
  */
 
 window.EstudiosTecnicosAdmin = (() => {
@@ -43,7 +43,7 @@ window.EstudiosTecnicosAdmin = (() => {
 
     if (items.length === 0) {
       els.list.innerHTML =
-        '<p style="padding:1.5rem; text-align:center; col      8b;">No hay estudios técnicos registrados.</p>';
+        '<p style="padding:1.5rem; text-align:center; col      8b;">No hay estudios tÃÂ©cnicos registrados.</p>';
       return;
     }
 
@@ -100,7 +100,7 @@ window.EstudiosTecnicosAdmin = (() => {
         body: fd,
       });
       if (res.ok) {
-        alert("¡Documento guardado con éxito!");
+        alert("ÃÂ¡Documento guardado con ÃÂ©xito!");
         resetForm();
         load();
       } else {
@@ -154,7 +154,7 @@ window.EstudiosTecnicosAdmin = (() => {
   }
 
   async function deleteByBtn(id) {
-    if (!confirm("¿Eliminar este documento definitivamente?")) return;
+    if (!confirm("ÃÂ¿Eliminar este documento definitivamente?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -192,3 +192,5 @@ document.addEventListener("DOMContentLoaded", () => {
     EstudiosTecnicosAdmin.init();
   }
 });
+
+

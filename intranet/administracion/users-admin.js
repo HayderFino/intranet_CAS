@@ -122,11 +122,10 @@ const UsersAdmin = (() => {
                         <strong>${user.displayName} (@${user.username})</strong>
                         <span class="badge ${user.role}">${user.role}</span>
                         <div style="font-size: 0.75rem; color: #64748b; margin-top: 5px;">
-                            Permisos: ${
-                              Object.keys(user.permissions || {})
-                                .filter((k) => user.permissions[k])
-                                .join(", ") || "Ninguno"
-                            }
+                            Permisos: ${Object.keys(user.permissions || {})
+              .filter((k) => user.permissions[k])
+              .join(", ") || "Ninguno"
+            }
                         </div>
                     </div>
                     <div class="item-actions">
@@ -174,7 +173,7 @@ const UsersAdmin = (() => {
   }
 
   async function deleteUser(id) {
-    if (!confirm("¿Estás seguro de eliminar este usuario?")) return;
+    if (!confirm("ÃÂ¿EstÃÂ¡s seguro de eliminar este usuario?")) return;
 
     try {
       const res = await fetch(`../api/users/${id}`, { method: "DELETE" });
@@ -205,4 +204,6 @@ const UsersAdmin = (() => {
 
 window.UsersAdmin = UsersAdmin;
 if (document.getElementById("usersSection")) UsersAdmin.init();
+
+
 

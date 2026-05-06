@@ -79,7 +79,7 @@ const DirectorioAdmin = {
   },
 
   delete: async function (id) {
-    if (!confirm("¿Eliminar este contacto?")) return;
+    if (!confirm("ÃÂ¿Eliminar este contacto?")) return;
     const res = await fetch(`${this.API}/${id}`, { method: "DELETE" });
     if (res.ok) {
       showToast("Contacto eliminado");
@@ -101,3 +101,5 @@ document.addEventListener("DOMContentLoaded", () => {
   const c = document.getElementById("dirCancelBtn");
   if (c) c.addEventListener("click", () => DirectorioAdmin.resetForm());
 });
+
+

@@ -76,7 +76,7 @@ const RevisionRedAdmin = (() => {
       elements.list.innerHTML = `
                 <div style="padding: 3rem; text-align: center; color: #64748b; background: #f8fafc; border-radius: 12px; border: 2px dashed #e2e8f0;">
                     <svg viewBox="0 0 24 24" width="48" height="48" fill="#cbd5e1" style="margin-bottom:1rem;"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
-                    <p>No hay archivos cargados aún.</p>
+                    <p>No hay archivos cargados aÃÂºn.</p>
                     <p style="font-size:0.85rem; margin-top:0.5rem;">Usa el formulario de arriba para subir el primer archivo.</p>
                 </div>`;
       return;
@@ -139,7 +139,7 @@ const RevisionRedAdmin = (() => {
 
     try {
       let fileUrl = "";
-      
+
       // Step 1: Upload file if selected
       if (file) {
         const fd = new FormData();
@@ -169,7 +169,7 @@ const RevisionRedAdmin = (() => {
 
       if (res.ok) {
         showNotify(
-          id ? "Archivo actualizado correctamente" : "Archivo subido con éxito",
+          id ? "Archivo actualizado correctamente" : "Archivo subido con ÃÂ©xito",
         );
         resetForm();
         load();
@@ -203,7 +203,7 @@ const RevisionRedAdmin = (() => {
   async function del(id) {
     if (
       !confirm(
-        "¿Seguro que deseas eliminar este archivo? Esta acción no se puede deshacer.",
+        "ÃÂ¿Seguro que deseas eliminar este archivo? Esta acción no se puede deshacer.",
       )
     )
       return;
@@ -239,3 +239,5 @@ document.addEventListener("DOMContentLoaded", () => {
     RevisionRedAdmin.init();
   }
 });
+
+

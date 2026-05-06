@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Configuración de rutas dinámicas para APIs
+  // Configuración de rutas dinÃÂ¡micas para APIs
   const API_BASE = (() => {
     const path = window.location.pathname;
     const adminIdx = path.indexOf('/administracion/');
@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.ProcesosApoyoAdmin) window.ProcesosApoyoAdmin.init();
   });
 
-  // --- Procesos Misionales SGI (genérico) ---
+  // --- Procesos Misionales SGI (genÃÂ©rico) ---
   // Config para las 3 secciones misionales
   const misionalConfig = [
     {
@@ -407,7 +407,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function rebuildFilterOptions() {
-      // Categorías únicas de los items
+      // Categorías ÃÂºnicas de los items
       const cats = [...new Set(loadedItems.map((i) => i.category))].filter(
         Boolean,
       );
@@ -506,7 +506,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (file) {
           const fd = new FormData();
-          // ⚠️ Los campos de texto DEBEN ir antes del archivo
+          // Ã¢Å¡Â Ã¯Â¸Â Los campos de texto DEBEN ir antes del archivo
           // para que Multer los tenga en req.body al elegir destino
           fd.append("section", cfg.apiSection);
           fd.append("category", category); // subcarpeta destino
@@ -540,7 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     async function deleteItem(id) {
-      if (!confirm("¿Eliminar este documento?")) return;
+      if (!confirm("ÃÂ¿Eliminar este documento?")) return;
       try {
         const res = await fetch(`${API_BASE}/sgi/${cfg.apiSection}/${id}`, {
           method: "DELETE",
@@ -680,7 +680,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function deleteItem(id) {
       if (
-        !confirm("¿Eliminar este documento PCB? El archivo también se borrará.")
+        !confirm("ÃÂ¿Eliminar este documento PCB? El archivo tambiÃÂ©n se borrarÃÂ¡.")
       )
         return;
       try {
@@ -806,7 +806,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     async function deleteRow(id) {
-      if (!confirm("¿Eliminar esta fila de la tabla?")) return;
+      if (!confirm("ÃÂ¿Eliminar esta fila de la tabla?")) return;
       try {
         const res = await fetch(`${API_BASE}/pcb/tabla/${id}`, { method: "DELETE" });
         if (res.ok) {
@@ -964,7 +964,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     async function deleteItem(id) {
-      if (!confirm("¿Eliminar este manual? El archivo también se borrará."))
+      if (!confirm("ÃÂ¿Eliminar este manual? El archivo tambiÃÂ©n se borrarÃÂ¡."))
         return;
       try {
         const res = await fetch(`${API}/${id}`, { method: "DELETE" });
@@ -1141,7 +1141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     async function deleteItem(id) {
-      if (!confirm("¿Eliminar este documento?")) return;
+      if (!confirm("ÃÂ¿Eliminar este documento?")) return;
       try {
         const res = await fetch(`${API_BASE}/sgi/${API_SECTION}/${id}`, {
           method: "DELETE",
@@ -1337,7 +1337,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function deleteRespelItem(id) {
     if (
-      !confirm("¿Eliminar este registro? El archivo físico también se borrará.")
+      !confirm("ÃÂ¿Eliminar este registro? El archivo físico tambiÃÂ©n se borrarÃÂ¡.")
     )
       return;
     const section = respelCurrentSection.value;
@@ -1475,7 +1475,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   async function deleteRuaItem(id) {
-    if (!confirm("¿Eliminar este registro RUA?")) return;
+    if (!confirm("ÃÂ¿Eliminar este registro RUA?")) return;
     try {
       const res = await fetch(`${API_BASE}/rua/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -1615,7 +1615,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function deleteBoletinItem(id) {
     if (
-      !confirm("¿Eliminar este boletín? El archivo físico también se borrará.")
+      !confirm("ÃÂ¿Eliminar este boletín? El archivo físico tambiÃÂ©n se borrarÃÂ¡.")
     )
       return;
     try {
@@ -1752,7 +1752,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function switchSgiSection(section) {
     sgiCurrentSection.value = section;
-    sgiSubtitle.innerText = `Administra los documentos de ${section === "planeacion" ? "Planeación Estratégica" : "Mejora Continua"}.`;
+    sgiSubtitle.innerText = `Administra los documentos de ${section === "planeacion" ? "Planeación EstratÃÂ©gica" : "Mejora Continua"}.`;
 
     // Update Tabs UI
     sgiTabButtons.forEach((btn) => {
@@ -1921,7 +1921,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   async function deleteSgiItem(id) {
-    if (!confirm("¿Eliminar documento?")) return;
+    if (!confirm("ÃÂ¿Eliminar documento?")) return;
     const section = sgiCurrentSection.value;
     try {
       const res = await fetch(`${API_BASE}/sgi/${section}/${id}`, {
@@ -1971,13 +1971,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   window.deleteNews = async (id) => {
-    if (!confirm("¿Eliminar noticia?")) return;
+    if (!confirm("ÃÂ¿Eliminar noticia?")) return;
     await fetch(`${API_BASE}/news/${id}`, { method: "DELETE" });
     loadNewsList();
     showToast("Eliminada");
   };
 
-  // --- Preview dinámico de imagen seleccionada ---
+  // --- Preview dinÃÂ¡mico de imagen seleccionada ---
   const imageInput = document.getElementById("imageInput");
   const previewArea = document.getElementById("previewArea");
   const previewCard = document.getElementById("previewCard");
@@ -2060,7 +2060,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (newsRes.ok) {
-        showToast("Noticia publicada con éxito");
+        showToast("Noticia publicada con ÃÂ©xito");
         document.getElementById("newsForm").reset();
         previewArea.classList.add("hidden");
         loadNewsList(); // Refrescar lista y estadísticas
@@ -2274,7 +2274,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function del(id) {
-      if (!confirm("¿Eliminar archivo?")) return;
+      if (!confirm("ÃÂ¿Eliminar archivo?")) return;
       try {
         const res = await fetch(`${API}/${id}`, { method: "DELETE" });
         if (res.ok) {
@@ -2337,7 +2337,7 @@ document.addEventListener("DOMContentLoaded", () => {
       { id: "nav-list-news", perm: p.news },
       { id: "nav-agenda", perm: p.agenda_cas },
 
-      // SGI: Estratégicos
+      // SGI: EstratÃÂ©gicos
       { id: "nav-sgi", perm: p.sgi_planeacion },
       { id: "nav-mejora", perm: p.sgi_mejora },
 
@@ -2449,7 +2449,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Ocultar botones de acceso rápido en el dashboard
+    // Ocultar botones de acceso rÃÂ¡pido en el dashboard
     const dashboardButtons = document.querySelectorAll(
       "#dashboardSection .btn-secondary",
     );
@@ -2498,5 +2498,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => toast.classList.add("hidden"), 3000);
   }
 });
+
+
 
 

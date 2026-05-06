@@ -23,12 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const API = `../../api.php?route=${route}`;
   const container = document.querySelector(".main-scroll-area");
-  
+
   // Keep the header and breadcrumbs, but remove the meta-info-bar and all category sections
   const welcomeHeader = document.querySelector(".welcome-header");
   const metaInfoBar = document.querySelector(".meta-info-bar");
   if (metaInfoBar) metaInfoBar.remove();
-  
+
   // Remove existing hardcoded sections
   document.querySelectorAll(".category-section").forEach(s => s.remove());
 
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sortedCats.forEach(cat => {
       const section = document.createElement("section");
       section.className = "category-section";
-      
+
       const header = document.createElement("div");
       header.className = "category-header";
       header.innerHTML = `
@@ -98,10 +98,10 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <h3>${cat}</h3>
       `;
-      
+
       const grid = document.createElement("div");
       grid.className = "file-list-grid";
-      
+
       grouped[cat].forEach(item => {
         const a = document.createElement("a");
         a.href = item.fileUrl;
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         grid.appendChild(a);
       });
-      
+
       section.appendChild(header);
       section.appendChild(grid);
       container.appendChild(section);
@@ -126,3 +126,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadData();
 });
+
+

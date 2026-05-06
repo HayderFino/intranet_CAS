@@ -147,7 +147,7 @@ const CitaAdmin = (() => {
 
     try {
       let fileUrl = "";
-      
+
       // Step 1: Upload file if selected
       if (file) {
         const fd = new FormData();
@@ -177,7 +177,7 @@ const CitaAdmin = (() => {
 
       const res = await fetch(url, options);
       if (res.ok) {
-        showNotify(id ? "Manual actualizado" : "Manual subido con éxito");
+        showNotify(id ? "Manual actualizado" : "Manual subido con ÃÂ©xito");
         resetForm();
         load();
       } else {
@@ -213,7 +213,7 @@ const CitaAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("¿Seguro que deseas eliminar este archivo?")) return;
+    if (!confirm("ÃÂ¿Seguro que deseas eliminar este archivo?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -247,3 +247,5 @@ document.addEventListener("DOMContentLoaded", () => {
     CitaAdmin.init();
   }
 });
+
+

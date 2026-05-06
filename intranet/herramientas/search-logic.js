@@ -58,9 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
     resultsCount.innerText = "Buscando...";
 
     try {
-      // Calcular ruta base relativa a la raiz del proyecto (asumiendo que estamos en /herramientas/)
-      const apiPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/herramientas/')) + '/api/';
-      const url = `${apiPath}search?q=${encodeURIComponent(query)}&category=${category}&startDate=${startDate}&endDate=${endDate}`;
+      // Calcular ruta base relativa de forma más robusta
+      const currentPath = window.location.pathname;
+      const baseUrl = window.location.origin;
+      const apiPath = currentPath.split('/intranet/')[0] + '/intranet/api/';
+      
+      const url = `${baseUrl}${apiPath}search?q=${encodeURIComponent(query)}&category=${category}&startDate=${startDate}&endDate=${endDate}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
@@ -149,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${res.snippet ? `<p style="margin:0;color:#64748b;font-size:0.875rem;line-height:1.6;">${snippetHtml}</p>` : ""}
                 <div style="margin-top:0.25rem;color:#3b82f6;font-size:0.8rem;font-weight:600;
                             display:flex;align-items:center;gap:4px;">
-                    ${isFile ? "⬇ Descargar archivo" : "→ Ver recurso"}
+                    ${isFile ? "↓ Descargar archivo" : "→ Ver recurso"}
                 </div>
             </div>`;
       })
@@ -228,3 +231,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
+

@@ -148,7 +148,7 @@ const SirhAdmin = (() => {
 
     try {
       let fileUrl = "";
-      
+
       // Step 1: Upload file if selected
       if (file) {
         const fd = new FormData();
@@ -158,8 +158,8 @@ const SirhAdmin = (() => {
           body: fd,
         });
         if (!upRes.ok) {
-           const upErr = await upRes.json();
-           throw new Error(upErr.message || "Error en la subida del archivo");
+          const upErr = await upRes.json();
+          throw new Error(upErr.message || "Error en la subida del archivo");
         }
         const upData = await upRes.json();
         fileUrl = upData.fileUrl;
@@ -181,7 +181,7 @@ const SirhAdmin = (() => {
 
       const res = await fetch(url, options);
       if (res.ok) {
-        showNotify(id ? "Archivo actualizado" : "Archivo subido con éxito");
+        showNotify(id ? "Archivo actualizado" : "Archivo subido con ÃÂ©xito");
         resetForm();
         load();
       } else {
@@ -215,7 +215,7 @@ const SirhAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("¿Seguro que deseas eliminar este archivo?")) return;
+    if (!confirm("ÃÂ¿Seguro que deseas eliminar este archivo?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -248,3 +248,5 @@ document.addEventListener("DOMContentLoaded", () => {
     SirhAdmin.init();
   }
 });
+
+

@@ -8,6 +8,7 @@ const BASE_PATH = scriptSrc.substring(0, scriptSrc.lastIndexOf('/') + 1);
 
 // --- Carrusel Dinámico ---
 let currentSlide = 0;
+let carouselInterval = null;
 
 function moveCarousel(direction) {
   const track = document.getElementById("carouselTrack");
@@ -22,6 +23,16 @@ function moveCarousel(direction) {
   dots.forEach((dot, index) => {
     dot.classList.toggle("active", index === currentSlide);
   });
+
+  // Reiniciar el timer si el usuario mueve manualmente
+  if (direction !== 0) {
+    startCarouselTimer();
+  }
+}
+
+function startCarouselTimer() {
+  if (carouselInterval) clearInterval(carouselInterval);
+  carouselInterval = setInterval(() => moveCarousel(1), 4000);
 }
 
 function initCarousel() {
@@ -45,8 +56,8 @@ function initCarousel() {
     dotsContainer.appendChild(dot);
   });
 
-  // --- Auto-play del carrusel cada 5s
-  setInterval(() => moveCarousel(1), 5000);
+  // --- Auto-play del carrusel cada 4s
+  startCarouselTimer();
 }
 
 // --- Carga dinámica del Banner ---
@@ -69,18 +80,18 @@ async function loadDynamicBanner() {
             <div class="carousel-container">
                 <div class="carousel-track" id="carouselTrack">
                     ${banners
-                      .map((banner) => {
-                        const targetUrl = banner.fileUrl || banner.link || "#";
-                        const hasLink = targetUrl !== "#";
-                        return `
+        .map((banner) => {
+          const targetUrl = banner.fileUrl || banner.link || "#";
+          const hasLink = targetUrl !== "#";
+          return `
                         <div class="carousel-slide">
                             ${hasLink ? `<a href="${(targetUrl && !targetUrl.startsWith('http') && !targetUrl.startsWith('/')) ? BASE_PATH + targetUrl : targetUrl}" target="_blank">` : ""}
                                 <img src="${(banner.imageUrl && banner.imageUrl.startsWith('http')) ? banner.imageUrl : BASE_PATH + banner.imageUrl.replace(/^\/+/, '')}" alt="${banner.title}" title="${banner.title}">
                             ${hasLink ? "</a>" : ""}
                         </div>
                     `;
-                      })
-                      .join("")}
+        })
+        .join("")}
                 </div>
 
                 
@@ -111,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // --- Lógica de Búsqueda Global (Header) ---
+  // --- Lógica de BÃºsqueda Global (Header) ---
   const headerSearchInput = document.querySelector(".search-bar input");
   if (headerSearchInput) {
     headerSearchInput.addEventListener("keypress", (e) => {
@@ -175,8 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Cargar banner dinámico
   loadDynamicBanner();
 
-  // Inicializar carrusel si existe en la página fijo (ahora redundante si es dinámico, pero seguro dejarlo)
-  // initCarousel(); // Se llama dentro de loadDynamicBanner
+  // Inicializar carrusel si existe en la página fijo
+  initCarousel(); 
 
   // Activar nav link seleccionado
   const navLinks = document.querySelectorAll(".nav-links a");
@@ -212,12 +223,12 @@ document.addEventListener("DOMContentLoaded", () => {
         el.classList.remove("active");
         const otherBtn =
           el.previousElementSibling?.querySelector(".btn-expand");
-        if (otherBtn) otherBtn.innerHTML = "Ver m&aacute;s &#9662;";
+        if (otherBtn) otherBtn.innerHTML = "Ver más ▾";
       }
     });
 
     content.classList.toggle("active");
-    button.innerHTML = isActive ? "Ver m&aacute;s &#9662;" : "Cerrar &#9652;";
+    button.innerHTML = isActive ? "Ver más ▾" : "Cerrar ▴";
   };
 
   // Toast global (para páginas que no tienen el de admin)
@@ -244,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!feedContainer) return;
 
     try {
-      // Fetch múltiples fuentes en paralelo
+      // Fetch mÃºltiples fuentes en paralelo
       const endpoints = [
         { url: BASE_PATH + "api/eventos", type: "evento" },
         { url: BASE_PATH + "api/news", type: "noticia" },
@@ -270,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { url: BASE_PATH + "api/cita", type: "manual", cat: "CITA" },
         { url: BASE_PATH + "api/sirh", type: "manual", cat: "SIRH" },
         { url: BASE_PATH + "api/snif", type: "manual", cat: "SNIF" },
-        { url: BASE_PATH + "api/revision-red", type: "manual", cat: "REVISIÓN RED" },
+        { url: BASE_PATH + "api/revision-red", type: "manual", cat: "REVISIÃN RED" },
       ];
 
       const responses = await Promise.all(
@@ -329,10 +340,10 @@ document.addEventListener("DOMContentLoaded", () => {
           } else if (type === "manual") {
             normalized.title =
               cat.startsWith("Manual") ||
-              cat.startsWith("REVISIÓN") ||
-              cat === "CITA" ||
-              cat === "SIRH" ||
-              cat === "SNIF"
+                cat.startsWith("REVISIÃN") ||
+                cat === "CITA" ||
+                cat === "SIRH" ||
+                cat === "SNIF"
                 ? `Manual ${cat}`
                 : `Nuevo ${cat}`;
             normalized.desc =
@@ -358,7 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       feedContainer.innerHTML = "";
-      // Mostrar los últimos 6 movimientos
+      // Mostrar los Ãºltimos 6 movimientos
       activity.slice(0, 6).forEach((item) => {
         const feedItem = document.createElement("div");
         feedItem.className = "feed-item";
@@ -404,7 +415,7 @@ window.openNewsModal = (item) => {
     overlay.className = "modal-overlay";
     overlay.innerHTML = `
             <div class="modal-content">
-                <button class="modal-close" onclick="closeNewsModal()">&times;</button>
+                <button class="modal-close" onclick="closeNewsModal()">×</button>
                 <div id="modal-news-data"></div>
             </div>
         `;
@@ -445,98 +456,98 @@ window.closeNewsModal = () => {
 // into their respective html pages.
 // ============================================
 document.addEventListener("DOMContentLoaded", () => {
-    const modules = [
-        { api: 'manual-funciones', grid: 'manual-funciones-grid', card: 'pdf-folder-card' },
-        { api: 'plan-monitoreo', grid: 'plan-monitoreo-grid', card: 'pdf-folder-card' },
-        { api: 'planes-talento', grid: 'planes-grid', card: 'plan-item' },
-        { api: 'convocatorias', grid: 'convocatorias-grid', card: 'pdf-folder-card' },
-        { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'pdf-folder-card' },
-        { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'pdf-folder-card' },
-        { api: 'manuales-sgi', grid: 'manuales-sgi-grid', card: 'pdf-folder-card' },
-        { api: 'boletines', grid: 'boletines-historico-grid', card: 'bulletin-card' },
-        { api: 'politicas-sgi', grid: 'politicas-grid', card: 'pdf-folder-card' },
-        { api: 'cita', grid: 'cita-grid', card: 'pdf-folder-card' },
-        { api: 'sirh', grid: 'sirh-grid', card: 'pdf-folder-card' },
-        { api: 'snif', grid: 'snif-docs-grid', card: 'pdf-folder-card' },
-        { api: 'revision-red', grid: 'revision-red-docs-grid', card: 'pdf-folder-card' },
-        { api: 'rua', grid: 'rua-docs-grid', card: 'pdf-folder-card' },
-        { api: 'pcb', grid: 'pcb-docs-grid', card: 'pdf-folder-card' },
-        { api: 'respel/documentos', grid: 'respel-docs-grid', card: 'pdf-folder-card' },
-        { api: 'respel/empresas', grid: 'respel-empresas-tbody', card: 'table-row' },
-        { api: 'sgi/planeacion-estrategica', grid: 'anexos-grid', card: 'file-item' },
-        { api: 'sgi/mejora-continua', grid: 'caracterizacion-grid', card: 'file-item' },
-        { api: 'sgi/admin-recursos', grid: 'caracterizacion-grid', card: 'file-item' },
-        { api: 'sgi/vigilancia-control', grid: 'caracterizacion-grid', card: 'file-item' },
-        { api: 'sgi/planeacion-ambiental', grid: 'caracterizacion-grid', card: 'file-item' }
-    ];
+  const modules = [
+    { api: 'manual-funciones', grid: 'manual-funciones-grid', card: 'pdf-folder-card' },
+    { api: 'plan-monitoreo', grid: 'plan-monitoreo-grid', card: 'pdf-folder-card' },
+    { api: 'planes-talento', grid: 'planes-grid', card: 'plan-item' },
+    { api: 'convocatorias', grid: 'convocatorias-grid', card: 'pdf-folder-card' },
+    { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'pdf-folder-card' },
+    { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'pdf-folder-card' },
+    { api: 'manuales-sgi', grid: 'manuales-sgi-grid', card: 'pdf-folder-card' },
+    { api: 'boletines', grid: 'boletines-historico-grid', card: 'bulletin-card' },
+    { api: 'politicas-sgi', grid: 'politicas-grid', card: 'pdf-folder-card' },
+    { api: 'cita', grid: 'cita-grid', card: 'pdf-folder-card' },
+    { api: 'sirh', grid: 'sirh-grid', card: 'pdf-folder-card' },
+    { api: 'snif', grid: 'snif-docs-grid', card: 'pdf-folder-card' },
+    { api: 'revision-red', grid: 'revision-red-docs-grid', card: 'pdf-folder-card' },
+    { api: 'rua', grid: 'rua-docs-grid', card: 'pdf-folder-card' },
+    { api: 'pcb', grid: 'pcb-docs-grid', card: 'pdf-folder-card' },
+    { api: 'respel/documentos', grid: 'respel-docs-grid', card: 'pdf-folder-card' },
+    { api: 'respel/empresas', grid: 'respel-empresas-tbody', card: 'table-row' },
+    { api: 'sgi/planeacion-estrategica', grid: 'anexos-grid', card: 'file-item' },
+    { api: 'sgi/mejora-continua', grid: 'caracterizacion-grid', card: 'file-item' },
+    { api: 'sgi/admin-recursos', grid: 'caracterizacion-grid', card: 'file-item' },
+    { api: 'sgi/vigilancia-control', grid: 'caracterizacion-grid', card: 'file-item' },
+    { api: 'sgi/planeacion-ambiental', grid: 'caracterizacion-grid', card: 'file-item' }
+  ];
 
-    modules.forEach(async m => {
-        const gridEl = document.getElementById(m.grid);
-        if (!gridEl) return;
+  modules.forEach(async m => {
+    const gridEl = document.getElementById(m.grid);
+    if (!gridEl) return;
 
-        // Seguridad extra: Solo cargar boletines en su página específica
-        if (m.api === 'boletines' && !window.location.pathname.includes('boletines.html')) {
-            return;
+    // Seguridad extra: Solo cargar boletines en su página específica
+    if (m.api === 'boletines' && !window.location.pathname.includes('boletines.html')) {
+      return;
+    }
+
+    // Filtro para módulos SGI: Solo cargar en su página respectiva
+    if (m.api.startsWith('sgi/')) {
+      const section = m.api.split('/')[1];
+      // Mapeo de secciones a nombres de archivos
+      const sectionPageMap = {
+        'planeacion-estrategica': 'planeacion-estrategica.html',
+        'mejora-continua': 'mejora-continua.html',
+        'admin-recursos': 'admin-recursos.html',
+        'vigilancia-control': 'vigilancia-control.html',
+        'planeacion-ambiental': 'planeacion-ambiental.html'
+      };
+
+      if (sectionPageMap[section] && !window.location.pathname.includes(sectionPageMap[section])) {
+        return;
+      }
+    }
+
+    try {
+      const r = await fetch(BASE_PATH + 'api/' + m.api);
+      if (!r.ok) return;
+      const items = await r.json();
+      const htmlParts = {};
+
+      items.forEach(item => {
+        const fUrl = item.fileUrl || item.href || '';
+        const ext = fUrl.split('.').pop().toLowerCase();
+        let color = '#ef4444', bg = '#ef4444', tstr = 'Descargar PDF'; // Default to Red for PDF
+        if (['xls', 'xlsx'].includes(ext)) { color = '#1d6f42'; bg = '#1d6f42'; tstr = 'Descargar XLSX'; }
+        else if (['doc', 'docx'].includes(ext)) { color = '#2b579a'; bg = '#2b579a'; tstr = 'Descargar DOCX'; }
+        else if (['ppt', 'pptx'].includes(ext)) { color = '#d24726'; bg = '#d24726'; tstr = 'Descargar PPT'; }
+
+        let url = fUrl;
+        if (fUrl && !fUrl.startsWith('http') && !fUrl.startsWith('/')) {
+          url = BASE_PATH + fUrl;
         }
+        const titleSafe = item.name || item.title || 'Documento';
 
-        // Filtro para módulos SGI: Solo cargar en su página respectiva
-        if (m.api.startsWith('sgi/')) {
-            const section = m.api.split('/')[1];
-            // Mapeo de secciones a nombres de archivos
-            const sectionPageMap = {
-                'planeacion-estrategica': 'planeacion-estrategica.html',
-                'mejora-continua': 'mejora-continua.html',
-                'admin-recursos': 'admin-recursos.html',
-                'vigilancia-control': 'vigilancia-control.html',
-                'planeacion-ambiental': 'planeacion-ambiental.html'
-            };
-            
-            if (sectionPageMap[section] && !window.location.pathname.includes(sectionPageMap[section])) {
-                return;
-            }
-        }
-
-        try {
-            const r = await fetch(BASE_PATH + 'api/' + m.api);
-            if (!r.ok) return;
-            const items = await r.json();
-            const htmlParts = {};
-            
-            items.forEach(item => {
-               const fUrl = item.fileUrl || item.href || '';
-               const ext = fUrl.split('.').pop().toLowerCase();
-               let color = '#ef4444', bg = '#ef4444', tstr = 'Descargar PDF'; // Default to Red for PDF
-               if (['xls','xlsx'].includes(ext)) { color = '#1d6f42'; bg = '#1d6f42'; tstr = 'Descargar XLSX'; }
-               else if (['doc','docx'].includes(ext)) { color = '#2b579a'; bg = '#2b579a'; tstr = 'Descargar DOCX'; }
-               else if (['ppt','pptx'].includes(ext)) { color = '#d24726'; bg = '#d24726'; tstr = 'Descargar PPT'; }
-               
-               let url = fUrl;
-               if (fUrl && !fUrl.startsWith('http') && !fUrl.startsWith('/')) {
-                   url = BASE_PATH + fUrl;
-               }
-               const titleSafe = item.name || item.title || 'Documento';
-
-                let cardHtml = "";
-                if (m.card === 'table-row') {
-                    const rowBg = item.isAlternate ? '#f9fbe7' : '#fff';
-                    cardHtml = `
+        let cardHtml = "";
+        if (m.card === 'table-row') {
+          const rowBg = item.isAlternate ? '#f9fbe7' : '#fff';
+          cardHtml = `
                     <tr style="background: ${rowBg}">
                       <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e0e0e0;">${titleSafe}</td>
                       <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e0e0e0; text-align: center;">${item.actNum || '-'}</td>
                       <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e0e0e0; text-align: center;">${item.actDate || '-'}</td>
                       <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e0e0e0; text-align: center;">
-                        <a href="${url}" target="_blank" class="respel-file-badge">&#128196; ${item.fileName || 'VER DOCUMENTO'}</a>
+                        <a href="${url}" target="_blank" class="respel-file-badge">📄 ${item.fileName || 'VER DOCUMENTO'}</a>
                       </td>
                     </tr>`;
-                } else if (m.card === 'plan-item') {
-                    cardHtml = `<a href="${url}" class="plan-item" data-id="${item.id}" target="_blank">
+        } else if (m.card === 'plan-item') {
+          cardHtml = `<a href="${url}" class="plan-item" data-id="${item.id}" target="_blank">
                         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" style="color:${color}">
                             <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
                         </svg>
                         ${titleSafe}
                     </a>`;
-                } else if (m.card === 'doc-item') {
-                    cardHtml = `<div class="doc-item" data-id="${item.id}">
+        } else if (m.card === 'doc-item') {
+          cardHtml = `<div class="doc-item" data-id="${item.id}">
                         <div class="doc-header">
                             <span class="doc-type">${item.type || 'DOCUMENTO'}</span>
                             <span class="doc-date">${item.date || ''}</span>
@@ -545,8 +556,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         <div class="doc-description">${item.description || ''}</div>
                         <a href="${url}" class="btn-download" target="_blank">Descargue aquí Documento</a>
                     </div>`;
-                } else if (m.card === 'bulletin-card') {
-                    cardHtml = `<a href="${url}" class="bulletin-list-item" data-id="${item.id}" target="_blank" style="text-decoration:none; display:flex; align-items:center; gap:1.25rem; padding:1rem; background:white; border:1px solid #e2e8f0; border-radius:12px; transition:all 0.3s ease;">
+        } else if (m.card === 'bulletin-card') {
+          cardHtml = `<a href="${url}" class="bulletin-list-item" data-id="${item.id}" target="_blank" style="text-decoration:none; display:flex; align-items:center; gap:1.25rem; padding:1rem; background:white; border:1px solid #e2e8f0; border-radius:12px; transition:all 0.3s ease;">
                          <div style="width:44px; height:44px; background:#f1f5f9; border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--primary); flex-shrink:0;">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                          </div>
@@ -556,64 +567,64 @@ document.addEventListener("DOMContentLoaded", () => {
                          </div>
                          <span style="padding:0.4rem 1rem; background:var(--primary); color:white; border-radius:8px; font-size:0.75rem; font-weight:700; white-space:nowrap;">Ver Boletín</span>
                     </a>`;
-                } else if (m.card === 'file-item') {
-                    const fname = url.split('/').pop();
-                    cardHtml = `<a href="${url}" class="file-item" data-id="${item.id}" download="${decodeURIComponent(fname)}">
+        } else if (m.card === 'file-item') {
+          const fname = url.split('/').pop();
+          cardHtml = `<a href="${url}" class="file-item" data-id="${item.id}" download="${decodeURIComponent(fname)}">
                         <div class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
                         <div class="file-name">${titleSafe}</div>
                     </a>`;
-                } else {
-                    const codeHtml = item.code ? `<p style="font-size: 0.8rem; color: var(--text-light); margin: -0.5rem 0 0.5rem 0;">${item.code}</p>` : '';
-                    cardHtml = `<a href="${url}" class="${m.card}" data-id="${item.id}" target="_blank" style="text-decoration:none;">
+        } else {
+          const codeHtml = item.code ? `<p style="font-size: 0.8rem; color: var(--text-light); margin: -0.5rem 0 0.5rem 0;">${item.code}</p>` : '';
+          cardHtml = `<a href="${url}" class="${m.card}" data-id="${item.id}" target="_blank" style="text-decoration:none;">
                   <div class="file-icon" style="color:${color};"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
                   <h4>${titleSafe}</h4>
                   ${codeHtml}
                   <span class="btn-pdf-download" style="background:${bg};">${tstr}</span>
                </a>`;
-                }
+        }
 
-                if (item.category) {
-                    const catId = item.category.toLowerCase()
-                        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-                        .replace(/[^a-z0-9]/g, '-')
-                        .replace(/-+/g, '-')
-                        .replace(/^-|-$/g, '')
-                        + '-grid';
-                    if (!htmlParts[catId]) htmlParts[catId] = "";
-                    htmlParts[catId] += cardHtml;
-                } else {
-                    if (!htmlParts[m.grid]) htmlParts[m.grid] = "";
-                    htmlParts[m.grid] += cardHtml;
-                }
-            });
+        if (item.category) {
+          const catId = item.category.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9]/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '')
+            + '-grid';
+          if (!htmlParts[catId]) htmlParts[catId] = "";
+          htmlParts[catId] += cardHtml;
+        } else {
+          if (!htmlParts[m.grid]) htmlParts[m.grid] = "";
+          htmlParts[m.grid] += cardHtml;
+        }
+      });
 
-            // Inyectamos en cada grid de categoría detectado (si el item tenía categoría)
-            Object.keys(htmlParts).forEach(gridId => {
-                if (gridId === m.grid) return; // Se maneja abajo
-                
-                const targetGrid = document.getElementById(gridId);
-                if (targetGrid) {
-                    const endMarkerPat = gridId.toUpperCase().replace(/-/g, '_').replace(/\//g, '_') + '_GRID';
-                    if (targetGrid.innerHTML.includes('END_' + endMarkerPat)) {
-                         const part1 = targetGrid.innerHTML.split('<!-- END_' + endMarkerPat + ' -->')[0];
-                         targetGrid.innerHTML = part1 + htmlParts[gridId] + '\n\n                <!-- END_' + endMarkerPat + ' -->';
-                    } else {
-                        targetGrid.innerHTML = htmlParts[gridId];
-                    }
-                }
-            });
+      // Inyectamos en cada grid de categoría detectado (si el item tenía categoría)
+      Object.keys(htmlParts).forEach(gridId => {
+        if (gridId === m.grid) return; // Se maneja abajo
 
-            // Comportamiento normal para el grid principal del módulo
-            const targetGrid = document.getElementById(m.grid);
-            if (targetGrid) {
-                const endMarkerPat = m.grid.toUpperCase().replace(/-/g, '_').replace(/\//g, '_') + '_GRID';
-                if (targetGrid.innerHTML.includes('END_' + endMarkerPat)) {
-                     const part1 = targetGrid.innerHTML.split('<!-- END_' + endMarkerPat + ' -->')[0];
-                     targetGrid.innerHTML = part1 + (htmlParts[m.grid] || '') + '\n\n                <!-- END_' + endMarkerPat + ' -->';
-                } else {
-                    targetGrid.innerHTML = htmlParts[m.grid] || '';
-                }
-            }
-        } catch (e) { console.error('Error fetching', m.api, e); }
-    });
+        const targetGrid = document.getElementById(gridId);
+        if (targetGrid) {
+          const endMarkerPat = gridId.toUpperCase().replace(/-/g, '_').replace(/\//g, '_') + '_GRID';
+          if (targetGrid.innerHTML.includes('END_' + endMarkerPat)) {
+            const part1 = targetGrid.innerHTML.split('<!-- END_' + endMarkerPat + ' -->')[0];
+            targetGrid.innerHTML = part1 + htmlParts[gridId] + '\n\n                <!-- END_' + endMarkerPat + ' -->';
+          } else {
+            targetGrid.innerHTML = htmlParts[gridId];
+          }
+        }
+      });
+
+      // Comportamiento normal para el grid principal del módulo
+      const targetGrid = document.getElementById(m.grid);
+      if (targetGrid) {
+        const endMarkerPat = m.grid.toUpperCase().replace(/-/g, '_').replace(/\//g, '_') + '_GRID';
+        if (targetGrid.innerHTML.includes('END_' + endMarkerPat)) {
+          const part1 = targetGrid.innerHTML.split('<!-- END_' + endMarkerPat + ' -->')[0];
+          targetGrid.innerHTML = part1 + (htmlParts[m.grid] || '') + '\n\n                <!-- END_' + endMarkerPat + ' -->';
+        } else {
+          targetGrid.innerHTML = htmlParts[m.grid] || '';
+        }
+      }
+    } catch (e) { console.error('Error fetching', m.api, e); }
+  });
 });

@@ -22,7 +22,7 @@ const ManualFuncionesAdmin = (() => {
   let items = [];
 
   function init() {
-    // Inicializar elementos aquí para asegurar que el DOM esté listo
+    // Inicializar elementos aquí para asegurar que el DOM estÃÂ© listo
     elements = {
       form: document.getElementById("manualFuncionesForm"),
       name: document.getElementById("manualFuncionesName"),
@@ -70,7 +70,7 @@ const ManualFuncionesAdmin = (() => {
   }
 
   async function load() {
-    // Aseguramos que elements esté poblado si load es llamado antes de init de forma externa
+    // Aseguramos que elements estÃÂ© poblado si load es llamado antes de init de forma externa
     if (!elements.list) {
       elements.list = document.getElementById("manualFuncionesItemsList");
       if (!elements.list) return;
@@ -189,7 +189,7 @@ const ManualFuncionesAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("¿Eliminar este manual?")) return;
+    if (!confirm("ÃÂ¿Eliminar este manual?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -234,3 +234,5 @@ document.addEventListener("DOMContentLoaded", () => {
     ManualFuncionesAdmin.init();
   }
 });
+
+

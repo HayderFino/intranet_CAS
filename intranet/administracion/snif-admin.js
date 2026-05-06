@@ -82,7 +82,7 @@ const SnifAdmin = (() => {
 
     try {
       showNotify(editId ? "Actualizando..." : "Subiendo...", "info");
-      
+
       let fileUrl = "";
       if (file) {
         const fd = new FormData();
@@ -141,7 +141,7 @@ const SnifAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("¿Estás seguro?")) return;
+    if (!confirm("ÃÂ¿EstÃÂ¡s seguro?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -168,3 +168,5 @@ const SnifAdmin = (() => {
 
 document.addEventListener("DOMContentLoaded", SnifAdmin.init);
 window.SnifAdmin = SnifAdmin;
+
+

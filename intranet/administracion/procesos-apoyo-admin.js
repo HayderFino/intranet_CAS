@@ -117,18 +117,18 @@ const ProcesosApoyoAdmin = (() => {
   function renderGrid() {
     if (!elements.grid) return;
     elements.grid.innerHTML = "";
-    
+
     Object.keys(PROCESSES).forEach(key => {
       try {
         const p = PROCESSES[key];
         const card = document.createElement("div");
         card.className = "folder-card";
         card.style.cssText = "background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.2s; text-align: center; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);";
-        
+
         card.onmouseover = () => card.style.transform = "translateY(-5px)";
         card.onmouseout = () => card.style.transform = "translateY(0)";
         card.onclick = () => selectProcess(key);
-        
+
         card.innerHTML = `
           <div style="width: 60px; height: 60px; background: #fff7ed; color: #f97316; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
             <svg viewBox="0 0 24 24" style="width: 32px; height: 32px;"><path fill="currentColor" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
@@ -153,10 +153,10 @@ const ProcesosApoyoAdmin = (() => {
     API = `../api/${currentProcess}`;
     elements.processSelect.value = key;
     elements.currentTitle.textContent = PROCESSES[key].name;
-    
+
     elements.grid.classList.add("hidden");
     elements.adminArea.classList.remove("hidden");
-    
+
     updateCategories();
     resetForm();
     load();
@@ -164,7 +164,7 @@ const ProcesosApoyoAdmin = (() => {
 
   function updateCategories() {
     const categories = PROCESSES[currentProcess].categories;
-    
+
     // Update form category select
     elements.category.innerHTML = '<option value="" disabled selected>Seleccione subcarpeta...</option>';
     categories.forEach(cat => {
@@ -259,7 +259,7 @@ const ProcesosApoyoAdmin = (() => {
     if (file) {
       const ext = "." + file.name.split(".").pop().toLowerCase();
       if (FORBIDDEN_EXTS.includes(ext)) return notify("Extensión no permitida", "error");
-      if (file.size > MAX_SIZE_BYTES) return notify(`Máximo ${MAX_SIZE_MB}MB`, "error");
+      if (file.size > MAX_SIZE_BYTES) return notify(`MÃÂ¡ximo ${MAX_SIZE_MB}MB`, "error");
 
       notify("Subiendo archivo...", "info");
       const fd = new FormData();
@@ -316,7 +316,7 @@ const ProcesosApoyoAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("¿Seguro que desea eliminar este archivo?")) return;
+    if (!confirm("ÃÂ¿Seguro que desea eliminar este archivo?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -339,3 +339,5 @@ const ProcesosApoyoAdmin = (() => {
 })();
 
 window.ProcesosApoyoAdmin = ProcesosApoyoAdmin;
+
+

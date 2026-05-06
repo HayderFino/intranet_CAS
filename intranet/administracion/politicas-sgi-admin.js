@@ -75,21 +75,19 @@ const PoliticasSgiAdmin = (() => {
                         <h4 style="margin:0; font-size:1.05rem; color:#1e293b;">${item.title}</h4>
                     </div>
                     
-                    ${
-                      item.code
-                        ? `
+                    ${item.code
+          ? `
                     <div style="background:#f1f5f9; color:#475569; padding:0.6rem; border-radius:8px; font-size:0.8rem; margin-bottom:0.75rem; line-height:1.5; overflow-wrap: anywhere; word-break: break-word;">
                         ${item.code}
                     </div>`
-                        : ""
-                    }
+          : ""
+        }
 
                     <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
-                        ${
-                          item.href && item.href !== "#"
-                            ? `<a href="${item.href}" target="_blank" class="admin-file-badge">📄 Ver Documento</a>`
-                            : '<span style="font-size:0.72rem; color:#94a3b8; font-style:italic;">⚠️ Sin archivo cargado</span>'
-                        }
+                        ${item.href && item.href !== "#"
+          ? `<a href="${item.href}" target="_blank" class="admin-file-badge">Ã°Å¸ââ Ver Documento</a>`
+          : '<span style="font-size:0.72rem; color:#94a3b8; font-style:italic;">Ã¢Å¡Â Ã¯Â¸Â Sin archivo cargado</span>'
+        }
                     </div>
                 </div>
                 <div class="card-actions" style="margin-left: 1.5rem;">
@@ -106,8 +104,8 @@ const PoliticasSgiAdmin = (() => {
       .querySelectorAll(".btn-edit")
       .forEach(
         (btn) =>
-          (btn.onclick = () =>
-            startEdit(items.find((i) => i.id === btn.dataset.id))),
+        (btn.onclick = () =>
+          startEdit(items.find((i) => i.id === btn.dataset.id))),
       );
   }
 
@@ -171,7 +169,7 @@ const PoliticasSgiAdmin = (() => {
         body: JSON.stringify(payload),
       });
       if (res.ok) {
-        toast(id ? "Actualizado ✓" : "Guardado ✓");
+        toast(id ? "Actualizado Ã¢Åâ" : "Guardado Ã¢Åâ");
         cancelEdit();
         load();
       } else {
@@ -183,7 +181,7 @@ const PoliticasSgiAdmin = (() => {
   }
 
   async function deleteItem(id) {
-    if (!confirm("¿Eliminar este documento?")) return;
+    if (!confirm("ÃÂ¿Eliminar este documento?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -209,3 +207,5 @@ const PoliticasSgiAdmin = (() => {
 })();
 
 window.PoliticasSgiAdmin = PoliticasSgiAdmin;
+
+

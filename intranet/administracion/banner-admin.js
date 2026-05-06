@@ -26,7 +26,7 @@ const BannerAdmin = {
                         <h4>${banner.title}</h4>
                         <p style="font-size: 0.8rem; color: #64748b;">
                             Orden: ${banner.order} | ${banner.link || "Sin link"}<br>
-                            ${banner.fileUrl ? `<span style="color: #059669;">📄 Archivo: ${banner.fileUrl.split("/").pop()}</span>` : '<span style="color: #94a3b8;">Sin archivo asociado</span>'}
+                            ${banner.fileUrl ? `<span style="color: #059669;">Ã°Å¸ââ Archivo: ${banner.fileUrl.split("/").pop()}</span>` : '<span style="color: #94a3b8;">Sin archivo asociado</span>'}
                         </p>
                     </div>
                     <div class="card-actions">
@@ -53,7 +53,7 @@ const BannerAdmin = {
     const imageFile = document.getElementById("bannerImage").files[0];
     const associatedFile = document.getElementById("bannerFile").files[0];
 
-    // Al crear, los data-* no existen → inicializamos en ''
+    // Al crear, los data-* no existen Ã¢â â inicializamos en ''
     let imageUrl = form.dataset.currentImageUrl || "";
     let fileUrl = form.dataset.currentFileUrl || "";
 
@@ -137,7 +137,7 @@ const BannerAdmin = {
   },
 
   delete: async function (id) {
-    if (!confirm("¿Estás seguro de eliminar este banner?")) return;
+    if (!confirm("ÃÂ¿EstÃÂ¡s seguro de eliminar este banner?")) return;
 
     try {
       const res = await fetch(`${this.API_URL}/${id}`, { method: "DELETE" });
@@ -175,3 +175,5 @@ document.addEventListener("DOMContentLoaded", () => {
     cancelBtn.addEventListener("click", () => BannerAdmin.resetForm());
   }
 });
+
+
