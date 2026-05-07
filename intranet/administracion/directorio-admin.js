@@ -79,7 +79,7 @@ const DirectorioAdmin = {
   },
 
   delete: async function (id) {
-    if (!confirm("ÃÂ¿Eliminar este contacto?")) return;
+    if (!confirm("¡¿Eliminar este contacto?")) return;
     const res = await fetch(`${this.API}/${id}`, { method: "DELETE" });
     if (res.ok) {
       showToast("Contacto eliminado");

@@ -213,7 +213,7 @@ const PlanesTalentoAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("ÃÂ¿Eliminar este documento?")) return;
+    if (!confirm("¡¿Eliminar este documento?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {

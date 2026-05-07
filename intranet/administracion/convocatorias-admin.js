@@ -103,7 +103,7 @@ window.ConvocatoriasAdmin = (() => {
         body: fd,
       });
       if (res.ok) {
-        alert("ÃÂ¡éxito!");
+        alert("¡¡éxito!");
         resetForm();
         load();
       } else {
@@ -145,7 +145,7 @@ window.ConvocatoriasAdmin = (() => {
   }
 
   async function deleteByBtn(id) {
-    if (!confirm("ÃÂ¿Eliminar esta convocatoria?")) return;
+    if (!confirm("¡¿Eliminar esta convocatoria?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {

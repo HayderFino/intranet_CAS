@@ -317,7 +317,7 @@ const MeciAdmin = (() => {
   }
 
   async function deleteItem(id) {
-    if (!confirm("ÃÂ¿Eliminar este documento? Esta acción no se puede deshacer."))
+    if (!confirm("¡¿Eliminar este documento? Esta acción no se puede deshacer."))
       return;
     try {
       const res = await fetch(`${API_BASE}${activeTab.route}/${id}`, {

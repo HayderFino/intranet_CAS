@@ -112,7 +112,7 @@ window.ProvisionEmpleosAdmin = (() => {
         body: fd,
       });
       if (res.ok) {
-        alert("ÃÂ¡Documento guardado con ÃÂ©xito!");
+        alert("¡¡Documento guardado con ÃÂ©xito!");
         resetForm();
         load();
       } else {
@@ -165,7 +165,7 @@ window.ProvisionEmpleosAdmin = (() => {
   }
 
   async function deleteByBtn(id) {
-    if (!confirm("ÃÂ¿Eliminar este documento definitivamente?")) return;
+    if (!confirm("¡¿Eliminar este documento definitivamente?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {

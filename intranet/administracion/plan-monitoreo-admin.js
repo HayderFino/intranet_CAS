@@ -185,7 +185,7 @@ const PlanMonitoreoAdmin = (() => {
         "El archivo principal no se puede eliminar por seguridad.",
         "info",
       );
-    if (!confirm("ÃÂ¿Eliminar este archivo?")) return;
+    if (!confirm("¡¿Eliminar este archivo?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
