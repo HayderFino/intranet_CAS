@@ -307,6 +307,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.ProcesosApoyoAdmin) window.ProcesosApoyoAdmin.init();
   });
 
+  // ── Galería Fotográfica ──────────────────────────────────
+  navItems.galeria = document.getElementById("nav-galeria");
+  sections.galeria = document.getElementById("galeriaSection");
+  safeClick(navItems.galeria, () => {
+    hideAll();
+    if (sections.galeria) sections.galeria.classList.remove("hidden");
+    if (navItems.galeria) navItems.galeria.classList.add("active");
+    if (typeof GaleriaAdmin !== "undefined") GaleriaAdmin.renderSection();
+  });
+
   // --- Procesos Misionales SGI (genÃÂ©rico) ---
   // Config para las 3 secciones misionales
   const misionalConfig = [
@@ -2498,7 +2508,3 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => toast.classList.add("hidden"), 3000);
   }
 });
-
-
-
-
