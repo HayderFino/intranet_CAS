@@ -115,7 +115,7 @@ const InformeGestionAdmin = {
   },
 
   delete: async function (id) {
-    if (!confirm("ÃÂ¿EstÃÂ¡s seguro de eliminar este informe?")) return;
+    if (!confirm("¡¿EstÃÂ¡s seguro de eliminar este informe?")) return;
 
     try {
       const res = await fetch(`${this.API_URL}/${id}`, { method: "DELETE" });

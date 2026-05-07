@@ -85,7 +85,7 @@ const EventosAdmin = {
   },
 
   delete: async function (id) {
-    if (!confirm("ÃÂ¿Eliminar esta entrada?")) return;
+    if (!confirm("¡¿Eliminar esta entrada?")) return;
     const res = await fetch(`${this.API}/${id}`, { method: "DELETE" });
     if (res.ok) {
       showToast("Eliminado");

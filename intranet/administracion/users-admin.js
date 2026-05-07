@@ -36,6 +36,8 @@ const UsersAdmin = (() => {
       rua: document.getElementById("perm-rua"),
       boletines_git: document.getElementById("perm-boletines_git"),
       pcb: document.getElementById("perm-pcb"),
+      galeria: document.getElementById("perm-galeria"),
+      procesos_apoyo: document.getElementById("perm-procesos_apoyo"),
 
       // GIT
       cita: document.getElementById("perm-cita"),
@@ -173,7 +175,7 @@ const UsersAdmin = (() => {
   }
 
   async function deleteUser(id) {
-    if (!confirm("ÃÂ¿EstÃÂ¡s seguro de eliminar este usuario?")) return;
+    if (!confirm("¡¿EstÃÂ¡s seguro de eliminar este usuario?")) return;
 
     try {
       const res = await fetch(`../api/users/${id}`, { method: "DELETE" });

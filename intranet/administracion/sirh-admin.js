@@ -215,7 +215,7 @@ const SirhAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("ÃÂ¿Seguro que deseas eliminar este archivo?")) return;
+    if (!confirm("¡¿Seguro que deseas eliminar este archivo?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {

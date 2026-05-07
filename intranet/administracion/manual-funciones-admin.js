@@ -189,7 +189,7 @@ const ManualFuncionesAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("ÃÂ¿Eliminar este manual?")) return;
+    if (!confirm("¡¿Eliminar este manual?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {

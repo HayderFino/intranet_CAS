@@ -316,7 +316,7 @@ const ProcesosApoyoAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("ÃÂ¿Seguro que desea eliminar este archivo?")) return;
+    if (!confirm("¡¿Seguro que desea eliminar este archivo?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {

@@ -181,7 +181,7 @@ const PoliticasSgiAdmin = (() => {
   }
 
   async function deleteItem(id) {
-    if (!confirm("ÃÂ¿Eliminar este documento?")) return;
+    if (!confirm("¡¿Eliminar este documento?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {

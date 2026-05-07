@@ -137,7 +137,7 @@ const BannerAdmin = {
   },
 
   delete: async function (id) {
-    if (!confirm("ÃÂ¿EstÃÂ¡s seguro de eliminar este banner?")) return;
+    if (!confirm("¡¿EstÃÂ¡s seguro de eliminar este banner?")) return;
 
     try {
       const res = await fetch(`${this.API_URL}/${id}`, { method: "DELETE" });

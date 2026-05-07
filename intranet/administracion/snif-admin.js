@@ -141,7 +141,7 @@ const SnifAdmin = (() => {
   }
 
   async function del(id) {
-    if (!confirm("ÃÂ¿EstÃÂ¡s seguro?")) return;
+    if (!confirm("¡¿EstÃÂ¡s seguro?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {

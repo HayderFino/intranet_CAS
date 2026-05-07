@@ -203,7 +203,7 @@ const RevisionRedAdmin = (() => {
   async function del(id) {
     if (
       !confirm(
-        "ÃÂ¿Seguro que deseas eliminar este archivo? Esta acción no se puede deshacer.",
+        "¡¿Seguro que deseas eliminar este archivo? Esta acción no se puede deshacer.",
       )
     )
       return;
