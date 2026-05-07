@@ -338,35 +338,6 @@
       <section class="admin-content">
         <!-- Dashboard Section -->
         <div id="dashboardSection">
-          <!-- Búsqueda Global en Dashboard -->
-          <div class="dashboard-search-container"
-            style="margin-bottom: 2rem; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;">
-            <h2 style="margin-top: 0; font-size: 1.25rem; margin-bottom: 1rem; color: #1e293b;">Buscador de Contenidos
-            </h2>
-            <div style="position: relative; display: flex; gap: 0.5rem;">
-              <input type="text" id="dashboardSearchInput"
-                placeholder="Buscar en noticias, documentos SGI, eventos, manuales..."
-                style="flex: 1; padding: 0.8rem 1rem 0.8rem 3rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; outline: none; transition: border-color 0.2s;">
-              <svg viewBox="0 0 24 24"
-                style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; color: #94a3b8;">
-                <path fill="currentColor"
-                  d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
-              </svg>
-              <button id="btnDashboardSearch" class="btn-primary" style="padding: 0.8rem 1.5rem;">Buscar</button>
-            </div>
-            <div id="dashboardSearchResults" class="hidden"
-              style="margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="margin: 0; font-size: 1rem; color: #64748b;">Resultados de búsqueda</h3>
-                <button id="btnClearSearch"
-                  style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 0.875rem;">Limpiar</button>
-              </div>
-              <div id="searchResultsList"
-                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
-                <!-- Resultados inyectados por JS -->
-              </div>
-            </div>
-          </div>
 
           <div class="stats-grid">
             <div class="stat-card">
@@ -404,6 +375,10 @@
             <div class="stat-card">
               <div id="stat-convocatorias-count" class="stat-value">--</div>
               <div class="stat-label">Convocatorias</div>
+            </div>
+            <div class="stat-card">
+              <div id="stat-galeria-count" class="stat-value">--</div>
+              <div class="stat-label">Álbumes en Galería</div>
             </div>
             <div class="stat-card">
               <div id="stat-informe-count" class="stat-value">--</div>
@@ -472,6 +447,11 @@
                       document.getElementById('nav-informe-gestion').click()
                     ">
                   + Informe Gestión
+                </button>
+                <button class="btn-secondary" onclick="
+                      document.getElementById('nav-galeria').click()
+                    ">
+                  + Galería Fotos
                 </button>
               </div>
             </div>

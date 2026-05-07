@@ -1671,6 +1671,7 @@ document.addEventListener("DOMContentLoaded", () => {
         convocatoriasR,
         informesR,
         politicasR,
+        galeriaR,
       ] = await Promise.all([
         fetch(`${API_BASE}/news`),
         fetch(`${API_BASE}/eventos`),
@@ -1685,6 +1686,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(`${API_BASE}/convocatorias`),
         fetch(`${API_BASE}/informe-gestion`),
         fetch(`${API_BASE}/politicas-sgi`),
+        fetch(`${API_BASE}/galeria`),
       ]);
 
       const news = newsR.ok ? await newsR.json() : [];
@@ -1702,6 +1704,7 @@ document.addEventListener("DOMContentLoaded", () => {
         : [];
       const informes = informesR.ok ? await informesR.json() : [];
       const politicas = politicasR.ok ? await politicasR.json() : { items: [] };
+      const galeria = galeriaR.ok ? await galeriaR.json() : [];
 
       const setStat = (id, val) => {
         const el = document.getElementById(id);
@@ -1723,6 +1726,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setStat("stat-snif-count", snif.length);
       setStat("stat-provision-count", provision.length);
       setStat("stat-convocatorias-count", convocatorias.length);
+      setStat("stat-galeria-count", galeria.length);
       setStat("stat-informe-count", informes.length);
       setStat(
         "stat-last-update",
@@ -1735,148 +1739,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error updating stats", e);
     }
   }
-
-  // --- Dashboard Search Logic ---
-  const dashboardSearchInput = document.getElementById("dashboardSearchInput");
-  const btnDashboardSearch = document.getElementById("btnDashboardSearch");
-  const dashboardSearchResults = document.getElementById("dashboardSearchResults");
-  const searchResultsList = document.getElementById("searchResultsList");
-  const btnClearSearch = document.getElementById("btnClearSearch");
-
-  if (btnDashboardSearch) {
-    btnDashboardSearch.onclick = performDashboardSearch;
-  }
-
-  if (dashboardSearchInput) {
-    dashboardSearchInput.onkeypress = (e) => {
-      if (e.key === "Enter") performDashboardSearch();
-    };
-  }
-
-  if (btnClearSearch) {
-    btnClearSearch.onclick = () => {
-      dashboardSearchInput.value = "";
-      dashboardSearchResults.classList.add("hidden");
-      searchResultsList.innerHTML = "";
-    };
-  }
-
-  async function performDashboardSearch() {
-    const query = dashboardSearchInput.value.trim().toLowerCase();
-    if (!query) return;
-
-    dashboardSearchResults.classList.remove("hidden");
-    searchResultsList.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #64748b;">Buscando contenidos...</p>';
-
-    try {
-      const endpoints = [
-        { url: `${API_BASE}/news`, type: "Noticia", icon: "📰" },
-        { url: `${API_BASE}/eventos`, type: "Evento", icon: "📅" },
-        { url: `${API_BASE}/sgi/planeacion`, type: "SGI Planeación", icon: "📄" },
-        { url: `${API_BASE}/sgi/mejora`, type: "SGI Mejora", icon: "📈" },
-        { url: `${API_BASE}/sgi/control-interno`, type: "SGI Control", icon: "🛡️" },
-        { url: `${API_BASE}/sgi-gestion-documental`, type: "Apoyo: Gestión Doc.", icon: "📂" },
-        { url: `${API_BASE}/sgi-contratacion`, type: "Apoyo: Contratación", icon: "📝" },
-        { url: `${API_BASE}/sgi-juridico`, type: "Apoyo: Jurídico", icon: "⚖️" },
-        { url: `${API_BASE}/sgi-bienes-servicios`, type: "Apoyo: Bienes", icon: "📦" },
-        { url: `${API_BASE}/sgi-gestion-tecnologias`, type: "Apoyo: TIC", icon: "💻" },
-        { url: `${API_BASE}/sgi-talento-humano`, type: "Apoyo: Talento", icon: "👥" },
-        { url: `${API_BASE}/respel/documentos`, type: "Respel", icon: "♻️" },
-        { url: `${API_BASE}/rua`, type: "RUA", icon: "📜" },
-        { url: `${API_BASE}/snif`, type: "SNIF", icon: "💾" },
-        { url: `${API_BASE}/galeria`, type: "Galería Album", icon: "📸" },
-        { url: `${API_BASE}/provision-empleos`, type: "Talento Humano", icon: "👤" },
-        { url: `${API_BASE}/convocatorias`, type: "Convocatoria", icon: "📣" },
-        { url: `${API_BASE}/informe-gestion`, type: "Informe Gestión", icon: "📊" },
-        { url: `${API_BASE}/boletines`, type: "Boletín GIT", icon: "📨" }
-      ];
-
-      const results = await Promise.all(endpoints.map(async (ep) => {
-        try {
-          const res = await fetch(ep.url);
-          if (!res.ok) return [];
-          const data = await res.json();
-          // Normalizar datos segÃºn el tipo
-          return (Array.isArray(data) ? data : (data.items || [])).filter(item => {
-            const text = (item.title || item.name || item.description || "").toLowerCase();
-            return text.includes(query);
-          }).map(item => ({ ...item, _searchType: ep.type, _searchIcon: ep.icon }));
-        } catch (e) {
-          return [];
-        }
-      }));
-
-      const allResults = results.flat();
-      renderSearchResults(allResults);
-    } catch (err) {
-      searchResultsList.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #ef4444;">Error al realizar la búsqueda.</p>';
-    }
-  }
-
-  function renderSearchResults(results) {
-    if (results.length === 0) {
-      searchResultsList.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #64748b;">No se encontraron resultados para tu búsqueda.</p>';
-      return;
-    }
-
-    searchResultsList.innerHTML = "";
-    results.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "news-manage-card";
-      card.style.flexDirection = "column";
-      card.style.alignItems = "flex-start";
-      card.style.gap = "0.5rem";
-
-      const title = item.title || item.name || "Sin título";
-      const sub = item.description || item.category || item.type || "";
-      const link = item.href || item.fileUrl || item.imageUrl || "#";
-
-      card.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 0.5rem; width: 100%;">
-          <span style="font-size: 1.2rem;">${item._searchIcon}</span>
-          <span style="font-size: 0.7rem; background: #f1f5f9; color: #475569; padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase;">${item._searchType}</span>
-        </div>
-        <h4 style="margin: 0; font-size: 1rem; color: #1e293b;">${title}</h4>
-        <p style="margin: 0; font-size: 0.8rem; color: #64748b; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${sub}</p>
-        <div style="margin-top: auto; padding-top: 0.5rem; width: 100%; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
-          <a href="${link}" target="_blank" style="font-size: 0.75rem; color: #3b82f6; text-decoration: none; font-weight: 600;">Ver Contenido</a>
-          <button class="btn-secondary" style="font-size: 0.7rem; padding: 0.3rem 0.6rem;" onclick="window.goToContent('${item._searchType}', '${item.id}')">Ir a Gestión</button>
-        </div>
-      `;
-      searchResultsList.appendChild(card);
-    });
-  }
-
-  window.goToContent = (type, id) => {
-    // Lógica para saltar a la sección correspondiente
-    const navMap = {
-      "Noticia": "nav-list-news",
-      "Evento": "nav-eventos",
-      "SGI Planeación": "nav-sgi",
-      "SGI Mejora": "nav-mejora",
-      "SGI Control": "nav-control-interno",
-      "Apoyo: Gestión Doc.": "nav-procesos-apoyo",
-      "Apoyo: Contratación": "nav-procesos-apoyo",
-      "Apoyo: Jurídico": "nav-procesos-apoyo",
-      "Apoyo: Bienes": "nav-procesos-apoyo",
-      "Apoyo: TIC": "nav-procesos-apoyo",
-      "Apoyo: Talento": "nav-procesos-apoyo",
-      "Respel": "nav-respel",
-      "RUA": "nav-rua",
-      "SNIF": "nav-snif",
-      "Galería Album": "nav-galeria",
-      "Talento Humano": "nav-provision-empleos",
-      "Convocatoria": "nav-convocatorias",
-      "Informe Gestión": "nav-informe-gestion",
-      "Boletín GIT": "nav-boletines"
-    };
-
-    const navId = navMap[type];
-    if (navId) {
-      const navEl = document.getElementById(navId);
-      if (navEl) navEl.click();
-    }
-  };
 
   // Initial call
   updateStats();
