@@ -887,29 +887,61 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
             }
         }
 
-        foreach ($allFiles as $f) {
-            $base = basename($f);
-            $m = $meta[$f] ?? $meta[$base] ?? [];
+        // Primero: items en el orden exacto del metadata.json
+        foreach ($meta as $metaKey => $m) {
+            // Verificar que el archivo existe en el directorio
+            $found = false;
+            foreach ($allFiles as $f) {
+                $base = basename($f);
+                if ($f === $metaKey || $base === $metaKey) {
+                    $found = true;
 
-            // Codificar cada segmento de la ruta para evitar errores con espacios o acentos en URLs
+                    $dirSegments = explode('/', ltrim($uploadDir, '/'));
+                    $encodedDir = implode('/', array_map('rawurlencode', $dirSegments));
+                    $fSegments = explode('/', $f);
+                    $encodedFile = implode('/', array_map('rawurlencode', $fSegments));
+                    $relativeUrl = WEB_BASE_PATH . ltrim($encodedDir, '/') . '/' . $encodedFile;
+
+                    $items[] = array_merge($m, [
+                        'id' => md5($f),
+                        'filename' => $f,
+                        'name' => $m['name'] ?? $m['title'] ?? pathinfo($f, PATHINFO_FILENAME),
+                        'title' => $m['title'] ?? $m['name'] ?? pathinfo($f, PATHINFO_FILENAME),
+                        'href' => $relativeUrl,
+                        'fileUrl' => $relativeUrl,
+                        'imageUrl' => $relativeUrl,
+                        'category' => $m['category'] ?? ''
+                    ]);
+                    break;
+                }
+            }
+        }
+
+        // Segundo: archivos huérfanos (sin entrada en metadata.json)
+        $usedFiles = array_column($items, 'filename');
+        foreach ($allFiles as $f) {
+            if (in_array($f, $usedFiles)) continue;
+            $base = basename($f);
+            if (isset($meta[$f]) || isset($meta[$base])) continue;
+
             $dirSegments = explode('/', ltrim($uploadDir, '/'));
             $encodedDir = implode('/', array_map('rawurlencode', $dirSegments));
             $fSegments = explode('/', $f);
             $encodedFile = implode('/', array_map('rawurlencode', $fSegments));
             $relativeUrl = WEB_BASE_PATH . ltrim($encodedDir, '/') . '/' . $encodedFile;
 
-            $items[] = array_merge($m, [
+            $items[] = [
                 'id' => md5($f),
                 'filename' => $f,
-                'name' => $m['name'] ?? $m['title'] ?? pathinfo($f, PATHINFO_FILENAME),
-                'title' => $m['title'] ?? $m['name'] ?? pathinfo($f, PATHINFO_FILENAME),
+                'name' => pathinfo($f, PATHINFO_FILENAME),
+                'title' => pathinfo($f, PATHINFO_FILENAME),
                 'href' => $relativeUrl,
                 'fileUrl' => $relativeUrl,
                 'imageUrl' => $relativeUrl,
-                'category' => $m['category'] ?? ''
-            ]);
+                'category' => ''
+            ];
         }
-        usort($items, fn($a, $b) => strcmp($b['filename'], $a['filename']));
+
         out($items);
     }
 

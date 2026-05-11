@@ -460,7 +460,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { api: 'manual-funciones', grid: 'manual-funciones-grid', card: 'pdf-folder-card' },
     { api: 'plan-monitoreo', grid: 'plan-monitoreo-grid', card: 'pdf-folder-card' },
     { api: 'planes-talento', grid: 'planes-grid', card: 'plan-item' },
-    { api: 'convocatorias', grid: 'convocatorias-grid', card: 'pdf-folder-card' },
+    { api: 'convocatorias', grid: 'convocatorias-grid', card: 'doc-item' },
     { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'pdf-folder-card' },
     { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'pdf-folder-card' },
     { api: 'manuales-sgi', grid: 'manuales-sgi-grid', card: 'pdf-folder-card' },
@@ -510,8 +510,14 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const r = await fetch(BASE_PATH + 'api/' + m.api);
       if (!r.ok) return;
-      const items = await r.json();
+      let items = await r.json();
+
+      if (m.grid.startsWith('index-')) {
+        items = items.slice(0, 4);
+      }
+
       const htmlParts = {};
+      let currentYear = null;
 
       items.forEach(item => {
         const fUrl = item.fileUrl || item.href || '';
@@ -526,6 +532,15 @@ document.addEventListener("DOMContentLoaded", () => {
           url = BASE_PATH + fUrl;
         }
         const titleSafe = item.name || item.title || 'Documento';
+
+        // Agrupación por año para convocatorias
+        const year = item.category || (item.date && item.date.match(/\d{4}/) ? item.date.match(/\d{4}/)[0] : null);
+        if (m.api === 'convocatorias' && year && year !== currentYear && !m.grid.startsWith('index-')) {
+            currentYear = year;
+            const targetGridId = m.grid;
+            if (!htmlParts[targetGridId]) htmlParts[targetGridId] = "";
+            htmlParts[targetGridId] += `<h3 class="year-group-header" style="grid-column: 1 / -1; margin: 2rem 0 1rem; color: var(--primary-dark); border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem; width: 100%; font-size: 1.5rem; font-weight: 700;">${year}</h3>`;
+        }
 
         let cardHtml = "";
         if (m.card === 'table-row') {
@@ -583,7 +598,7 @@ document.addEventListener("DOMContentLoaded", () => {
                </a>`;
         }
 
-        if (item.category) {
+        if (item.category && m.api !== 'convocatorias') {
           const catId = item.category.toLowerCase()
             .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             .replace(/[^a-z0-9]/g, '-')
