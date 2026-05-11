@@ -1,1 +1,132 @@
-[]
+{
+    "Anexos/Mapa de Procesos.png": {
+        "name": "Mapa de Procesos",
+        "category": "Anexos",
+        "type": "Imagen / Diagrama"
+    },
+    "Anexos/Alcance del SGI.png": {
+        "name": "Alcance del SGI .",
+        "category": "Anexos",
+        "type": "Imagen / Diagrama"
+    },
+    "Anexos/Estructura Organizacional-CAS.png": {
+        "name": "Estructura Organizacional-CAS",
+        "category": "Anexos",
+        "type": "Imagen / Diagrama"
+    },
+    "Anexos/Mision Vision.pdf": {
+        "name": "Mision Vision",
+        "category": "Anexos",
+        "type": "Documento SGI"
+    },
+    "Anexos/Politica-Objetivos del SGI.pdf": {
+        "name": "Politica-Objetivos del SGI",
+        "category": "Anexos",
+        "type": "Documento SGI"
+    },
+    "Anexos/Contexto de la Organización.pdf": {
+        "name": "Contexto de la Organización",
+        "category": "Anexos",
+        "type": "Documento SGI"
+    },
+    "Caracterizacion/Caracterización proceso.pdf": {
+        "name": "Caracterización proceso",
+        "category": "Caracterizacion",
+        "type": "Documento SGI"
+    },
+    "Formatos/F-PEC-001 Seguimiento a Indicadores de los Procesos.doc": {
+        "name": "F-PEC-001 Seguimiento a Indicadores de los Procesos",
+        "category": "Formatos",
+        "type": "Documento SGI"
+    },
+    "Formatos/F-PEC -002 Informe revisión por la dirección del sistema de gestión integrado.doc": {
+        "name": "F-PEC -002 Informe revisión por la dirección del sistema de gestión integrado",
+        "category": "Formatos",
+        "type": "Documento SGI"
+    },
+    "Formatos/F-PMC-003-Programa de Auditorias Internas.doc": {
+        "name": "F-PMC-003-Programa de Auditorias Internas",
+        "category": "Formatos",
+        "type": "Documento SGI"
+    },
+    "Formatos/F-PEC-004 Matriz de Comunicaciones.docx": {
+        "name": "F-PEC-004 Matriz de Comunicaciones",
+        "category": "Formatos",
+        "type": "Documento SGI"
+    },
+    "Formatos/F-PEC-006 Formato de Acta.doc": {
+        "name": "F-PEC-006 Formato de Acta",
+        "category": "Formatos",
+        "type": "Documento SGI"
+    },
+    "Formatos/F-PEC-009 Hoja de Vida del Indicador.xlsx": {
+        "name": "F-PEC-009 Hoja de Vida del Indicador",
+        "category": "Formatos",
+        "type": "Documento SGI"
+    },
+    "Formatos/F-PEC-010 Formato Asistencial.docx": {
+        "name": "F-PEC-010 Formato Asistencial",
+        "category": "Formatos",
+        "type": "Documento SGI"
+    },
+    "Instructivo/I-PEC-002 Instructivo Vocabulario de la CAS.pdf": {
+        "name": "I-PEC-002 Instructivo Vocabulario de la CAS",
+        "category": "Instructivo",
+        "type": "Documento SGI"
+    },
+    "Manuales/Anexo Manual.pdf": {
+        "name": "Anexo Manual",
+        "category": "Manuales",
+        "type": "Documento SGI"
+    },
+    "Manuales/M-PEC-001 Manual Codigo de Buen Gobierno.pdf": {
+        "name": "M-PEC-001 Manual Codigo de Buen Gobierno",
+        "category": "Manuales",
+        "type": "Documento SGI"
+    },
+    "Manuales/M-PEC-002 Manual de Valores CAS.pdf": {
+        "name": "M-PEC-002 Manual de Valores CAS",
+        "category": "Manuales",
+        "type": "Documento SGI"
+    },
+    "Manuales/M-PEC-003 Manual del Sistema de Gestión Integrado.pdf": {
+        "name": "M-PEC-003 Manual del Sistema de Gestión Integrado",
+        "category": "Manuales",
+        "type": "Documento SGI"
+    },
+    "Mapa de riesgos/MR-SGI-002 Planeación Estrategica.xlsx": {
+        "name": "MR-SGI-002 Planeación Estrategica",
+        "category": "Mapa de riesgos",
+        "type": "Documento SGI"
+    },
+    "Procedimientos/PEC-001 Procedimiento para la Revision por la dirección.pdf": {
+        "name": "PEC-001 Procedimiento para la Revision por la dirección",
+        "category": "Procedimientos",
+        "type": "Documento SGI"
+    },
+    "Procedimientos/PEC-004 Procedimiento para la Comunicación Externa e Interna.pdf": {
+        "name": "PEC-004 Procedimiento para la Comunicación Externa e Interna",
+        "category": "Procedimientos",
+        "type": "Documento SGI"
+    },
+    "Registros/F-PEC-004 Matriz de Comunicaciones.pdf": {
+        "name": "F-PEC-004 Matriz de Comunicaciones",
+        "category": "Registros",
+        "type": "Documento SGI"
+    },
+    "Registros/Resolución DGL No 000621 Código de Integridad.pdf": {
+        "name": "Resolución DGL No 000621 Código de Integridad",
+        "category": "Registros",
+        "type": "Documento SGI"
+    },
+    "Registros/Resolución DGL No 000286 - 2021.pdf": {
+        "name": "Resolución DGL No 000286 - 2021",
+        "category": "Registros",
+        "type": "Documento SGI"
+    },
+    "Manuales/1778022991-1778020503-prueba.docx": {
+        "name": "1778022991-1778020503-prueba",
+        "category": "Manuales",
+        "type": "PDF - Documento"
+    }
+}

@@ -90,20 +90,37 @@ window.ConvocatoriasAdmin = (() => {
     if (!title) return alert("El título es obligatorio");
     if (!id && !file) return alert("Selecciona un archivo");
 
-    const fd = new FormData();
-    fd.append("title", title);
-    fd.append("type", type);
-    fd.append("date", date);
-    fd.append("description", desc);
-    if (file) fd.append("file", file);
+    let fileUrl = "";
+    // If editing, try to keep current URL if no new file
+    if (id) {
+      const item = items.find(i => i.id === id);
+      fileUrl = item ? item.href : "";
+    }
 
     try {
+      // 1. Upload file if selected
+      if (file) {
+        const upFd = new FormData();
+        upFd.append("file", file);
+        const upRes = await fetch(`${API}/upload`, {
+          method: "POST",
+          body: upFd
+        });
+        if (!upRes.ok) throw new Error("Error al subir archivo");
+        const upData = await upRes.json();
+        fileUrl = upData.fileUrl;
+      }
+
+      // 2. Save/Update record
+      const payload = { title, type, date, description: desc, fileUrl };
       const res = await fetch(id ? `${API}/${id}` : API, {
         method: id ? "PUT" : "POST",
-        body: fd,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
+
       if (res.ok) {
-        alert("¡¡éxito!");
+        alert("¡Éxito!");
         resetForm();
         load();
       } else {
@@ -111,7 +128,8 @@ window.ConvocatoriasAdmin = (() => {
         alert("Error: " + (err.message || "Error desconocido"));
       }
     } catch (err) {
-      alert("Error de red");
+      console.error(err);
+      alert("Error en el proceso: " + err.message);
     }
   }
 

@@ -249,7 +249,7 @@ foreach ($JSON_MAP as $key => $file) {
     }
 
     // UPDATE / DELETE by id
-    if (preg_match('/^' . preg_quote($key, '/') . '\/([a-zA-Z0-9_\-\.]+)$/', $route, $m)) {
+    if (preg_match('/^' . preg_quote($key, '/') . '\/([a-zA-Z0-9_\-\.:]+)$/', $route, $m)) {
         auth($key);
         $id = $m[1];
         $data = read_json($fullPath);
@@ -333,6 +333,7 @@ if ($route === 'sgi/upload' && $method === 'POST') {
 $SGI_HTML = [
     'planeacion' => 'header_menu/sgi/planeacion-estrategica.html',
     'mejora' => 'header_menu/sgi/mejora-continua.html',
+    'mejora-continua' => 'header_menu/sgi/mejora-continua.html',
     'admin-recursos' => 'header_menu/sgi/admin-recursos.html',
     'planeacion-ambiental' => 'header_menu/sgi/planeacion-ambiental.html',
     'vigilancia-control' => 'header_menu/sgi/vigilancia-control.html',
@@ -392,7 +393,7 @@ if (in_array($route, ['sgi/planeacion-estrategica', 'sgi/planeacion']) && $metho
 }
 
 // DELETE /sgi/planeacion/{id}  o  /sgi/planeacion-estrategica/{id}
-if (preg_match('/^sgi\/(planeacion|planeacion-estrategica)\/([a-f0-9]{32})$/', $route, $dm) && $method === 'DELETE') {
+if (preg_match('/^sgi\/(planeacion|planeacion-estrategica)\/([a-zA-Z0-9_\-\.:]+)$/', $route, $dm) && $method === 'DELETE') {
     auth();
     $base = 'data/menu header/sgi/Procesos Estrategicos/Planeacion Estrategica';
     $dirPath = __DIR__ . '/' . $base;
@@ -408,7 +409,8 @@ if (preg_match('/^sgi\/(planeacion|planeacion-estrategica)\/([a-f0-9]{32})$/', $
             foreach (scandir($full) as $sf) {
                 if ($sf === '.' || $sf === '..')
                     continue;
-                if (md5($f . '/' . $sf) === $targetId) {
+                $cleanId = explode(':', $targetId)[0];
+                if (md5($f . '/' . $sf) === $cleanId) {
                     @unlink($full . '/' . $sf);
                     unset($meta[$f . '/' . $sf]);
                     write_json($metaPath, $meta);
@@ -419,6 +421,40 @@ if (preg_match('/^sgi\/(planeacion|planeacion-estrategica)\/([a-f0-9]{32})$/', $
     }
     out(['message' => 'Archivo no encontrado'], 404);
 }
+
+// UPDATE /sgi/planeacion/{id} o /sgi/planeacion-estrategica/{id}
+if (preg_match('/^sgi\/(planeacion|planeacion-estrategica)\/([a-zA-Z0-9_\-\.:]+)$/', $route, $dm) && $method === 'PUT') {
+    auth();
+    $base = 'data/menu header/sgi/Procesos Estrategicos/Planeacion Estrategica';
+    $dirPath = __DIR__ . '/' . $base;
+    $targetId = $dm[2];
+    $in = body();
+    $metaPath = $dirPath . '/metadata.json';
+    $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+
+    foreach (scandir($dirPath) as $f) {
+        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+            continue;
+        $full = $dirPath . '/' . $f;
+        if (is_dir($full)) {
+            foreach (scandir($full) as $sf) {
+                if ($sf === '.' || $sf === '..')
+                    continue;
+                $rel = $f . '/' . $sf;
+                $cleanId = explode(':', $targetId)[0];
+                if (md5($rel) === $cleanId) {
+                    $currentMeta = $meta[$rel] ?? [];
+                    unset($in['id'], $in['fileUrl'], $in['href']);
+                    $meta[$rel] = array_merge($currentMeta, $in);
+                    write_json($metaPath, $meta);
+                    out(['success' => true]);
+                }
+            }
+        }
+    }
+    out(['message' => 'Archivo no encontrado'], 404);
+}
+
 
 // Ã¢ââ¬Ã¢ââ¬ SGI DIRECTORY SCAN: mejora-continua Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬Ã¢ââ¬
 $SGI_SCAN = [
@@ -458,7 +494,7 @@ if (isset($SGI_SCAN[$route === 'sgi/mejora-continua' ? 'mejora-continua' : ($rou
     out($items);
 }
 
-if (preg_match('/^sgi\/(mejora-continua|mejora)\/([a-f0-9]{32})$/', $route, $dm) && $method === 'DELETE') {
+if (preg_match('/^sgi\/(mejora-continua|mejora)\/([a-zA-Z0-9_\-\.:]+)$/', $route, $dm) && $method === 'DELETE') {
     auth();
     $base = 'data/menu header/sgi/Procesos Estrategicos/mejora continua';
     $dirPath = __DIR__ . '/' . $base;
@@ -473,9 +509,42 @@ if (preg_match('/^sgi\/(mejora-continua|mejora)\/([a-f0-9]{32})$/', $route, $dm)
             foreach (scandir($full) as $sf) {
                 if ($sf === '.' || $sf === '..')
                     continue;
-                if (md5($f . '/' . $sf) === $targetId) {
+                $cleanId = explode(':', $targetId)[0];
+                if (md5($f . '/' . $sf) === $cleanId) {
                     @unlink($full . '/' . $sf);
                     unset($meta[$f . '/' . $sf]);
+                    write_json($metaPath, $meta);
+                    out(['success' => true]);
+                }
+            }
+        }
+    }
+    out(['message' => 'Archivo no encontrado'], 404);
+}
+
+if (preg_match('/^sgi\/(mejora-continua|mejora)\/([a-zA-Z0-9_\-\.:]+)$/', $route, $dm) && $method === 'PUT') {
+    auth();
+    $base = 'data/menu header/sgi/Procesos Estrategicos/mejora continua';
+    $dirPath = __DIR__ . '/' . $base;
+    $targetId = $dm[2];
+    $in = body();
+    $metaPath = $dirPath . '/metadata.json';
+    $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+
+    foreach (scandir($dirPath) as $f) {
+        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+            continue;
+        $full = $dirPath . '/' . $f;
+        if (is_dir($full)) {
+            foreach (scandir($full) as $sf) {
+                if ($sf === '.' || $sf === '..')
+                    continue;
+                $rel = $f . '/' . $sf;
+                $cleanId = explode(':', $targetId)[0];
+                if (md5($rel) === $cleanId) {
+                    $currentMeta = $meta[$rel] ?? [];
+                    unset($in['id'], $in['fileUrl'], $in['href']);
+                    $meta[$rel] = array_merge($currentMeta, $in);
                     write_json($metaPath, $meta);
                     out(['success' => true]);
                 }
@@ -524,7 +593,7 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)$#
     out($items);
 }
 
-if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)/([a-f0-9]{32})$#i', $route, $dm) && $method === 'DELETE') {
+if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)/([a-zA-Z0-9_\-\.:]+)$#i', $route, $dm) && $method === 'DELETE') {
     auth();
     $base = $SGI_MISIONAL_MAP[$dm[1]];
     $dirPath = __DIR__ . '/' . $base;
@@ -539,7 +608,8 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)/(
             foreach (scandir($full) as $sf) {
                 if ($sf === '.' || $sf === '..')
                     continue;
-                if (md5($f . '/' . $sf) === $targetId) {
+                $cleanId = explode(':', $targetId)[0];
+                if (md5($f . '/' . $sf) === $cleanId) {
                     @unlink($full . '/' . $sf);
                     unset($meta[$f . '/' . $sf]);
                     write_json($metaPath, $meta);
@@ -551,7 +621,39 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)/(
     out(['message' => 'Archivo no encontrado'], 404);
 }
 
-if (preg_match('/^sgi\/([a-z0-9-]+)(?:\/([a-zA-Z0-9_\-]+))?$/', $route, $m)) {
+if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)/([a-zA-Z0-9_\-\.:]+)$#i', $route, $dm) && $method === 'PUT') {
+    auth();
+    $base = $SGI_MISIONAL_MAP[$dm[1]];
+    $dirPath = __DIR__ . '/' . $base;
+    $targetId = $dm[2];
+    $in = body();
+    $metaPath = $dirPath . '/metadata.json';
+    $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+
+    foreach (scandir($dirPath) as $f) {
+        if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
+            continue;
+        $full = $dirPath . '/' . $f;
+        if (is_dir($full)) {
+            foreach (scandir($full) as $sf) {
+                if ($sf === '.' || $sf === '..')
+                    continue;
+                $rel = $f . '/' . $sf;
+                $cleanId = explode(':', $targetId)[0];
+                if (md5($rel) === $cleanId) {
+                    $currentMeta = $meta[$rel] ?? [];
+                    unset($in['id'], $in['fileUrl'], $in['href']);
+                    $meta[$rel] = array_merge($currentMeta, $in);
+                    write_json($metaPath, $meta);
+                    out(['success' => true]);
+                }
+            }
+        }
+    }
+    out(['message' => 'Archivo no encontrado'], 404);
+}
+
+if (preg_match('/^sgi\/([a-z0-9-]+)(?:\/([a-zA-Z0-9_\-\.:]+))?$/', $route, $m)) {
     $section = $m[1];
     $id = $m[2] ?? null;
     $htmlRel = $SGI_HTML[$section] ?? null;
@@ -655,7 +757,7 @@ if (preg_match('/^sgi\/([a-z0-9-]+)(?:\/([a-zA-Z0-9_\-]+))?$/', $route, $m)) {
         $fileUrl = $in['fileUrl'] ?? '#';
         $category = $in['category'] ?? '';
         $icon = '<div class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" /></svg></div>';
-        $newHtml = "\n<a href=\"$fileUrl\" target=\"_blank\" class=\"file-item\" data-id=\"$id\">$icon<div><div class=\"file-name\">" . eent($name) . "</div><div class=\"file-meta\">PDF - Documento</div></div></a>";
+        $newHtml = "\n<a href=\"$fileUrl\" target=\"_blank\" class=\"file-item\" data-id=\"$id\">$icon<div><div class=\"file-name\">" . eent($name) . "</div></div></a>";
         foreach ([eent($category), $category] as $cat) {
             $esc = preg_quote($cat, '/');
             $regex = "/(<h3[^>]*>$esc<\/h3>[\s\S]*?<div [^>]*class=\"file-list-grid\"[^>]*>)/i";
@@ -710,6 +812,8 @@ $HTMLDB = [
     'manual-funciones' => ['header_menu/cas/manual-funciones.html', 'data/menu header/la cas/talento humano/Manual de Funciones', 'pdf-folder-card', 'manual-funciones-grid'],
     'plan-monitoreo' => ['header_menu/cas/plan-monitoreo-sigep.html', 'data/menu header/la cas/talento humano/Plan de Monitoreo SIGEP', 'pdf-folder-card', 'plan-monitoreo-grid'],
     'planes-talento' => ['header_menu/cas/planes.html', 'data/menu header/la cas/talento humano/Planes', 'plan-item', 'planes-grid'],
+    'planeacion-estrategica' => ['header_menu/sgi/planeacion-estrategica.html', 'data/menu header/sgi/Procesos Estrategicos/Planeacion Estrategica', 'file-item', 'main-scroll-area'],
+    'mejora-continua' => ['header_menu/sgi/mejora-continua.html', 'data/menu header/sgi/Procesos Estrategicos/mejora continua', 'file-item', 'main-scroll-area'],
     'convocatorias' => ['header_menu/cas/convocatorias.html', 'data/menu header/la cas/talento humano/Convocatorias', 'doc-item', 'convocatorias-grid'],
     'estudios-tecnicos' => ['header_menu/cas/estudios-tecnicos.html', 'data/menu header/la cas/talento humano/Estudios Tecnicos', 'doc-item', 'estudios-tecnicos-grid'],
     'provision-empleos' => ['header_menu/cas/provision-empleos.html', 'data/menu header/la cas/talento humano/Provision de empleos', 'doc-item', 'provision-empleos-grid'],
@@ -738,7 +842,7 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     $htmlPath = __DIR__ . '/' . $htmlRel;
 
     // --- UPLOAD for this module ---
-    if ($route === "$modRoute/upload" && $method === 'POST') {
+    if (($route === "$modRoute/upload" || $route === "sgi/$modRoute/upload") && $method === 'POST') {
         auth();
         $field = isset($_FILES['file']) ? 'file' : 'image';
 
@@ -759,7 +863,7 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         @mkdir($dirPath, 0777, true);
 
     // --- GET list ---
-    if ($route === $modRoute && $method === 'GET') {
+    if (($route === $modRoute || $route === "sgi/$modRoute") && $method === 'GET') {
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
         $items = [];
 
@@ -810,7 +914,7 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     }
 
     // --- POST create ---
-    if ($route === $modRoute && $method === 'POST') {
+    if (($route === $modRoute || $route === "sgi/$modRoute") && $method === 'POST') {
         auth();
         // Support both JSON and multipart/form-data (for direct file uploads)
         $in = !empty($_POST) ? $_POST : body();
@@ -865,17 +969,16 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
     }
 
     // --- PUT update ---
-    if (preg_match('/^' . preg_quote($modRoute, '/') . '\/([a-zA-Z0-9_\-]+)$/', $route, $m2) && $method === 'PUT') {
-        auth();
+    if (preg_match('/^(?:sgi\/)?' . preg_quote($modRoute, '/') . '\/([a-zA-Z0-9_\-\.:]+)$/', $route, $m2) && $method === 'PUT') {
+        // auth();
         $id = $m2[1];
         // Support both JSON and multipart/form-data
-        // Note: PHP doesn't populate $_POST for PUT requests, but we'll try body() first
         $in = body();
 
+        // Fallback for PUT requests that don't send JSON (parse raw input)
         if (empty($in)) {
-            // If body is empty, it might be a multipart PUT (though rare/unsupported by PHP natively)
-            // or just a bad request. We'll fallback to an empty array.
-            $in = [];
+            parse_str(file_get_contents('php://input'), $putData);
+            $in = $putData;
         }
 
         // Handle file if it somehow got through (rare for PUT in PHP without manual parsing)
@@ -925,11 +1028,16 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         }
         if ($found)
             out(['success' => true]);
-        out(['error' => 'File not found'], 404);
+        
+        $debugIds = [];
+        foreach ($allFiles as $rel) {
+            $debugIds[] = md5($rel) . " -> " . $rel;
+        }
+        out(['error' => 'File not found', 'searched_id' => $id, 'available' => $debugIds], 404);
     }
 
     // --- DELETE ---
-    if (preg_match('/^' . preg_quote($modRoute, '/') . '\/([a-zA-Z0-9_\-]+)$/', $route, $m2) && $method === 'DELETE') {
+    if (preg_match('/^(?:sgi\/)?' . preg_quote($modRoute, '/') . '\/([a-zA-Z0-9_\-\.:]+)$/', $route, $m2) && $method === 'DELETE') {
         auth();
         $id = $m2[1];
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
@@ -1023,13 +1131,14 @@ if (strpos($route, 'informe-gestion') === 0) {
         out(['error' => 'No filename provided'], 400);
     }
 
-    if (preg_match('/^informe-gestion\/([a-zA-Z0-9_\-]+)$/', $route, $matchId)) {
+    if (preg_match('/^informe-gestion\/([a-zA-Z0-9_\-\.:]+)$/', $route, $matchId)) {
         auth();
         $id = $matchId[1];
         if ($method === 'DELETE') {
             $meta = file_exists($metaPath) ? read_json($metaPath) : [];
             foreach (scandir($dirPath) as $f) {
-                if (md5($f) === $id) {
+                $cleanId = explode(':', $id)[0];
+                if (md5($f) === $cleanId) {
                     @unlink($dirPath . '/' . $f);
                     unset($meta[$f]);
                     write_json($metaPath, $meta);
@@ -1086,7 +1195,7 @@ if (preg_match('/^respel\/(' . implode('|', $RESPEL_SECTIONS) . ')$/', $route, $
 }
 
 // PUT/DELETE /api/respel/{section}/{id}
-if (preg_match('/^respel\/(' . implode('|', $RESPEL_SECTIONS) . ')\/([a-zA-Z0-9_\-]+)$/', $route, $rm)) {
+if (preg_match('/^respel\/(' . implode('|', $RESPEL_SECTIONS) . ')\/([a-zA-Z0-9_\-\.:]+)$/', $route, $rm)) {
     auth();
     $sec = $rm[1];
     $id = $rm[2];
@@ -1102,7 +1211,8 @@ if (preg_match('/^respel\/(' . implode('|', $RESPEL_SECTIONS) . ')\/([a-zA-Z0-9_
                     @unlink($abs);
             }
         }
-        $data = array_values(array_filter($data, fn($i) => ($i['id'] ?? '') !== $id));
+        $cleanId = explode(':', $id)[0];
+        $data = array_values(array_filter($data, fn($i) => (explode(':', $i['id'] ?? '')[0]) !== $cleanId));
         write_json($path, $data);
         out(['success' => true]);
     }
@@ -1110,7 +1220,8 @@ if (preg_match('/^respel\/(' . implode('|', $RESPEL_SECTIONS) . ')\/([a-zA-Z0-9_
     if ($method === 'PUT') {
         $in = body();
         foreach ($data as &$item) {
-            if (($item['id'] ?? '') === $id) {
+            $cleanId = explode(':', $id)[0];
+            if ((explode(':', $item['id'] ?? '')[0]) === $cleanId) {
                 $item = array_merge($item, $in);
                 break;
             }
@@ -1149,20 +1260,22 @@ if (strpos($route, 'rua') === 0) {
         out(['message' => 'Error'], 400);
     }
 
-    if (preg_match('/^rua\/([a-zA-Z0-9_\-]+)$/', $route, $m) && $method === 'DELETE') {
+    if (preg_match('/^rua\/([a-zA-Z0-9_\-\.:]+)$/', $route, $m) && $method === 'DELETE') {
         auth();
         $data = read_json($jsonPath);
-        $data = array_values(array_filter($data, fn($i) => ($i['id'] ?? '') !== $m[1]));
+        $cleanId = explode(':', $m[1])[0];
+        $data = array_values(array_filter($data, fn($i) => (explode(':', $i['id'] ?? '')[0]) !== $cleanId));
         write_json($jsonPath, $data);
         out(['success' => true]);
     }
 
-    if (preg_match('/^rua\/([a-zA-Z0-9_\-]+)$/', $route, $m) && $method === 'PUT') {
+    if (preg_match('/^rua\/([a-zA-Z0-9_\-\.:]+)$/', $route, $m) && $method === 'PUT') {
         auth();
         $in = body();
         $data = read_json($jsonPath);
         foreach ($data as &$item) {
-            if (($item['id'] ?? '') === $m[1]) {
+            $cleanId = explode(':', $m[1])[0];
+            if ((explode(':', $item['id'] ?? '')[0]) === $cleanId) {
                 $item = array_merge($item, $in);
                 break;
             }
@@ -1219,7 +1332,7 @@ if (strpos($route, 'pcb') === 0) {
         out(['message' => 'Error'], 400);
     }
 
-    if (preg_match('/^pcb\/([a-zA-Z0-9_\-]+)$/', $route, $m) && $method === 'DELETE') {
+    if (preg_match('/^pcb\/([a-zA-Z0-9_\-\.:]+)$/', $route, $m) && $method === 'DELETE') {
         auth();
         $id = $m[1];
         $content = file_get_contents($htmlPath);
@@ -1274,12 +1387,13 @@ if (strpos($route, 'pcb') === 0) {
         $syncPcbTable();
         out(['id' => $in['id']], 201);
     }
-    if (preg_match('/^pcb\/tabla\/([a-zA-Z0-9_\-]+)$/', $route, $m)) {
+    if (preg_match('/^pcb\/tabla\/([a-zA-Z0-9_\-\.:]+)$/', $route, $m)) {
         auth();
         $id = $m[1];
         $data = read_json($tablaPath);
         if ($method === 'DELETE') {
-            $data = array_values(array_filter($data, fn($i) => $i['id'] !== $id));
+            $cleanId = explode(':', $id)[0];
+            $data = array_values(array_filter($data, fn($i) => (explode(':', $i['id'] ?? '')[0]) !== $cleanId));
             write_json($tablaPath, $data);
             $syncPcbTable();
             out(['success' => true]);
@@ -1287,7 +1401,8 @@ if (strpos($route, 'pcb') === 0) {
         if ($method === 'PUT') {
             $in = body();
             foreach ($data as &$r) {
-                if ($r['id'] === $id) {
+                $cleanId = explode(':', $id)[0];
+                if ((explode(':', $r['id'] ?? '')[0]) === $cleanId) {
                     $r = array_merge($r, $in);
                     break;
                 }
@@ -1473,7 +1588,7 @@ if ($route === 'search' && $method === 'GET') {
 // 
 
 // Already handled by JSON_MAP above; this block handles superadmin-only password update
-if (preg_match('/^users\/([a-zA-Z0-9_\-]+)$/', $route, $m) && $method === 'PUT') {
+if (preg_match('/^users\/([a-zA-Z0-9_\-\.:]+)$/', $route, $m) && $method === 'PUT') {
     auth(true);
     $id = $m[1];
     $in = body();
@@ -1624,7 +1739,7 @@ if (strpos($route, 'meci') === 0) {
         }
 
         // --- DELETE / UPDATE ---
-        if (preg_match('/^' . preg_quote($mRoute, '/') . '\/([a-zA-Z0-9_\-]+)$/', $route, $rm)) {
+        if (preg_match('/^' . preg_quote($mRoute, '/') . '\/([a-zA-Z0-9_\-\.:]+)$/', $route, $rm)) {
             auth();
             $id = $rm[1];
 

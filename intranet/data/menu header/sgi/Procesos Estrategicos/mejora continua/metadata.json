@@ -1,1 +1,130 @@
-[]
+{
+    "Caracterización/Caracterización proceso.pdf": {
+        "name": "Caracterización proceso .",
+        "category": "Caracterización"
+    },
+    "Formatos/F-PMC-001 Informe Resultado del Seguimiento a la Satisfaccion a Clientes.xls": {
+        "name": "F-PMC-001 Informe Resultado del Seguimiento a la Satisfaccion a Clientes",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-002 Formato de Acciones Correctivas y para Abordar Riesgos.xls": {
+        "name": "F-PMC-002 Formato de Acciones Correctivas y para Abordar Riesgos",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-003 Programa de Auditorias Internas.doc": {
+        "name": "F-PMC-003 Programa de Auditorias Internas",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-004 Plan de Auditorias Internas.doc": {
+        "name": "F-PMC-004 Plan de Auditorias Internas",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-005 Lista de Chequeo Auditoria Interna del Sistema de Gestión Integrado.doc": {
+        "name": "F-PMC-005 Lista de Chequeo Auditoria Interna del Sistema de Gestión Integrado",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-006 Informe de Auditoria Interna al Sistema de Gestión.doc": {
+        "name": "F-PMC-006 Informe de Auditoria Interna al Sistema de Gestión",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-007 Evaluación a la Auditoria Interna y Auditores.xls": {
+        "name": "F-PMC-007 Evaluación a la Auditoria Interna y Auditores",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-008 Informe General de Gestion de la Subdireccion de Administración de la Oferta, Autoridad Ambiental y Sedes Regionales de Apoyo.xls": {
+        "name": "F-PMC-008 Informe General de Gestion de la Subdireccion de Administración de la Oferta, Autoridad Ambiental y Sedes Regionales de Apoyo",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-009 Listado Maestro de Documentos y Registros del Sistema de Gestión Integrado.xls": {
+        "name": "F-PMC-009 Listado Maestro de Documentos y Registros del Sistema de Gestión Integrado",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-015 Encuesta de Satisfacción y Sugerencias.doc": {
+        "name": "F-PMC-015 Encuesta de Satisfacción y Sugerencias",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-016 Formato Reporte Salida no Conforme.doc": {
+        "name": "F-PMC-016 Formato Reporte Salida no Conforme",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-017 Cumplimiento Metas Regionales.xls": {
+        "name": "F-PMC-017 Cumplimiento Metas Regionales",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-018 Mejoramiento Proceso de Notificaciones.xls": {
+        "name": "F-PMC-018 Mejoramiento Proceso de Notificaciones",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-019 Eficiencia Cumplimiento Metas Tecnicos y Abogados.xls": {
+        "name": "F-PMC-019 Eficiencia Cumplimiento Metas Tecnicos y Abogados",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-020 Gestion Tramites Regionales.xls": {
+        "name": "F-PMC-020 Gestion Tramites Regionales",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-021 No. Dias Tramites.xlsx": {
+        "name": "F-PMC-021 No. Dias Tramites",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-022 Evaluacion Salida No Conforme.xlsx": {
+        "name": "F-PMC-022 Evaluacion Salida No Conforme",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-024 Formato Control de Distribución de Documentos.xlsx": {
+        "name": "F-PMC-024 Formato Control de Distribución de Documentos",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-025 Matriz de Seguimiento al Desempeño Ambiental.xls": {
+        "name": "F-PMC-025 Matriz de Seguimiento al Desempeño Ambiental",
+        "category": "Formatos"
+    },
+    "Formatos/F-PMC-026 Formato Percepcion del usuario.doc": {
+        "name": "F-PMC-026 Formato Percepcion del usuario",
+        "category": "Formatos"
+    },
+    "Instructivos/I-PMC-001 Instructivo para Determinar los Requisitos del Auditor Interno.pdf": {
+        "name": "I-PMC-001 Instructivo para Determinar los Requisitos del Auditor Interno",
+        "category": "Instructivos"
+    },
+    "Instructivos/I-PMC-002 Instuctivo para la Presentación y Calificación de Informe de Gestión de SAO, SAA y Sedes Regionales de Apoyo para Contratistas.pdf": {
+        "name": "I-PMC-002 Instuctivo para la Presentación y Calificación de Informe de Gestión de SAO, SAA y Sedes Regionales de Apoyo para Contratistas",
+        "category": "Instructivos"
+    },
+    "Mapa de riesgos/MR-SGI-002 Mejora Continua.xlsx": {
+        "name": "MR-SGI-002 Mejora Continua",
+        "category": "Mapa de riesgos"
+    },
+    "Procedimientos/PMC-001 Procedimiento para realizar Seguimiento a la Satisfaccion del Cliente y Partes Interesadas.docx": {
+        "name": "PMC-001 Procedimiento para realizar Seguimiento a la Satisfaccion del Cliente y Partes Interesadas",
+        "category": "Procedimientos"
+    },
+    "Procedimientos/PMC-002 Procedimiento de Acciones Correctivas y para Abordar Riesgos.pdf": {
+        "name": "PMC-002 Procedimiento de Acciones Correctivas y para Abordar Riesgos",
+        "category": "Procedimientos"
+    },
+    "Procedimientos/PMC-003 Procedimiento para Auditorias Internas del Sistema de Gestión.pdf": {
+        "name": "PMC-003 Procedimiento para Auditorias Internas del Sistema de Gestión",
+        "category": "Procedimientos"
+    },
+    "Procedimientos/PMC-004 Procedimiento para el Control de Registros.pdf": {
+        "name": "PMC-004 Procedimiento para el Control de Registros",
+        "category": "Procedimientos"
+    },
+    "Procedimientos/PMC-005 Procedimiento para Controlar la Salida No Conforme.pdf": {
+        "name": "PMC-005 Procedimiento para Controlar la Salida No Conforme",
+        "category": "Procedimientos"
+    },
+    "Procedimientos/PMC-006 Procedimiento para Elaboración de Documentos.pdf": {
+        "name": "PMC-006 Procedimiento para Elaboración de Documentos",
+        "category": "Procedimientos"
+    },
+    "Procedimientos/PMC-007 Procedimiento para el Control de Documentos.pdf": {
+        "name": "PMC-007 Procedimiento para el Control de Documentos",
+        "category": "Procedimientos"
+    },
+    "Procedimientos/PMC-008 Procedimiento de seguimiento y medición al desempeño ambiental y SYST.pdf": {
+        "name": "PMC-008 Procedimiento de seguimiento y medición al desempeño ambiental y SYST",
+        "category": "Procedimientos"
+    }
+}

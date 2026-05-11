@@ -99,18 +99,31 @@ window.ProvisionEmpleosAdmin = (() => {
     if (!title) return alert("El título es obligatorio");
     if (!id && !fileInput) return alert("Selecciona un archivo");
 
-    const fd = new FormData();
-    fd.append("title", title);
-    fd.append("type", type);
-    fd.append("date", date);
-    fd.append("description", desc);
-    if (fileInput) fd.append("file", fileInput);
+    const payload = { title, type, date, description: desc };
 
     try {
-      const res = await fetch(id ? `${API}/${id}` : API, {
-        method: id ? "PUT" : "POST",
-        body: fd,
-      });
+      let res;
+      if (id && !fileInput) {
+        // Edit text only: use JSON
+        res = await fetch(`${API}/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        // Create or Edit with file: use FormData
+        const fd = new FormData();
+        fd.append("title", title);
+        fd.append("type", type);
+        fd.append("date", date);
+        fd.append("description", desc);
+        if (fileInput) fd.append("file", fileInput);
+
+        res = await fetch(id ? `${API}/${id}` : API, {
+          method: id ? "PUT" : "POST",
+          body: fd,
+        });
+      }
       if (res.ok) {
         alert("¡¡Documento guardado con ÃÂ©xito!");
         resetForm();

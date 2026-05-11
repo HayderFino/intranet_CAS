@@ -4,13 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const path = window.location.pathname;
     const adminIdx = path.indexOf('/administracion/');
     if (adminIdx !== -1) {
-      return path.substring(0, adminIdx) + '/api/';
+      return path.substring(0, adminIdx) + '/api';
     }
     const adminShortIdx = path.indexOf('/administracion');
     if (adminShortIdx !== -1) {
-      return path.substring(0, adminShortIdx) + '/api/';
+      return path.substring(0, adminShortIdx) + '/api';
     }
-    return '../api/';
+    return '../api';
   })();
 
   // Helper para asignar eventos de forma segura
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hideAll();
     if (sections.sgi) sections.sgi.classList.remove("hidden");
     if (navItems.mejora) navItems.mejora.classList.add("active");
-    if (typeof switchSgiSection === "function") switchSgiSection("mejora");
+    if (typeof switchSgiSection === "function") switchSgiSection("mejora-continua");
   });
 
   navItems.respel = document.getElementById("nav-respel");
@@ -1753,20 +1753,20 @@ document.addEventListener("DOMContentLoaded", () => {
       "Mapa de riesgos",
       "Procedimientos",
       "Registros",
-      "Mejora Continua",
     ],
-    mejora: [
+    'mejora-continua': [
       "Caracterización",
       "Formatos",
       "Instructivos",
-      "Mapa de Riesgos",
+      "Mapa de riesgos",
       "Procedimientos",
+      "Registros",
     ],
   };
 
   function switchSgiSection(section) {
     sgiCurrentSection.value = section;
-    sgiSubtitle.innerText = `Administra los documentos de ${section === "planeacion" ? "Planeación EstratÃÂ©gica" : "Mejora Continua"}.`;
+    sgiSubtitle.innerText = `Administra los documentos de ${section === "planeacion" ? "Planeación Estratégica" : "Mejora Continua"}.`;
 
     // Update Tabs UI
     sgiTabButtons.forEach((btn) => {
@@ -2249,16 +2249,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = elements.file.files[0];
       if (!id && !file) return showToast("Selecciona un archivo", "info");
 
-      showToast(id ? "Actualizando..." : "Subiendo...", "info");
-      const fd = new FormData();
-      fd.append("name", elements.name.value);
-      if (file) fd.append("file", file);
-
       try {
-        const res = await fetch(id ? `${API}/${id}` : API, {
-          method: id ? "PUT" : "POST",
-          body: fd,
-        });
+        let res;
+        if (id && !file) {
+          // Edit text only
+          res = await fetch(`${API}/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: elements.name.value }),
+          });
+        } else {
+          // Create or Edit with file
+          const fd = new FormData();
+          fd.append("name", elements.name.value);
+          if (file) fd.append("file", file);
+
+          res = await fetch(id ? `${API}/${id}` : API, {
+            method: id ? "PUT" : "POST",
+            body: fd,
+          });
+        }
         if (res.ok) {
           showToast(id ? "Actualizado" : "Subido");
           resetForm();

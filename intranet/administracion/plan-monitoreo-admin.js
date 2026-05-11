@@ -137,16 +137,34 @@ const PlanMonitoreoAdmin = (() => {
         return notify(`Supera el límite de ${MAX_SIZE_MB}MB`, "error");
     }
 
-    notify(id ? "Actualizando..." : "Subiendo...", "info");
-    const fd = new FormData();
-    fd.append("name", name);
-    if (file) fd.append("file", file);
+    let fileUrl = "";
+    // If editing, try to keep current URL if no new file
+    if (id) {
+      const item = items.find(i => i.id === id);
+      fileUrl = item ? item.href : "";
+    }
 
     try {
+      // 1. Upload file if selected
+      if (file) {
+        const upFd = new FormData();
+        upFd.append("file", file);
+        const upRes = await fetch(`${API}/upload`, {
+          method: "POST",
+          body: upFd
+        });
+        if (!upRes.ok) throw new Error("Error al subir archivo");
+        const upData = await upRes.json();
+        fileUrl = upData.fileUrl;
+      }
+
+      // 2. Save/Update record
       const res = await fetch(id ? `${API}/${id}` : API, {
         method: id ? "PUT" : "POST",
-        body: fd,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, fileUrl }),
       });
+
       if (res.ok) {
         notify(id ? "Actualizado" : "Subido");
         resetForm();
@@ -156,7 +174,8 @@ const PlanMonitoreoAdmin = (() => {
         notify(err.message || "Error al procesar", "error");
       }
     } catch (err) {
-      notify("Error de red", "error");
+      console.error(err);
+      notify("Error en el proceso: " + err.message, "error");
     }
   }
 
