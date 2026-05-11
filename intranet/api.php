@@ -785,7 +785,7 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
 
         foreach ($allFiles as $f) {
             $base = basename($f);
-            $m = $meta[$base] ?? [];
+            $m = $meta[$f] ?? $meta[$base] ?? [];
 
             // Codificar cada segmento de la ruta para evitar errores con espacios o acentos en URLs
             $dirSegments = explode('/', ltrim($uploadDir, '/'));
