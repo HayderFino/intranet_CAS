@@ -462,7 +462,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { api: 'planes-talento', grid: 'planes-grid', card: 'plan-item' },
     { api: 'convocatorias', grid: 'convocatorias-grid', card: 'doc-item' },
     { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'pdf-folder-card' },
-    { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'pdf-folder-card' },
+    { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'doc-item' },
     { api: 'manuales-sgi', grid: 'manuales-sgi-grid', card: 'pdf-folder-card' },
     { api: 'boletines', grid: 'boletines-historico-grid', card: 'bulletin-card' },
     { api: 'politicas-sgi', grid: 'politicas-grid', card: 'pdf-folder-card' },
@@ -533,9 +533,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         const titleSafe = item.name || item.title || 'Documento';
 
-        // Agrupación por año para convocatorias
+        // Agrupación por año para convocatorias y provisión de empleos
         const year = item.category || (item.date && item.date.match(/\d{4}/) ? item.date.match(/\d{4}/)[0] : null);
-        if (m.api === 'convocatorias' && year && year !== currentYear && !m.grid.startsWith('index-')) {
+        if ((m.api === 'convocatorias' || m.api === 'provision-empleos') && year && year !== currentYear && !m.grid.startsWith('index-')) {
             currentYear = year;
             const targetGridId = m.grid;
             if (!htmlParts[targetGridId]) htmlParts[targetGridId] = "";
@@ -598,7 +598,7 @@ document.addEventListener("DOMContentLoaded", () => {
                </a>`;
         }
 
-        if (item.category && m.api !== 'convocatorias') {
+        if (item.category && m.api !== 'convocatorias' && m.api !== 'provision-empleos') {
           const catId = item.category.toLowerCase()
             .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             .replace(/[^a-z0-9]/g, '-')
