@@ -6,6 +6,26 @@
 const scriptSrc = document.currentScript ? document.currentScript.src : window.location.href;
 const BASE_PATH = scriptSrc.substring(0, scriptSrc.lastIndexOf('/') + 1);
 
+// Verificar si se está ejecutando desde el sistema de archivos (file://)
+if (window.location.protocol === 'file:') {
+  console.error("ALERTA: Estás abriendo el archivo directamente (CORS bloqueado). Debes usar un servidor local (Laragon/XAMPP).");
+  document.addEventListener("DOMContentLoaded", () => {
+    const warning = document.createElement("div");
+    warning.innerHTML = `
+            <div style="background: #fee2e2; color: #b91c1c; padding: 1rem; text-align: center; font-weight: bold; position: fixed; top: 0; left: 0; right: 0; z-index: 10000; border-bottom: 2px solid #ef4444; font-family: sans-serif; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                ⚠️ Error de Protocolo: Estás abriendo la Intranet como un archivo local. 
+                <br>
+                <span style="font-weight: normal; font-size: 0.9rem;">
+                    Las funciones dinámicas (API) no funcionarán. Por favor, usa 
+                    <strong style="color: #991b1b;">http://localhost/</strong> a través de Laragon o XAMPP.
+                </span>
+            </div>
+        `;
+    document.body.prepend(warning);
+    document.body.style.paddingTop = "60px";
+  });
+}
+
 // --- Carrusel Dinámico ---
 let currentSlide = 0;
 let carouselInterval = null;
@@ -187,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadDynamicBanner();
 
   // Inicializar carrusel si existe en la página fijo
-  initCarousel(); 
+  initCarousel();
 
   // Activar nav link seleccionado
   const navLinks = document.querySelectorAll(".nav-links a");
@@ -536,10 +556,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Agrupación por año para convocatorias y provisión de empleos
         const year = item.category || (item.date && item.date.match(/\d{4}/) ? item.date.match(/\d{4}/)[0] : null);
         if ((m.api === 'convocatorias' || m.api === 'provision-empleos') && year && year !== currentYear && !m.grid.startsWith('index-')) {
-            currentYear = year;
-            const targetGridId = m.grid;
-            if (!htmlParts[targetGridId]) htmlParts[targetGridId] = "";
-            htmlParts[targetGridId] += `<h3 class="year-group-header" style="grid-column: 1 / -1; margin: 2rem 0 1rem; color: var(--primary-dark); border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem; width: 100%; font-size: 1.5rem; font-weight: 700;">${year}</h3>`;
+          currentYear = year;
+          const targetGridId = m.grid;
+          if (!htmlParts[targetGridId]) htmlParts[targetGridId] = "";
+          htmlParts[targetGridId] += `<h3 class="year-group-header" style="grid-column: 1 / -1; margin: 2rem 0 1rem; color: var(--primary-dark); border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem; width: 100%; font-size: 1.5rem; font-weight: 700;">${year}</h3>`;
         }
 
         let cardHtml = "";
