@@ -14,7 +14,7 @@ if (window.location.protocol === 'file:') {
     warning.innerHTML = `
             <div style="background: #fee2e2; color: #b91c1c; padding: 1rem; text-align: center; font-weight: bold; position: fixed; top: 0; left: 0; right: 0; z-index: 10000; border-bottom: 2px solid #ef4444; font-family: sans-serif; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
                 ⚠️ Error de Protocolo: Estás abriendo la Intranet como un archivo local. 
-                <br>
+                <br>0
                 <span style="font-weight: normal; font-size: 0.9rem;">
                     Las funciones dinámicas (API) no funcionarán. Por favor, usa 
                     <strong style="color: #991b1b;">http://localhost/</strong> a través de Laragon o XAMPP.
@@ -481,7 +481,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { api: 'plan-monitoreo', grid: 'plan-monitoreo-grid', card: 'pdf-folder-card' },
     { api: 'planes-talento', grid: 'planes-grid', card: 'plan-item' },
     { api: 'convocatorias', grid: 'convocatorias-grid', card: 'doc-item' },
-    { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'doc-item' },
+    { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'pdf-folder-card' },
     { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'doc-item' },
     { api: 'manuales-sgi', grid: 'manuales-sgi-grid', card: 'pdf-folder-card' },
     { api: 'boletines', grid: 'boletines-historico-grid', card: 'bulletin-card' },
@@ -555,7 +555,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Agrupación por año para convocatorias y provisión de empleos
         const year = item.category || (item.date && item.date.match(/\d{4}/) ? item.date.match(/\d{4}/)[0] : null);
-        if ((m.api === 'convocatorias' || m.api === 'provision-empleos' || m.api === 'estudios-tecnicos') && year && year !== currentYear && !m.grid.startsWith('index-')) {
+        if ((m.api === 'convocatorias' || m.api === 'provision-empleos') && year && year !== currentYear && !m.grid.startsWith('index-')) {
           currentYear = year;
           const targetGridId = m.grid;
           if (!htmlParts[targetGridId]) htmlParts[targetGridId] = "";
@@ -618,14 +618,13 @@ document.addEventListener("DOMContentLoaded", () => {
                </a>`;
         }
 
-        const catId = item.category ? item.category.toLowerCase()
-          .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-          .replace(/[^a-z0-9]/g, '-')
-          .replace(/-+/g, '-')
-          .replace(/^-|-$/g, '')
-          + '-grid' : null;
-
-        if (catId && document.getElementById(catId)) {
+        if (item.category && m.api !== 'convocatorias' && m.api !== 'provision-empleos') {
+          const catId = item.category.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9]/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '')
+            + '-grid';
           if (!htmlParts[catId]) htmlParts[catId] = "";
           htmlParts[catId] += cardHtml;
         } else {
