@@ -1456,19 +1456,19 @@
                 <div class="form-group">
                   <label for="citaCategory">Categorí­a</label>
                   <select id="citaCategory" required>
-                    <option value="GUÃAS - LIQUIDACIONES">
+                    <option value="Guías - Liquidaciones">
                       Guías - Liquidaciones
                     </option>
-                    <option value="GUÃAS - PERMISOS Y TRÁMITES">
+                    <option value="Guías - Permisos y Trámites">
                       Guías - Permisos y Trámites
                     </option>
-                    <option value="GUÃAS - SANCIONATORIO">
+                    <option value="Guías - Sancionatorio">
                       Guías - Sancionatorio
                     </option>
-                    <option value="PROCEDIMIENTOS - PERMISOS Y TRÁMITES">
+                    <option value="Procedimientos - Permisos y Trámites">
                       Procedimientos - Permisos y Trámites
                     </option>
-                    <option value="PROCEDIMIENTOS - SANCIONATORIOS">
+                    <option value="Procedimientos - Sancionatorios">
                       Procedimientos - Sancionatorios
                     </option>
                   </select>
@@ -1508,19 +1508,19 @@
                     font-size: 0.9rem;
                   ">
                 <option value="all">Todas las categorías</option>
-                <option value="GUÃAS - LIQUIDACIONES">
+                <option value="Guías - Liquidaciones">
                   Guías - Liquidaciones
                 </option>
-                <option value="GUÃAS - PERMISOS Y TRÁMITES">
+                <option value="Guías - Permisos y Trámites">
                   Guías - Permisos y Trámites
                 </option>
-                <option value="GUÃAS - SANCIONATORIO">
+                <option value="Guías - Sancionatorio">
                   Guías - Sancionatorio
                 </option>
-                <option value="PROCEDIMIENTOS - PERMISOS Y TRÁMITES">
+                <option value="Procedimientos - Permisos y Trámites">
                   Procedimientos - Permisos y Trámites
                 </option>
-                <option value="PROCEDIMIENTOS - SANCIONATORIOS">
+                <option value="Procedimientos - Sancionatorios">
                   Procedimientos - Sancionatorios
                 </option>
               </select>
@@ -1614,10 +1614,18 @@
                 <label for="revisionRedName">Nombre del Archivo / Guía</label>
                 <input type="text" id="revisionRedName" placeholder="Ej: Guía de Usuario Vélez" required />
               </div>
-              <div class="form-group">
-                <label for="revisionRedFile">Archivo (PDF, Word, Excel, ZIP, Imagen)</label>
-                <input type="file" id="revisionRedFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.png,.zip"
-                  required />
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="revisionRedCategory">Clasificación</label>
+                  <select id="revisionRedCategory" required>
+                    <option value="Guías de Usuario">Guías de Usuario</option>
+                    <option value="Documentos">Documentos</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="revisionRedFile">Archivo (PDF, Word, Excel, ZIP, Imagen)</label>
+                  <input type="file" id="revisionRedFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.png,.zip" required />
+                </div>
               </div>
               <div class="form-actions" id="revisionRedFormActions">
                 <button type="submit" class="btn-primary" id="revisionRedSaveBtn">
@@ -1626,6 +1634,31 @@
                 <div id="revisionRedCancelContainer" style="display: inline-block"></div>
               </div>
             </form>
+
+            <div class="list-filter" style="
+                  margin-bottom: 1.5rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 1rem;
+                  background: #f8fafc;
+                  padding: 1rem;
+                  border-radius: 8px;
+                  border: 1px solid #e2e8f0;
+                ">
+              <label for="revisionRedFilterCategory" style="font-weight: 600; color: #64748b; font-size: 0.9rem">Filtrar por Clase:</label>
+              <select id="revisionRedFilterCategory" style="
+                    flex: 1;
+                    max-width: 300px;
+                    padding: 0.5rem;
+                    border: 1px solid #cbd5e1;
+                    border-radius: 6px;
+                    font-size: 0.9rem;
+                  ">
+                <option value="all">Todas las clases</option>
+                <option value="Guías de Usuario">Guías de Usuario</option>
+                <option value="Documentos">Documentos</option>
+              </select>
+            </div>
 
             <div id="revisionRedItemsList" class="news-management-list">
               <!-- Items inyectados por JS -->
@@ -1648,16 +1681,20 @@
                 <label for="snifName">Nombre del Archivo / Documento</label>
                 <input type="text" id="snifName" placeholder="Ej: Manual de Diligenciamiento SNIF 2023" required />
               </div>
-              <div class="form-group">
-                <label for="snifFile">Archivo (PDF, Word, Excel, PPT, ZIP, Imagen)</label>
-                <input type="file" id="snifFile"
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.svg,.zip,.rar,.odt,.ods,.odp,.txt,.csv"
-                  required />
-                <small style="display: block; margin-top: 0.3rem; color: #64748b">
-                  Máximo 20 MB &middot; No se permiten .exe, .bat,
-                  .cmd, .js, .sh &middot; Deja vacío para conservar el
-                  archivo actual al editar.
-                </small>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="snifCategory">Clasificación</label>
+                  <select id="snifCategory" required>
+                    <option value="Documentación y Formatos">Documentación y Formatos</option>
+                    <option value="Manuales">Manuales</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="snifFile">Archivo (PDF, Word, Excel, PPT, ZIP, Imagen)</label>
+                  <input type="file" id="snifFile"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.svg,.zip,.rar,.odt,.ods,.odp,.txt,.csv"
+                    required />
+                </div>
               </div>
               <div class="form-actions" id="snifFormActions">
                 <button type="submit" class="btn-primary" id="snifSaveBtn">
@@ -1666,6 +1703,31 @@
                 <div id="snifCancelContainer" style="display: inline-block"></div>
               </div>
             </form>
+
+            <div class="list-filter" style="
+                  margin-bottom: 1.5rem;
+                  display: flex;
+                  align-items: center;
+                  gap: 1rem;
+                  background: #f8fafc;
+                  padding: 1rem;
+                  border-radius: 8px;
+                  border: 1px solid #e2e8f0;
+                ">
+              <label for="snifFilterCategory" style="font-weight: 600; color: #64748b; font-size: 0.9rem">Filtrar por Clase:</label>
+              <select id="snifFilterCategory" style="
+                    flex: 1;
+                    max-width: 300px;
+                    padding: 0.5rem;
+                    border: 1px solid #cbd5e1;
+                    border-radius: 6px;
+                    font-size: 0.9rem;
+                  ">
+                <option value="all">Todas las clases</option>
+                <option value="Documentación y Formatos">Documentación y Formatos</option>
+                <option value="Manuales">Manuales</option>
+              </select>
+            </div>
 
             <div id="snifItemsList" class="news-management-list">
               <!-- Items inyectados por JS -->

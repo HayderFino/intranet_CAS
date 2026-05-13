@@ -8,9 +8,11 @@ const SnifAdmin = (() => {
   const elements = {
     form: document.getElementById("snifForm"),
     name: document.getElementById("snifName"),
+    category: document.getElementById("snifCategory"),
     file: document.getElementById("snifFile"),
     saveBtn: document.getElementById("snifSaveBtn"),
     list: document.getElementById("snifItemsList"),
+    filter: document.getElementById("snifFilterCategory"),
   };
 
   let items = [];
@@ -21,17 +23,23 @@ const SnifAdmin = (() => {
     console.log("SNIF Admin initialized");
 
     // Cancel button
-    const cancelBtn = document.createElement("button");
-    cancelBtn.type = "button";
-    cancelBtn.className = "btn-secondary hidden";
-    cancelBtn.style.marginLeft = "0.5rem";
-    cancelBtn.innerText = "Cancelar Edición";
-    elements.form.querySelector(".form-actions").appendChild(cancelBtn);
-
-    elements.cancelBtn = cancelBtn;
-    cancelBtn.onclick = resetForm;
+    const cancelContainer = document.getElementById("snifCancelContainer");
+    if (cancelContainer) {
+      const cancelBtn = document.createElement("button");
+      cancelBtn.type = "button";
+      cancelBtn.className = "btn-secondary hidden";
+      cancelBtn.style.marginLeft = "0.5rem";
+      cancelBtn.innerText = "Cancelar Edición";
+      cancelContainer.appendChild(cancelBtn);
+      elements.cancelBtn = cancelBtn;
+      cancelBtn.onclick = resetForm;
+    }
 
     elements.form.onsubmit = handleSubmit;
+    if (elements.filter) {
+      elements.filter.onchange = render;
+    }
+
     load();
   }
 
@@ -48,18 +56,30 @@ const SnifAdmin = (() => {
   }
 
   function render() {
-    if (items.length === 0) {
-      elements.list.innerHTML = "<p>No hay archivos registrados.</p>";
+    const filterVal = elements.filter ? elements.filter.value : "all";
+    
+    let filtered = items;
+    if (filterVal !== "all") {
+      filtered = items.filter(i => 
+        (i.category || "").trim().toLowerCase() === filterVal.trim().toLowerCase()
+      );
+    }
+
+    if (filtered.length === 0) {
+      elements.list.innerHTML = "<p>No hay archivos en esta categoría.</p>";
       return;
     }
 
-    elements.list.innerHTML = items
+    elements.list.innerHTML = filtered
       .map(
         (item) => `
             <div class="news-manage-card">
                 <div class="news-info">
+                    <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem;">
+                        <span style="background:#10b98120; color:#10b981; padding:2px 8px; border-radius:4px; font-size:0.7rem; font-weight:700;">${item.category || "General"}</span>
+                        <small style="color: #64748b;">${(item.type || "PDF").toUpperCase()} - ${item.size || ""}</small>
+                    </div>
                     <h4>${item.name}</h4>
-                    <small style="color: #64748b;">${item.type || "Archivo"} - ${item.size || ""}</small>
                 </div>
                 <div class="card-actions">
                     <a href="${item.href}" target="_blank" class="btn-secondary" style="text-decoration:none;">Ver</a>
@@ -98,6 +118,7 @@ const SnifAdmin = (() => {
 
       const payload = {
         name: elements.name.value,
+        category: elements.category.value
       };
       if (fileUrl) payload.href = fileUrl;
 
@@ -126,9 +147,10 @@ const SnifAdmin = (() => {
 
     editId = id;
     elements.name.value = item.name;
+    elements.category.value = item.category || "Documentación y Formatos";
     elements.file.required = false;
     elements.saveBtn.innerText = "Actualizar Archivo";
-    elements.cancelBtn.classList.remove("hidden");
+    if (elements.cancelBtn) elements.cancelBtn.classList.remove("hidden");
     elements.form.scrollIntoView({ behavior: "smooth" });
   }
 
@@ -137,11 +159,11 @@ const SnifAdmin = (() => {
     editId = null;
     elements.file.required = true;
     elements.saveBtn.innerText = "Subir Archivo";
-    elements.cancelBtn.classList.add("hidden");
+    if (elements.cancelBtn) elements.cancelBtn.classList.add("hidden");
   }
 
   async function del(id) {
-    if (!confirm("¡¿EstÃÂ¡s seguro?")) return;
+    if (!confirm("¿Estás seguro de eliminar este archivo?")) return;
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -168,5 +190,3 @@ const SnifAdmin = (() => {
 
 document.addEventListener("DOMContentLoaded", SnifAdmin.init);
 window.SnifAdmin = SnifAdmin;
-
-

@@ -75,7 +75,7 @@ const CitaAdmin = (() => {
     const filtered =
       filterVal === "all"
         ? items
-        : items.filter((i) => i.category === filterVal);
+        : items.filter((i) => (i.category || "").trim().toLowerCase() === filterVal.trim().toLowerCase());
 
     if (filtered.length === 0) {
       elements.list.innerHTML = `

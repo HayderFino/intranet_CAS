@@ -1,1 +1,10 @@
-[]
+{
+    "Instructivos/Instructivo Registro de Fuentes.pdf": {
+        "name": "Instructivo Registro de Fuentes",
+        "category": "Instructivos"
+    },
+    "Instructivos/Instructivo Registro de Usuarios Recurso Hidrico.pdf": {
+        "name": "Instructivo Registro de Usuarios Recurso Hidrico",
+        "category": "Instructivos"
+    }
+}

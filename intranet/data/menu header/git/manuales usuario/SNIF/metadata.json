@@ -1,1 +1,18 @@
-[]
+{
+    "Documentacion y Formatos/Manual de diligenciamiento tematico SNIF 2013.pdf": {
+        "name": "Manual de diligenciamiento tematico SNIF 2013",
+        "category": "Documentación y Formatos"
+    },
+    "Documentacion y Formatos/Resolucion 000503 de mayo 26 de 2015.pdf": {
+        "name": "Resolución 000503 de mayo 26 de 2015",
+        "category": "Documentación y Formatos"
+    },
+    "Documentacion y Formatos/Presentacion SNIF 2015.ppt": {
+        "name": "Presentación SNIF 2015",
+        "category": "Documentación y Formatos"
+    },
+    "Documentacion y Formatos/Formato SNIF.xlsx": {
+        "name": "Formato SNIF",
+        "category": "Documentación y Formatos"
+    }
+}

@@ -1,1 +1,106 @@
-[]
+{
+    "Guías - Liquidaciones/Guia Liquidación TES.pdf": {
+        "name": "Guia Liquidación TES",
+        "category": "Guías - Liquidaciones"
+    },
+    "Guías - Liquidaciones/Guía Liquidación TUA.pdf": {
+        "name": "Guía Liquidación TUA",
+        "category": "Guías - Liquidaciones"
+    },
+    "Guías - Permisos y Trámites/Guía Aprovechamiento Forestal Doméstico Aislado.pdf": {
+        "name": "Guía Aprovechamiento Forestal Doméstico Aislado",
+        "category": "Guías - Permisos y Trámites"
+    },
+    "Guías - Permisos y Trámites/Guía Aprovechamiento Forestal Persistente Único.pdf": {
+        "name": "Guía Aprovechamiento Forestal Persistente Único",
+        "category": "Guías - Permisos y Trámites"
+    },
+    "Guías - Permisos y Trámites/Guía Concesión Aguas Superficiales.pdf": {
+        "name": "Guía Concesión Aguas Superficiales",
+        "category": "Guías - Permisos y Trámites"
+    },
+    "Guías - Permisos y Trámites/Guía Concesión de Aguas Subterraneas.pdf": {
+        "name": "Guía Concesión de Aguas Subterraneas",
+        "category": "Guías - Permisos y Trámites"
+    },
+    "Guías - Permisos y Trámites/Guía Exploración de Aguas Subterraneas.pdf": {
+        "name": "Guía Exploración de Aguas Subterraneas",
+        "category": "Guías - Permisos y Trámites"
+    },
+    "Guías - Permisos y Trámites/Guía Licencia Ambiental.pdf": {
+        "name": "Guía Licencia Ambiental",
+        "category": "Guías - Permisos y Trámites"
+    },
+    "Guías - Permisos y Trámites/Guía Permiso de Emisiones Atmosféricas Fuentes Fijas.pdf": {
+        "name": "Guía Permiso de Emisiones Atmosféricas Fuentes Fijas",
+        "category": "Guías - Permisos y Trámites"
+    },
+    "Guías - Permisos y Trámites/Guía Vertimientos.pdf": {
+        "name": "Guía Vertimientos",
+        "category": "Guías - Permisos y Trámites"
+    },
+    "Guías - Sancionatorio/Guía Contravenciones Flagrancia.pdf": {
+        "name": "Guía Contravenciones Flagrancia",
+        "category": "Guías - Sancionatorio"
+    },
+    "Guías - Sancionatorio/Guía Contravenciones Incumplimiento Obligación.pdf": {
+        "name": "Guía Contravenciones Incumplimiento Obligación",
+        "category": "Guías - Sancionatorio"
+    },
+    "Guías - Sancionatorio/Guía Contravenciones Medida Preventiva.pdf": {
+        "name": "Guía Contravenciones Medida Preventiva",
+        "category": "Guías - Sancionatorio"
+    },
+    "Guías - Sancionatorio/Guía de Contravenciones Denuncia.pdf": {
+        "name": "Guía de Contravenciones Denuncia",
+        "category": "Guías - Sancionatorio"
+    },
+    "Procedimientos - Permisos y Trámites/Procedimiento Aprovechamiento Forestal Domestico.pdf": {
+        "name": "Procedimiento Aprovechamiento Forestal Domestico",
+        "category": "Procedimientos - Permisos y Trámites"
+    },
+    "Procedimientos - Permisos y Trámites/Procedimiento Aprovechamiento Forestal Persistente Único.pdf": {
+        "name": "Procedimiento Aprovechamiento Forestal Persistente Único",
+        "category": "Procedimientos - Permisos y Trámites"
+    },
+    "Procedimientos - Permisos y Trámites/Procedimiento Concesión de Aguas Subterraneas.pdf": {
+        "name": "Procedimiento Concesión de Aguas Subterraneas",
+        "category": "Procedimientos - Permisos y Trámites"
+    },
+    "Procedimientos - Permisos y Trámites/Procedimiento Concesión de Aguas Superficiales.pdf": {
+        "name": "Procedimiento Concesión de Aguas Superficiales",
+        "category": "Procedimientos - Permisos y Trámites"
+    },
+    "Procedimientos - Permisos y Trámites/Procedimiento Emisiones Atmosféricas.pdf": {
+        "name": "Procedimiento Emisiones Atmosféricas",
+        "category": "Procedimientos - Permisos y Trámites"
+    },
+    "Procedimientos - Permisos y Trámites/Procedimiento Exploración Concesión Aguas Subterraneas.pdf": {
+        "name": "Procedimiento Exploración Concesión Aguas Subterraneas",
+        "category": "Procedimientos - Permisos y Trámites"
+    },
+    "Procedimientos - Permisos y Trámites/Procedimiento Licencia Ambiental.pdf": {
+        "name": "Procedimiento Licencia Ambiental",
+        "category": "Procedimientos - Permisos y Trámites"
+    },
+    "Procedimientos - Permisos y Trámites/Procedimiento Vertimientos.pdf": {
+        "name": "Procedimiento Vertimientos",
+        "category": "Procedimientos - Permisos y Trámites"
+    },
+    "Procedimientos - Sancionatorios/Procedimiento Atención Contravenciones Medida Preventiva.pdf": {
+        "name": "Procedimiento Atención Contravenciones Medida Preventiva",
+        "category": "Procedimientos - Sancionatorios"
+    },
+    "Procedimientos - Sancionatorios/Procedimiento Atención Contravención Flagrancia.pdf": {
+        "name": "Procedimiento Atención Contravención Flagrancia",
+        "category": "Procedimientos - Sancionatorios"
+    },
+    "Procedimientos - Sancionatorios/Procedimiento Atención Contravención Incumplimiento Obligación.pdf": {
+        "name": "Procedimiento Atención Contravención Incumplimiento Obligación",
+        "category": "Procedimientos - Sancionatorios"
+    },
+    "Procedimientos - Sancionatorios/Procedimiento Atención Contravención Inicio Queja.pdf": {
+        "name": "Procedimiento Atención Contravención Inicio Queja",
+        "category": "Procedimientos - Sancionatorios"
+    }
+}
