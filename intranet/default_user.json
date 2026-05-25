@@ -2,7 +2,7 @@
     {
         "_id": "69a9c6bfc73243a90d88024c",
         "username": "Admin",
-        "password": "",
+        "password": "$2y$10$2n2uVjzRNnYK6rSsvOFYKO0.fDGB1IRNNgVpk14rsrPlQLp3./apm",
         "role": "superadmin",
         "displayName": "Hayder",
         "createdAt": "2026-03-05T18:09:03.580+00:00",
