@@ -569,28 +569,80 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)$#
     if (file_exists($dirPath) && is_dir($dirPath)) {
         $metaPath = $dirPath . '/metadata.json';
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+        
+        // Leer directorios
         foreach (scandir($dirPath) as $f) {
             if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
                 continue;
             $full = $dirPath . '/' . $f;
             if (is_dir($full)) {
+                // Leer archivos dentro del directorio
                 foreach (scandir($full) as $sf) {
                     if ($sf === '.' || $sf === '..')
                         continue;
                     $rel = $f . '/' . $sf;
                     $m2 = $meta[$rel] ?? [];
+                    
+                    // Construir URL
+                    $fileUrl = WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf)));
+                    
                     $items[] = [
                         'id' => md5($rel),
                         'name' => $m2['name'] ?? pathinfo($sf, PATHINFO_FILENAME),
-                        'href' => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
-                        'fileUrl' => WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf))),
+                        'href' => $fileUrl,
+                        'fileUrl' => $fileUrl,
                         'category' => $f,
+                        'meta' => 'PDF - Documento'
                     ];
                 }
             }
         }
     }
     out($items);
+}
+
+// POST /sgi/admin-recursos (create new item)
+if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)$#i', $route, $sm) && $method === 'POST') {
+    auth();
+    $section = $sm[1];
+    $base = $SGI_MISIONAL_MAP[$section];
+    $dirPath = __DIR__ . '/' . $base;
+    $metaPath = $dirPath . '/metadata.json';
+    $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+    
+    $in = body();
+    $name = $in['name'] ?? 'Sin nombre';
+    $category = $in['category'] ?? 'General';
+    $fileUrl = $in['fileUrl'] ?? '#';
+    
+    // Create category folder if it doesn't exist
+    $catPath = $dirPath . '/' . $category;
+    if (!is_dir($catPath)) {
+        @mkdir($catPath, 0777, true);
+    }
+    
+    // Extract relative path from fileUrl
+    $relPath = '';
+    if ($fileUrl && $fileUrl !== '#') {
+        $decodedUrl = urldecode($fileUrl);
+        $searchDir = rtrim($base, '/');
+        $pos = strpos($decodedUrl, $searchDir);
+        if ($pos !== false) {
+            $relPath = ltrim(substr($decodedUrl, $pos + strlen($searchDir)), '/');
+        } else {
+            $relPath = $category . '/' . basename($decodedUrl);
+        }
+    } else {
+        $relPath = $category . '/' . time() . '-' . preg_replace('/[^a-zA-Z0-9_\-]/', '', str_replace(' ', '-', $name));
+    }
+    
+    // Save metadata
+    $meta[$relPath] = [
+        'name' => $name,
+        'category' => $category,
+    ];
+    write_json($metaPath, $meta);
+    out(['id' => md5($relPath)], 201);
 }
 
 if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)/([a-zA-Z0-9_\-\.:]+)$#i', $route, $dm) && $method === 'DELETE') {

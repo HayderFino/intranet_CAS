@@ -22,6 +22,14 @@ const PlanesTalentoAdmin = (() => {
   let items = [];
   let currentFilter = "all";
 
+  const normalize = (s) =>
+    String(s || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+
   function init() {
     elements = {
       form: document.getElementById("planesTalentoForm"),
@@ -97,7 +105,7 @@ const PlanesTalentoAdmin = (() => {
 
     let filtered = items;
     if (currentFilter !== "all") {
-      filtered = items.filter((i) => i.category === currentFilter);
+      filtered = items.filter((i) => normalize(i.category) === normalize(currentFilter));
     }
 
     if (filtered.length === 0) {

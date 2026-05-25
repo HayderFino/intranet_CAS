@@ -47,6 +47,14 @@ const MeciAdmin = (() => {
   let items = [];
   let editingId = null;
 
+  const normalize = (s) =>
+    String(s || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+
   function getEls() {
     return {
       form: document.getElementById("meciForm"),
@@ -102,7 +110,7 @@ const MeciAdmin = (() => {
       els.filterSelect.innerHTML =
         '<option value="all">Todas las subcarpetas</option>' +
         activeTab.subfolders
-          .map((sf) => `<option value="${sf}">${sf}</option>`)
+          .map((sf) => `<option value="${normalize(sf)}">${sf}</option>`)
           .join("");
     }
 
@@ -129,7 +137,7 @@ const MeciAdmin = (() => {
     const filtered =
       filterVal === "all" || !activeTab.hasSubfolders
         ? items
-        : items.filter((i) => i.subfolder === filterVal || i.category === filterVal);
+        : items.filter((i) => normalize(i.subfolder) === filterVal || normalize(i.category) === filterVal);
 
     if (els.countEl) {
       els.countEl.textContent = `${filtered.length} de ${items.length} documentos`;
