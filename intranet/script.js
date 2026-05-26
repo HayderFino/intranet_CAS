@@ -481,7 +481,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { api: 'plan-monitoreo', grid: 'plan-monitoreo-grid', card: 'pdf-folder-card' },
     { api: 'planes-talento', grid: 'planes-grid', card: 'plan-item' },
     { api: 'convocatorias', grid: 'convocatorias-grid', card: 'doc-item' },
-    { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'pdf-folder-card' },
+    { api: 'estudios-tecnicos', grid: 'estudios-tecnicos-grid', card: 'doc-item' },
     { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'doc-item' },
     { api: 'manuales-sgi', grid: 'manuales-sgi-grid', card: 'pdf-folder-card' },
     { api: 'boletines', grid: 'boletines-historico-grid', card: 'bulletin-card' },

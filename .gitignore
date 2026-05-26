@@ -10,4 +10,5 @@ dist/
 build/
 uploads/
 intranet/data/
-.agents/workflows/intranet.md
+.agents/workflows/intranet.md
+*.zip
