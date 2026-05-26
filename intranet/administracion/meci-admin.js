@@ -312,7 +312,7 @@ const MeciAdmin = (() => {
         body: JSON.stringify(payload),
       });
       if (res.ok) {
-        toast(id ? "Documento actualizado Ã¢Åâ" : "Documento guardado Ã¢Åâ");
+        toast(id ? "Documento actualizado " : "Documento guardado");
         cancelEdit();
         load(TABS.indexOf(activeTab));
       } else {

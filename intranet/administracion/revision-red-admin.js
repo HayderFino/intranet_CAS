@@ -186,7 +186,7 @@ const RevisionRedAdmin = (() => {
     setTimeout(() => toast.classList.add("hidden"), 3000);
   }
 
-  return { init, startEdit, del };
+  return { init, startEdit, del, load };
 })();
 
 document.addEventListener("DOMContentLoaded", RevisionRedAdmin.init);

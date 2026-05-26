@@ -485,7 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { api: 'provision-empleos', grid: 'provision-empleos-grid', card: 'doc-item' },
     { api: 'manuales-sgi', grid: 'manuales-sgi-grid', card: 'pdf-folder-card' },
     { api: 'boletines', grid: 'boletines-historico-grid', card: 'bulletin-card' },
-    { api: 'politicas-sgi', grid: 'politicas-grid', card: 'pdf-folder-card' },
+    { api: 'politicas-sgi', grid: 'politicas-grid', card: 'policy-card' },
     { api: 'cita', grid: 'cita-grid', card: 'pdf-folder-card' },
     { api: 'sirh', grid: 'sirh-grid', card: 'pdf-folder-card' },
     { api: 'snif', grid: 'snif-grid', card: 'pdf-folder-card' },
@@ -602,6 +602,32 @@ document.addEventListener("DOMContentLoaded", () => {
                          </div>
                          <span style="padding:0.4rem 1rem; background:var(--primary); color:white; border-radius:8px; font-size:0.75rem; font-weight:700; white-space:nowrap;">Ver Boletín</span>
                     </a>`;
+        } else if (m.card === 'policy-card') {
+          const accentClasses = ['policy-accent-blue', 'policy-accent-green', 'policy-accent-orange', 'policy-accent-red', 'policy-accent-purple', 'policy-accent-teal'];
+          const accentClass = accentClasses[Math.abs(titleSafe.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % accentClasses.length];
+          cardHtml = `
+            <article class="policy-card ${accentClass}" data-id="${item.id}">
+                <div class="policy-header">
+                    <div class="policy-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-2.903 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946 2.903 3.42 3.42 0 012.219 2.219 3.42 3.42 0 002.903 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-2.903 1.946 3.42 3.42 0 01-2.219 2.219 3.42 3.42 0 00-1.946 2.903 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-2.903 3.42 3.42 0 01-2.219-2.219 3.42 3.42 0 00-2.903-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 002.903-1.946 3.42 3.42 0 012.219-2.219z" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h2 class="policy-title">${titleSafe}</h2>
+                </div>
+                <div class="policy-content">
+                    <p style="white-space: pre-wrap;">${item.code || ''}</p>
+                </div>
+                <div class="download-actions">
+                    ${(url && url !== '#') ? `
+                    <a href="${url}" target="_blank" class="btn-download">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Descargar Política
+                    </a>` : ''}
+                </div>
+            </article>`;
         } else if (m.card === 'file-item') {
           const fname = url.split('/').pop();
           cardHtml = `<a href="${url}" class="file-item" data-id="${item.id}" download="${decodeURIComponent(fname)}">

@@ -43,7 +43,7 @@ const PoliticasSgiAdmin = (() => {
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
 
-      items = data.items || [];
+      items = Array.isArray(data) ? data : (data.items || []);
       renderList();
     } catch (e) {
       listEl.innerHTML =
@@ -85,8 +85,8 @@ const PoliticasSgiAdmin = (() => {
 
                     <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
                         ${item.href && item.href !== "#"
-          ? `<a href="${item.href}" target="_blank" class="admin-file-badge">Ã°Å¸ââ Ver Documento</a>`
-          : '<span style="font-size:0.72rem; color:#94a3b8; font-style:italic;">Ã¢Å¡Â Ã¯Â¸Â Sin archivo cargado</span>'
+          ? `<a href="${item.href}" target="_blank" class="admin-file-badge"> Ver Documento</a>`
+          : '<span style="font-size:0.72rem; color:#94a3b8; font-style:italic;"> Sin archivo cargado</span>'
         }
                     </div>
                 </div>
@@ -169,7 +169,7 @@ const PoliticasSgiAdmin = (() => {
         body: JSON.stringify(payload),
       });
       if (res.ok) {
-        toast(id ? "Actualizado Ã¢Åâ" : "Guardado Ã¢Åâ");
+        toast(id ? "Actualizado " : "Guardado");
         cancelEdit();
         load();
       } else {

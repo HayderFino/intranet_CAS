@@ -311,7 +311,9 @@ if ($route === 'sgi/upload' && $method === 'POST') {
 
     $sgiUploadBase = [
         'planeacion' => 'data/menu header/sgi/Procesos Estrategicos/Planeacion Estrategica',
+        'planeacion-estrategica' => 'data/menu header/sgi/Procesos Estrategicos/Planeacion Estrategica',
         'mejora' => 'data/menu header/sgi/Procesos Estrategicos/mejora continua',
+        'mejora-continua' => 'data/menu header/sgi/Procesos Estrategicos/mejora continua',
         'admin-recursos' => 'data/menu header/sgi/procesos misionales/Administracion de la Oferta de Recursos Naturales Renovables disponibles, Educacion Ambiental y Participacion Ciudadana',
         'planeacion-ambiental' => 'data/menu header/sgi/procesos misionales/Planeacion y Ordenamiento Ambiental',
         'vigilancia-control' => 'data/menu header/sgi/procesos misionales/Vigilancia, Seguimiento y Control Ambiental',
@@ -1178,7 +1180,8 @@ if (strpos($route, 'informe-gestion') === 0) {
         $items = [];
         $files = is_dir($dirPath) ? scandir($dirPath) : [];
         foreach ($files as $f) {
-            if ($f === '.' || $f === '..' || strtolower(pathinfo($f, PATHINFO_EXTENSION)) !== 'pdf')
+            $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+            if ($f === '.' || $f === '..' || !in_array($ext, ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']))
                 continue;
             $m = $meta[$f] ?? [];
             $dirSegments = explode('/', ltrim($uploadDir, '/'));
@@ -1198,21 +1201,38 @@ if (strpos($route, 'informe-gestion') === 0) {
 
     if ($route === 'informe-gestion' && $method === 'POST') {
         auth();
-        $in = body();
-        $f = basename($in['pdfUrl'] ?? ''); // extraemos nombre original de fileUrl/pdfUrl
-        if (!$f)
-            $f = $in['filename'] ?? '';
+
+        // Soporte de FormData (multipart) y JSON puro
+        $in = !empty($_POST) ? $_POST : body();
+
+        // Subir archivo si viene en la misma petición
+        $f = '';
+        if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+            $url = upload_file('file', $uploadDir);
+            if ($url) {
+                $f = basename($url);
+                $in['pdfUrl'] = $url;
+            } else {
+                out(['error' => 'Error al mover el archivo subido'], 500);
+            }
+        }
+
+        // Si no vino archivo, intentar extraer nombre de pdfUrl/filename del body
+        if (!$f) {
+            $f = basename($in['pdfUrl'] ?? '');
+            if (!$f) $f = $in['filename'] ?? '';
+        }
 
         if ($f) {
             $meta = file_exists($metaPath) ? read_json($metaPath) : [];
             $meta[$f] = [
-                'title' => $in['title'] ?? pathinfo($f, PATHINFO_FILENAME),
-                'description' => $in['description'] ?? ''
+                'title'       => trim($in['title'] ?? pathinfo($f, PATHINFO_FILENAME)),
+                'description' => trim($in['description'] ?? '')
             ];
             write_json($metaPath, $meta);
             out(['success' => true, 'id' => md5($f)], 201);
         }
-        out(['error' => 'No filename provided'], 400);
+        out(['error' => 'No se recibió ningún archivo'], 400);
     }
 
     if (preg_match('/^informe-gestion\/([a-zA-Z0-9_\-\.:]+)$/', $route, $matchId)) {
@@ -1230,6 +1250,38 @@ if (strpos($route, 'informe-gestion') === 0) {
                 }
             }
             out(['success' => true]); // even if not found
+        }
+        if ($method === 'PUT') {
+            $in = body();
+            $meta = file_exists($metaPath) ? read_json($metaPath) : [];
+            $cleanId = explode(':', $id)[0];
+            $found = false;
+            foreach (scandir($dirPath) as $f) {
+                $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+                if ($f === '.' || $f === '..' || !in_array($ext, ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']))
+                    continue;
+                if (md5($f) === $cleanId) {
+                    $existing = $meta[$f] ?? [];
+                    if (isset($in['title'])) $existing['title'] = $in['title'];
+                    if (isset($in['description'])) $existing['description'] = $in['description'];
+                    
+                    // Si se cargó un nuevo archivo para reemplazar el existente
+                    if (isset($in['pdfUrl']) && !empty($in['pdfUrl'])) {
+                        $newFilename = basename($in['pdfUrl']);
+                        if ($newFilename !== $f) {
+                            @unlink($dirPath . '/' . $f);
+                            unset($meta[$f]);
+                            $f = $newFilename;
+                        }
+                    }
+                    
+                    $meta[$f] = $existing;
+                    write_json($metaPath, $meta);
+                    $found = true;
+                    out(['success' => true]);
+                }
+            }
+            if (!$found) out(['message' => 'Informe no encontrado'], 404);
         }
     }
 }
