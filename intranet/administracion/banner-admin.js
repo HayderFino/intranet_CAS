@@ -26,7 +26,7 @@ const BannerAdmin = {
                         <h4>${banner.title}</h4>
                         <p style="font-size: 0.8rem; color: #64748b;">
                             Orden: ${banner.order} | ${banner.link || "Sin link"}<br>
-                            ${banner.fileUrl ? `<span style="color: #059669;">Ã°Å¸ââ Archivo: ${banner.fileUrl.split("/").pop()}</span>` : '<span style="color: #94a3b8;">Sin archivo asociado</span>'}
+                            ${banner.fileUrl ? `<span style="color: #059669;">&#128196; Archivo: ${banner.fileUrl.split("/").pop()}</span>` : '<span style="color: #94a3b8;">Sin archivo asociado</span>'}
                         </p>
                     </div>
                     <div class="card-actions">

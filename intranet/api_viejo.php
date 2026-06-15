@@ -1,8 +1,13 @@
 <?php
-// api_v2.php
-// Nueva versión refactorizada de la API conectada a PostgreSQL
-
 ob_start();
+
+/**
+ * ============================================================
+ *  API UNIVERSAL - INTRANET CAS
+ *  Autor: Migración PHP — Apache/XAMPP
+ * ========================================================================
+ */
+
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -15,323 +20,287 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 session_start();
-require_once __DIR__ . '/database.php';
 
 $route = trim($_GET['route'] ?? '');
-$route = strtolower(trim($route, '/'));
+$route = trim($route, '/');
+$route = strtolower($route); // Normalize to lowercase for easier matching
+
 $method = $_SERVER['REQUEST_METHOD'];
 
+// Detectar la ruta base del proyecto de forma dinámica (ej: /intranet_CAS/intranet)
 $baseDir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
 define('WEB_BASE_PATH', $baseDir . '/');
 
-function out($data, $code = 200) {
+// Define the root directory for data (absolute on disk)
+define('DATA_ROOT', __DIR__ . '/');
+
+
+
+// ----------------------------------------------------------------------------------------------------
+//  HELPERS
+// ----------------------------------------------------------------------------------------------------
+
+function out($data, $code = 200)
+{
     http_response_code($code);
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-    if (session_status() === PHP_SESSION_ACTIVE) session_write_close();
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
+    }
     exit();
 }
 
-function body() {
+function body()
+{
     return json_decode(file_get_contents('php://input'), true) ?? [];
 }
 
-function read_json($path) {
-    if (!file_exists($path)) return [];
-    $data = json_decode(file_get_contents($path), true);
-    return is_array($data) ? $data : [];
-}
+function auth($resource = null)
+{
+    if (!isset($_SESSION['userId']))
+        out(['message' => 'No autorizado'], 401);
 
-function write_json($path, $data) {
-    file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-}
-
-function eent($s) { return htmlentities($s, ENT_QUOTES, 'UTF-8'); }
-function dent($s) { return html_entity_decode($s, ENT_QUOTES, 'UTF-8'); }
-
-function auth($resource = null) {
-    if (!isset($_SESSION['userId'])) out(['message' => 'No autorizado'], 401);
     $role = $_SESSION['role'] ?? '';
     $permissions = $_SESSION['permissions'] ?? [];
-    if ($role === 'superadmin') return;
 
-    // Mapear rutas de API a nombres de permisos en el frontend
-    $permMap = [
-        'directorio' => 'correos',
-        'agenda' => 'agenda_cas',
-        'manual-funciones' => 'manual_funciones',
-        'plan-monitoreo' => 'sigep',
-        'planes-talento' => 'planes_talento',
-        'planeacion-estrategica' => 'sgi_planeacion',
-        'mejora-continua' => 'sgi_mejora',
-        'estudios-tecnicos' => 'estudios_tecnicos',
-        'provision-empleos' => 'provision_empleos',
-        'manuales-sgi' => 'sgi_manuales',
-        'boletines' => 'boletines_git',
-        'politicas-sgi' => 'sgi_politicas',
-        'revision-red' => 'revision_red',
-        'sgi-gestion-documental' => 'procesos_apoyo',
-        'sgi-contratacion' => 'procesos_apoyo',
-        'sgi-juridico' => 'procesos_apoyo',
-        'sgi-bienes-servicios' => 'procesos_apoyo',
-        'sgi-gestion-tecnologias' => 'procesos_apoyo',
-        'sgi-talento-humano' => 'procesos_apoyo',
-        'sgi-control-disciplinario' => 'procesos_apoyo',
-        'sgi-cobro-coactivo' => 'procesos_apoyo',
-        'sgi-gestion-financiera' => 'procesos_apoyo',
-        'sgi-gestion-integral' => 'procesos_apoyo'
-    ];
-    $checkRes = $permMap[$resource] ?? $resource;
+    // Si es superadmin, tiene acceso a todo
+    if ($role === 'superadmin')
+        return;
 
-    if ($resource === 'users' && !($permissions['users'] ?? false)) out(['message' => 'Requiere permiso'], 403);
-    if ($resource && $resource !== 'users' && !($permissions[$checkRes] ?? false)) out(['message' => 'Sin permiso para: ' . $resource], 403);
+    // Si se requiere acceso de superadmin (como para gestionar usuarios)
+    // Pero también permitimos si tiene el permiso específico 'users'
+    if ($resource === 'users') {
+        if ($role !== 'superadmin' && !($permissions['users'] ?? false)) {
+            out(['message' => 'Requiere Super Admin o permiso de Usuarios. Tu rol: ' . $role], 403);
+        }
+        return;
+    }
+
+    // Para otros recursos, si se pasó un nombre de recurso, verificar permiso
+    if ($resource && !($permissions[$resource] ?? false)) {
+        out(['message' => 'No tienes permiso para: ' . $resource], 403);
+    }
 }
 
-function upload_file($field, $destDir) {
-    if (!isset($_FILES[$field]) || $_FILES[$field]['error'] !== UPLOAD_ERR_OK) return null;
+/**  Decode HTML entities → real chars  */
+function dent($s)
+{
+    return html_entity_decode((string) $s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+}
+
+/**  Encode real chars → HTML entities  */
+function eent($s)
+{
+    return (string) $s;
+}
+
+/**  Read JSON file safely  */
+function read_json($path)
+{
+    if (!file_exists($path))
+        return [];
+    return json_decode(file_get_contents($path), true) ?? [];
+}
+
+/**  Write JSON file safely  */
+function write_json($path, $data)
+{
+    file_put_contents($path, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+}
+
+/**  Upload a file from $_FILES[$field] to $destDir, return relative URL  */
+function upload_file($field, $destDir)
+{
+    if (!isset($_FILES[$field]))
+        return null;
+    $f = $_FILES[$field];
+    if ($f['error'] !== UPLOAD_ERR_OK)
+        return null;
+
     $dir = __DIR__ . '/' . ltrim($destDir, '/');
-    if (!is_dir($dir)) mkdir($dir, 0777, true);
-    $cleanName = preg_replace('/[^a-zA-Z0-9._-]/', '_', $_FILES[$field]['name']);
+    if (!is_dir($dir))
+        mkdir($dir, 0777, true);
+
+    $cleanName = preg_replace('/[^a-zA-Z0-9._-]/', '_', $f['name']);
     $name = time() . '-' . $cleanName;
-    if (move_uploaded_file($_FILES[$field]['tmp_name'], $dir . '/' . $name)) {
+
+    if (move_uploaded_file($f['tmp_name'], $dir . '/' . $name)) {
         return ltrim($destDir, '/') . '/' . $name;
     }
     return null;
 }
 
-$pdo = Database::getConnection();
+/**  Strip a block with data-id from an HTML file  */
+function html_remove_block($htmlPath, $id, $pattern)
+{
+    $content = file_get_contents($htmlPath);
+    $escaped = preg_quote($id, '/');
+    $regex = str_replace('__ID__', $escaped, $pattern);
+    $match = [];
+    if (preg_match($regex, $content, $match)) {
+        // Try to delete physical file referenced in href/src
+        if (preg_match('/(?:href|src)="([^"]+)"/i', $match[0], $fh)) {
+            $rel = $fh[1];
+            if ($rel && $rel !== '#' && strpos($rel, 'http') === false) {
+                $abs = realpath(__DIR__ . '/' . ltrim(str_replace('../../', '', $rel), '/'));
+                if ($abs && file_exists($abs))
+                    @unlink($abs);
+            }
+        }
+        $content = preg_replace($regex, '', $content, 1);
+        file_put_contents($htmlPath, $content);
+        return true;
+    }
+    return false;
+}
 
-// 1. AUTH
+/**  Get items with data-id="Ã¢â¬Â¦" from an HTML file using a regex  */
+function html_get_items($htmlPath, $itemRegex, $cb)
+{
+    if (!file_exists($htmlPath))
+        return [];
+    $content = file_get_contents($htmlPath);
+    preg_match_all($itemRegex, $content, $matches, PREG_SET_ORDER);
+    $items = [];
+    foreach ($matches as $m)
+        $items[] = $cb($m);
+    return $items;
+}
+
+// 
+//  1. AUTH
+// 
+
 if ($route === 'auth/login' && $method === 'POST') {
     $in = body();
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :u");
-    $stmt->execute(['u' => $in['username'] ?? '']);
-    $u = $stmt->fetch();
-    if ($u && password_verify($in['password'] ?? '', $u['password_hash'])) {
-        $_SESSION['userId'] = $u['id'];
-        $_SESSION['displayName'] = $u['display_name'];
-        $_SESSION['role'] = $u['role'];
-        $_SESSION['permissions'] = json_decode($u['permissions'], true) ?? [];
-        out([
-            'success' => true,
-            'user' => [
-                'username' => $u['username'],
-                'displayName' => $u['display_name'],
-                'role' => $u['role'],
-                'permissions' => $_SESSION['permissions'],
-            ]
-        ]);
+    $users = read_json(__DIR__ . '/default_user.json');
+    foreach ($users as $u) {
+        if ($u['username'] === ($in['username'] ?? '') && password_verify($in['password'] ?? '', $u['password'])) {
+            $_SESSION['userId'] = $u['id'] ?? $u['_id'] ?? uniqid();
+            $_SESSION['displayName'] = $u['displayName'];
+            $_SESSION['role'] = $u['role'];
+            $_SESSION['permissions'] = $u['permissions'];
+            out([
+                'success' => true,
+                'user' => [
+                    'username' => $u['username'],
+                    'displayName' => $u['displayName'],
+                    'role' => $u['role'],
+                    'permissions' => $u['permissions'],
+                ]
+            ]);
+        }
     }
     out(['success' => false, 'message' => 'Credenciales inválidas'], 401);
 }
 
-if ($route === 'auth/logout') { session_destroy(); out(['success' => true]); }
+if ($route === 'auth/logout') {
+    session_destroy();
+    out(['success' => true]);
+}
+
 if ($route === 'auth/check') {
-    if (isset($_SESSION['userId'])) {
-        out(['success' => true, 'user' => [
-            'displayName' => $_SESSION['displayName'],
-            'role' => $_SESSION['role'],
-            'permissions' => $_SESSION['permissions'],
-        ]]);
-    }
+    if (isset($_SESSION['userId']))
+        out([
+            'success' => true,
+            'user' => [
+                'displayName' => $_SESSION['displayName'],
+                'role' => $_SESSION['role'],
+                'permissions' => $_SESSION['permissions'],
+            ]
+        ]);
     out(['success' => false], 401);
 }
 
-// 2. UPLOADS GENERICOS
-if ($route === 'news/upload' && $method === 'POST') {
-    auth();
-    $url = upload_file('image', 'data/imagenes');
-    if ($url) out(['imageUrl' => $url]);
-    out(['message' => 'Error'], 400);
-}
-if ($route === 'banner/upload' && $method === 'POST') {
-    auth();
-    $imgUrl = upload_file('image', 'data/imagenes');
-    $fileUrl = upload_file('file', 'data/imagenes');
-    if ($imgUrl || $fileUrl) {
-        $res = [];
-        if ($imgUrl) $res['imageUrl'] = $imgUrl;
-        if ($fileUrl) $res['fileUrl'] = $fileUrl;
-        out($res);
-    }
-    out(['message' => 'Error'], 400);
-}
-if ($route === 'sgi/upload' && $method === 'POST') {
-    auth();
-    $section = $_POST['section'] ?? 'general';
-    $category = $_POST['category'] ?? '';
-    $dest = "data/menu header/sgi/" . ($category ? "$section/$category" : $section);
-    $url = upload_file('file', $dest);
-    if ($url) out(['fileUrl' => $url]);
-    out(['message' => 'Error upload'], 400);
-}
+// 
+//  2. SIMPLE JSON CRUD  (news, eventos, banner, directorio, users)
+// 
 
-// 3. GENERIC CRUD MAPPING
-$DB_MAP = [
-    'news' => ['table' => 'news', 'cols' => ['title','description','image_url','category']],
-    'eventos' => ['table' => 'events', 'cols' => ['title','description','event_date','location','image_url','category']],
-    'banner' => ['table' => 'banners', 'cols' => ['title','image_url','link_url','is_active', 'file_url']],
-    'directorio' => ['table' => 'directory', 'cols' => ['full_name','position','department','extension','email']],
-    'users' => ['table' => 'users', 'cols' => ['username','password_hash','display_name','role','permissions']],
-    'agenda' => ['table' => 'agenda', 'cols' => ['title','description','start_time','end_time']]
+$JSON_MAP = [
+    'news' => 'data/noticias.json',
+    'eventos' => 'data/eventos.json',
+    'banner' => 'data/banner.json',
+    'directorio' => 'data/directorio.json',
+    'users' => 'default_user.json',
+    'agenda' => 'data/agenda.json',
 ];
 
-// Mapeo Frontend -> Base de Datos por módulo
-$FIELD_MAPS = [
-    'global' => [
-        'imageUrl' => 'image_url', 'eventDate' => 'event_date', 'linkUrl' => 'link_url',
-        'isActive' => 'is_active', 'displayName' => 'display_name', 'fullName' => 'full_name',
-        'startTime' => 'start_time', 'endTime' => 'end_time', 'password' => 'password_hash',
-        'titulo' => 'title', 'descripcion' => 'description'
-    ],
-    'news' => [
-        'category' => 'category', 'fileUrl' => 'image_url'
-    ],
-    'eventos' => [
-        'tipo' => 'category', 'fecha' => 'event_date', 'lugar' => 'location', 'acento' => 'image_url'
-    ],
-    'banner' => [
-        'link' => 'link_url', 'fileUrl' => 'file_url'
-    ],
-    'directorio' => [
-        'nombre' => 'full_name', 'cargo' => 'position', 'dependencia' => 'department', 'correo' => 'email'
-    ],
-    'agenda' => [
-        'time' => 'start_time'
-    ]
-];
-
-// Mapeo Base de Datos -> Frontend por módulo
-$REV_MAPS = [
-    'global' => [
-        'image_url' => 'imageUrl', 'event_date' => 'eventDate', 'link_url' => 'linkUrl',
-        'is_active' => 'isActive', 'display_name' => 'displayName', 'full_name' => 'fullName',
-        'start_time' => 'startTime', 'end_time' => 'endTime', 'password_hash' => 'password'
-    ],
-    'news' => [
-        'image_url' => 'imageUrl', 'category' => 'category', 'title' => 'title', 'description' => 'description'
-    ],
-    'eventos' => [
-        'category' => 'tipo', 'title' => 'titulo', 'event_date' => 'fecha', 
-        'location' => 'lugar', 'description' => 'descripcion', 'image_url' => 'acento'
-    ],
-    'banner' => [
-        'image_url' => 'imageUrl', 'link_url' => 'link', 'title' => 'title', 'is_active' => 'isActive', 'order' => 'order', 'file_url' => 'fileUrl'
-    ],
-    'directorio' => [
-        'full_name' => 'nombre', 'position' => 'cargo', 'department' => 'dependencia', 'email' => 'correo'
-    ],
-    'agenda' => [
-        'title' => 'title', 'start_time' => 'time'
-    ]
-];
-
-foreach ($DB_MAP as $key => $config) {
-    $table = $config['table'];
-    $allowed_cols = $config['cols'];
-
-    $fieldMap = array_merge($FIELD_MAPS['global'], $FIELD_MAPS[$key] ?? []);
-    $revMap = array_merge($REV_MAPS['global'], $REV_MAPS[$key] ?? []);
+foreach ($JSON_MAP as $key => $file) {
+    $fullPath = __DIR__ . '/' . $file;
 
     // LIST
     if ($route === $key && $method === 'GET') {
-        $order = ($table === 'directory' || $table === 'users' || $table === 'agenda') ? "" : "ORDER BY created_at DESC";
-        $stmt = $pdo->query("SELECT * FROM {$table} {$order}");
-        $results = $stmt->fetchAll();
-        
-        foreach ($results as &$r) {
-            // Convertir de snake_case a camelCase para el frontend
-            foreach ($revMap as $dbCol => $frontCol) {
-                if (array_key_exists($dbCol, $r)) {
-                    $r[$frontCol] = $r[$dbCol];
-                    if ($dbCol !== $frontCol) unset($r[$dbCol]);
-                }
-            }
-            if ($table === 'users' && isset($r['permissions'])) {
-                $r['permissions'] = json_decode($r['permissions'], true);
-                unset($r['password_hash']); 
-            }
-            if (isset($r['created_at'])) {
-                $r['createdAt'] = $r['created_at'];
-                unset($r['created_at']);
-            }
-        }
-        out($results);
+        out(read_json($fullPath));
     }
 
     // CREATE
     if ($route === $key && $method === 'POST') {
         auth($key);
         $in = body();
-        
-        if ($key === 'users') {
-            $in['password_hash'] = password_hash($in['password'] ?? '', PASSWORD_BCRYPT);
-            unset($in['password']);
-            if (isset($in['permissions'])) $in['permissions'] = json_encode($in['permissions']);
-        }
-        
-        $insert_cols = ['id'];
-        $insert_vals = [uniqid()];
-        $placeholders = ['?'];
-        
-        foreach ($in as $k => $v) {
-            $dbCol = $fieldMap[$k] ?? $k;
-            if (in_array($dbCol, $allowed_cols)) {
-                $insert_cols[] = $dbCol;
-                $insert_vals[] = $v;
-                $placeholders[] = '?';
-            }
-        }
-        
-        $sql = "INSERT INTO {$table} (" . implode(',', $insert_cols) . ") VALUES (" . implode(',', $placeholders) . ")";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($insert_vals);
-        out(['message' => 'Creado', 'id' => $insert_vals[0]], 201);
+        $data = read_json($fullPath);
+        if ($key === 'users')
+            $in['password'] = password_hash($in['password'] ?? '', PASSWORD_BCRYPT);
+        $in['id'] = uniqid();
+        $in['createdAt'] = date('c');
+        array_unshift($data, $in);
+        write_json($fullPath, $data);
+        out(['message' => 'Creado', 'id' => $in['id']], 201);
     }
 
-    // UPDATE / DELETE
+    // UPDATE / DELETE by id
     if (preg_match('/^' . preg_quote($key, '/') . '\/([a-zA-Z0-9_\-\.:]+)$/', $route, $m)) {
         auth($key);
         $id = $m[1];
-        
+        $data = read_json($fullPath);
+
         if ($method === 'DELETE') {
-            $stmt = $pdo->prepare("DELETE FROM {$table} WHERE id = ?");
-            $stmt->execute([$id]);
+            $data = array_values(array_filter(
+                $data,
+                function ($i) use ($id) {
+                    $iid = $i['id'] ?? $i['_id']['$oid'] ?? $i['_id'] ?? '';
+                    return $iid !== $id;
+                }
+            ));
+            write_json($fullPath, $data);
             out(['message' => 'Eliminado']);
         }
-        
+
         if ($method === 'PUT') {
             $in = body();
-            if ($key === 'users' && !empty($in['password'])) {
-                $in['password_hash'] = password_hash($in['password'], PASSWORD_BCRYPT);
-                unset($in['password']);
-            }
-            if ($key === 'users' && isset($in['permissions'])) {
-                $in['permissions'] = json_encode($in['permissions']);
-            }
-            
-            $updates = [];
-            $vals = [];
-            foreach ($in as $k => $v) {
-                $dbCol = $fieldMap[$k] ?? $k;
-                if (in_array($dbCol, $allowed_cols)) {
-                    $updates[] = "$dbCol = ?";
-                    $vals[] = $v;
+            foreach ($data as &$item) {
+                $iid = $item['id'] ?? $item['_id']['$oid'] ?? $item['_id'] ?? '';
+                if ($iid === $id) {
+                    $item = array_merge($item, $in);
+                    break;
                 }
             }
-            
-            if (!empty($updates)) {
-                $vals[] = $id;
-                $sql = "UPDATE {$table} SET " . implode(', ', $updates) . " WHERE id = ?";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute($vals);
-            }
+            write_json($fullPath, $data);
             out(['message' => 'Actualizado']);
         }
     }
 }
 
+// 
+//  3. IMAGE / FILE UPLOAD (generic)
+// 
 
-// --- RESTAURADO SGI LEGACY ---
+// /api/news/upload
+if ($route === 'news/upload' && $method === 'POST') {
+    auth();
+    $url = upload_file('image', 'data/imagenes');
+    if ($url)
+        out(['imageUrl' => $url]);
+    out(['message' => 'No se subió imagen'], 400);
+}
+
+// /api/banner/upload
+if ($route === 'banner/upload' && $method === 'POST') {
+    auth();
+    $url = upload_file('image', 'data/imagenes');
+    if ($url)
+        out(['imageUrl' => $url]);
+    out(['message' => 'Error'], 400);
+}
 
 // /api/sgi/upload   (section + category determine subfolder)
 if ($route === 'sgi/upload' && $method === 'POST') {
@@ -361,6 +330,7 @@ if ($route === 'sgi/upload' && $method === 'POST') {
 // 
 //  4. SGI HTML-DB  /api/sgi/{section}[/{id}]
 // 
+
 $SGI_HTML = [
     'planeacion' => 'header_menu/sgi/planeacion-estrategica.html',
     'mejora' => 'header_menu/sgi/mejora-continua.html',
@@ -600,7 +570,7 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)$#
     if (file_exists($dirPath) && is_dir($dirPath)) {
         $metaPath = $dirPath . '/metadata.json';
         $meta = file_exists($metaPath) ? read_json($metaPath) : [];
-        
+
         // Leer directorios
         foreach (scandir($dirPath) as $f) {
             if ($f === '.' || $f === '..' || strtolower($f) === 'metadata.json')
@@ -613,10 +583,10 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)$#
                         continue;
                     $rel = $f . '/' . $sf;
                     $m2 = $meta[$rel] ?? [];
-                    
+
                     // Construir URL
                     $fileUrl = WEB_BASE_PATH . implode('/', array_map('rawurlencode', explode('/', $base . '/' . $f . '/' . $sf)));
-                    
+
                     $items[] = [
                         'id' => md5($rel),
                         'name' => $m2['name'] ?? pathinfo($sf, PATHINFO_FILENAME),
@@ -640,18 +610,18 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)$#
     $dirPath = __DIR__ . '/' . $base;
     $metaPath = $dirPath . '/metadata.json';
     $meta = file_exists($metaPath) ? read_json($metaPath) : [];
-    
+
     $in = body();
     $name = $in['name'] ?? 'Sin nombre';
     $category = $in['category'] ?? 'General';
     $fileUrl = $in['fileUrl'] ?? '#';
-    
+
     // Create category folder if it doesn't exist
     $catPath = $dirPath . '/' . $category;
     if (!is_dir($catPath)) {
         @mkdir($catPath, 0777, true);
     }
-    
+
     // Extract relative path from fileUrl
     $relPath = '';
     if ($fileUrl && $fileUrl !== '#') {
@@ -666,7 +636,7 @@ if (preg_match('#^sgi/(admin-recursos|vigilancia-control|planeacion-ambiental)$#
     } else {
         $relPath = $category . '/' . time() . '-' . preg_replace('/[^a-zA-Z0-9_\-]/', '', str_replace(' ', '-', $name));
     }
-    
+
     // Save metadata
     $meta[$relPath] = [
         'name' => $name,
@@ -879,9 +849,12 @@ if (preg_match('/^sgi\/([a-z0-9-]+)(?:\/([a-zA-Z0-9_\-\.:]+))?$/', $route, $m)) 
 }
 
 // 
-
-
-// RECUPERADO DESDE API VIEJO
+//  5. MÓDULOS HTML-DB genÃÂ©ricos (helper universal)
+//     informe-gestion, manual-funciones, plan-monitoreo,
+//     planes-talento, convocatorias, estudios-tecnicos,
+//     provision-empleos, manuales-sgi, boletines,
+//     politicas-sgi, cita, sirh, snif, revision-red
+// 
 
 /**
  * Módulos que usan tarjetas .pdf-folder-card con data-id
@@ -1000,9 +973,11 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         // Segundo: archivos huérfanos (sin entrada en metadata.json)
         $usedFiles = array_column($items, 'filename');
         foreach ($allFiles as $f) {
-            if (in_array($f, $usedFiles)) continue;
+            if (in_array($f, $usedFiles))
+                continue;
             $base = basename($f);
-            if (isset($meta[$f]) || isset($meta[$base])) continue;
+            if (isset($meta[$f]) || isset($meta[$base]))
+                continue;
 
             $dirSegments = explode('/', ltrim($uploadDir, '/'));
             $encodedDir = implode('/', array_map('rawurlencode', $dirSegments));
@@ -1140,7 +1115,7 @@ foreach ($HTMLDB as $modRoute => [$htmlRel, $uploadDir, $cardClass, $gridId]) {
         }
         if ($found)
             out(['success' => true]);
-        
+
         $debugIds = [];
         foreach ($allFiles as $rel) {
             $debugIds[] = md5($rel) . " -> " . $rel;
@@ -1246,13 +1221,14 @@ if (strpos($route, 'informe-gestion') === 0) {
         // Si no vino archivo, intentar extraer nombre de pdfUrl/filename del body
         if (!$f) {
             $f = basename($in['pdfUrl'] ?? '');
-            if (!$f) $f = $in['filename'] ?? '';
+            if (!$f)
+                $f = $in['filename'] ?? '';
         }
 
         if ($f) {
             $meta = file_exists($metaPath) ? read_json($metaPath) : [];
             $meta[$f] = [
-                'title'       => trim($in['title'] ?? pathinfo($f, PATHINFO_FILENAME)),
+                'title' => trim($in['title'] ?? pathinfo($f, PATHINFO_FILENAME)),
                 'description' => trim($in['description'] ?? '')
             ];
             write_json($metaPath, $meta);
@@ -1288,9 +1264,11 @@ if (strpos($route, 'informe-gestion') === 0) {
                     continue;
                 if (md5($f) === $cleanId) {
                     $existing = $meta[$f] ?? [];
-                    if (isset($in['title'])) $existing['title'] = $in['title'];
-                    if (isset($in['description'])) $existing['description'] = $in['description'];
-                    
+                    if (isset($in['title']))
+                        $existing['title'] = $in['title'];
+                    if (isset($in['description']))
+                        $existing['description'] = $in['description'];
+
                     // Si se cargó un nuevo archivo para reemplazar el existente
                     if (isset($in['pdfUrl']) && !empty($in['pdfUrl'])) {
                         $newFilename = basename($in['pdfUrl']);
@@ -1300,14 +1278,15 @@ if (strpos($route, 'informe-gestion') === 0) {
                             $f = $newFilename;
                         }
                     }
-                    
+
                     $meta[$f] = $existing;
                     write_json($metaPath, $meta);
                     $found = true;
                     out(['success' => true]);
                 }
             }
-            if (!$found) out(['message' => 'Informe no encontrado'], 404);
+            if (!$found)
+                out(['message' => 'Informe no encontrado'], 404);
         }
     }
 }
